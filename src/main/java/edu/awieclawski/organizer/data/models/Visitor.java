@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = {})
 public class Visitor extends BaseEntity  {
     public static final String TABLE_NAME = "visitors";
     private String name;
@@ -29,7 +29,6 @@ public class Visitor extends BaseEntity  {
 
     @Getter
     public enum Const {
-        ID("id"),
         NAME("name"),
         URL("url"),
         IP("ip"),

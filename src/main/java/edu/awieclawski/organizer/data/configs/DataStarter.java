@@ -1,6 +1,7 @@
 package edu.awieclawski.organizer.data.configs;
 
 import edu.awieclawski.organizer.data.models.Visitor;
+import edu.awieclawski.organizer.data.models.base.BaseEntity;
 import edu.awieclawski.organizer.generator.services.VisitorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class DataStarter {
     private void initDataDefinition() {
         String sql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s TEXT PRIMARY KEY, %s TEXT, %s DATETIME DEFAULT CURRENT_TIMESTAMP, %s TEXT, %s TEXT);",
                 Visitor.TABLE_NAME,
-                Visitor.Const.ID.getColumn(),
+                BaseEntity.BaseConst.ID.getColumn(),
                 Visitor.Const.NAME.getColumn(),
                 Visitor.Const.TIMESTAMP.getColumn(),
                 Visitor.Const.URL.getColumn(),

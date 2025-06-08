@@ -1,18 +1,16 @@
-package edu.awieclawski.organizer.data.models.base;
+package edu.awieclawski.organizer.generator.dtos.base;
 
 import edu.awieclawski.organizer.data.decriptor.Cryptor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class BaseEntity {
+public class BaseDto {
     private String id;
     private Integer hashId;
 
@@ -20,7 +18,7 @@ public class BaseEntity {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        BaseEntity that = (BaseEntity) o;
+        BaseDto that = (BaseDto) o;
         return id.equals(that.id);
     }
 
@@ -30,15 +28,5 @@ public class BaseEntity {
             this.hashId = Cryptor.decryptWord(this.id);
         }
         return this.hashId;
-    }
-
-    @Getter
-    public enum BaseConst {
-        ID("id");
-        private final String column;
-
-        BaseConst(String column) {
-            this.column = column;
-        }
     }
 }

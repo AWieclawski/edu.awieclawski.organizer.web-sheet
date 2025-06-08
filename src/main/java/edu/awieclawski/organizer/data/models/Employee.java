@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = {})
 public class Employee extends BaseEntity {
     public static final String TABLE_NAME = "employees";
     private String name;
@@ -25,7 +25,6 @@ public class Employee extends BaseEntity {
 
     @Getter
     public enum Const {
-        ID("id"),
         NAME("name"),
         SURNAME("sur_name"),
         NICK("uniq_nick");

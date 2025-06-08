@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = {})
 public class MonthRecord extends BaseEntity {
     public static final String TABLE_NAME = "month_records";
     private Integer year;
@@ -27,7 +27,6 @@ public class MonthRecord extends BaseEntity {
 
     @Getter
     public enum Const {
-        ID("id"),
         MONTH("month"),
         YEAR("year"),
         VISITOR("visitor_id");

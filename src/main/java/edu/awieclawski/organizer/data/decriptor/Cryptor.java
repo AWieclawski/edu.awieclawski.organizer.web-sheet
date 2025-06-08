@@ -1,5 +1,11 @@
 package edu.awieclawski.organizer.data.decriptor;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Cryptor {
 
     private static final int PRIME_FACTOR = 73;

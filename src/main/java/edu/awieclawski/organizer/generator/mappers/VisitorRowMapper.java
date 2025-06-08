@@ -1,6 +1,5 @@
 package edu.awieclawski.organizer.generator.mappers;
 
-import edu.awieclawski.organizer.data.decriptor.Cryptor;
 import edu.awieclawski.organizer.data.models.Visitor;
 import edu.awieclawski.organizer.generator.dtos.VisitorDto;
 import edu.awieclawski.organizer.utils.DateUtils;
@@ -13,13 +12,12 @@ public class VisitorRowMapper implements RowMapper<VisitorDto> {
 
     @Override
     public VisitorDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-        String id = rs.getString(Visitor.Const.ID.getColumn());
         return VisitorDto.builder()
                 .name(rs.getString(Visitor.Const.NAME.getColumn()))
                 .url(rs.getString(Visitor.Const.URL.getColumn()))
                 .ip(rs.getString(Visitor.Const.IP.getColumn()))
                 .timestamp(DateUtils.timestampToToString(rs.getTimestamp(Visitor.Const.TIMESTAMP.getColumn())))
-                .hashId(Cryptor.decryptWord(id))
+                .id(rs.getString(Visitor.BaseConst.ID.getColumn()))
                 .build();
     }
 

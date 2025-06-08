@@ -43,7 +43,8 @@ bin/
 **/.DS_Store
 **/.externalToolBuilders
 #**/*-dev.yml
-# dtabase files
+
+# database files
 **/*.db
 **/*.db-shm
 **/*.db-wal

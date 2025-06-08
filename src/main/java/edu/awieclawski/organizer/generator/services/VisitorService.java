@@ -1,10 +1,12 @@
 package edu.awieclawski.organizer.generator.services;
 
-import edu.awieclawski.organizer.generator.dtos.VisitorDto;
 import edu.awieclawski.organizer.data.models.Visitor;
+import edu.awieclawski.organizer.data.repositories.BaseIdDateTimeFormater;
 import edu.awieclawski.organizer.data.repositories.VisitorRepository;
-import lombok.RequiredArgsConstructor;
+import edu.awieclawski.organizer.generator.dtos.VisitorDto;
+import edu.awieclawski.organizer.generator.services.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,13 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service(value = VisitorService.BEAN_NAME)
-public class VisitorService {
+@DependsOn(VisitorRepository.BEAN_NAME)
+public class VisitorService extends BaseService<Visitor> {
 
-    public static final String BEAN_NAME = "edu.albedo.data.services.VisitorService";
+    public static final String BEAN_NAME = "edu.awieclawski.organizer.generator.services";
 
     private final VisitorRepository visitorRepository;
+
+    public VisitorService(VisitorRepository visitorRepository, BaseIdDateTimeFormater baseIdFormater) {
+        super(baseIdFormater);
+        this.visitorRepository = visitorRepository;
+    }
 
     public VisitorDto createVisitor(Visitor visitor) {
         LocalDateTime timeStamp = LocalDateTime.now();
@@ -27,8 +34,7 @@ public class VisitorService {
     }
 
     public VisitorDto saveVisitor(Visitor visitor) {
-        LocalDateTime timeStamp = visitor.getTimestamp() != null ? visitor.getTimestamp() : LocalDateTime.now();
-        visitor.setId(timeStamp.format(visitorRepository.getBaseIdFormater().getFormatter()));
+        createVisitorId(visitor);
         try {
             return visitorRepository.save(visitor);
         } catch (Exception e) {

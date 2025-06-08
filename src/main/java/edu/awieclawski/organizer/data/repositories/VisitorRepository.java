@@ -1,11 +1,10 @@
 package edu.awieclawski.organizer.data.repositories;
 
+import edu.awieclawski.organizer.data.models.Visitor;
 import edu.awieclawski.organizer.generator.dtos.VisitorDto;
 import edu.awieclawski.organizer.generator.mappers.VisitorMapper;
 import edu.awieclawski.organizer.generator.mappers.VisitorRowMapper;
-import edu.awieclawski.organizer.data.models.Visitor;
 import edu.awieclawski.organizer.utils.DateUtils;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,14 +21,13 @@ import java.util.Map;
 
 import static edu.awieclawski.organizer.data.models.Visitor.TABLE_NAME;
 
-@Repository
+@Repository(VisitorRepository.BEAN_NAME)
 @RequiredArgsConstructor
 public class VisitorRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    public static final String BEAN_NAME = "edu.awieclawski.organizer.data.repositories.VisitorRepository";
 
-    @Getter
-    private final BaseIdDateTimeFormater baseIdFormater;
+    private final JdbcTemplate jdbcTemplate;
 
     /**
      * https://www.baeldung.com/spring-jdbctemplate-in-list
@@ -49,7 +47,7 @@ public class VisitorRepository {
 
     public VisitorDto findById(String id) {
         String query = String.format("SELECT * FROM %s  WHERE %s = ?;",
-                TABLE_NAME, Visitor.Const.ID.getColumn());
+                TABLE_NAME, Visitor.BaseConst.ID.getColumn());
         return jdbcTemplate.queryForObject(query, getRowMapper(), id);
     }
 
@@ -80,7 +78,7 @@ public class VisitorRepository {
 
     public int addVisitor(Visitor visitor) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put(Visitor.Const.ID.getColumn(), visitor.getId());
+        parameters.put(Visitor.BaseConst.ID.getColumn(), visitor.getId());
         parameters.put(Visitor.Const.TIMESTAMP.getColumn(), DateUtils.localDateTimeToTimestamp(visitor.getTimestamp()));
         parameters.put(Visitor.Const.URL.getColumn(), visitor.getUrl());
         parameters.put(Visitor.Const.IP.getColumn(), visitor.getIp());

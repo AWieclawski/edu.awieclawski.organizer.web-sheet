@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, of = {})
 public class DateCell extends BaseEntity {
     public static final String TABLE_NAME = "date_cells";
     private LocalDate localDate;
@@ -31,7 +31,6 @@ public class DateCell extends BaseEntity {
 
     @Getter
     public enum Const {
-        ID("id"),
         DATE("local_date"),
         HOURS("hours"),
         CELL_TYPE("cell_type"),
