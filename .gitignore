@@ -21,11 +21,6 @@ bin/
 *.log
 *.log.*
 
-# database
-*.db
-*.db-shm
-*.db-wal
-
 ### STS ###
 .apt_generated
 .classpath
@@ -47,7 +42,8 @@ bin/
 **/target/
 **/.DS_Store
 **/.externalToolBuilders
-**/*-dev.yml
+#**/*-dev.yml
+# dtabase files
 **/*.db
 **/*.db-shm
 **/*.db-wal
