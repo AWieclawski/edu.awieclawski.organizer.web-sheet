@@ -1,0 +1,33 @@
+# spring context variables
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  application:
+    name: web-sheet-test
+  main:
+    banner-mode: off
+  datasource:
+    url: jdbc:sqlite:appdata.db
+# end-points
+endpoint:
+  visitors: api/visitors
+# date time formatter
+date:
+  time:
+    format:
+      pattern: yyyyMMddHHmmssns
+# logging
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    edu.awieclawski.organizer: DEBUG
+# general variables
+lackValue: lack-of-value
+cronMonitorDefault: ${CRON:* */1 * * * *}
+cronMonitorCustom: ${CRON_URL_SRC_MONITOR:${cronMonitorDefault}}
+# individual comics variables
+application:

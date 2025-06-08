@@ -1,0 +1,89 @@
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+p,
+blockquote,
+em,
+img,
+q,
+strong,
+sub,
+sup,
+b,
+i,
+ol,
+ul,
+li,
+table,
+tbody,
+tfoot,
+tr,
+th,
+td,
+article,
+aside,
+figure,
+footer,
+header,
+menu,
+nav,
+section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+
+body {
+    color: #eeeeee;
+    background-color: #111111;
+    font-family: Tahoma, Verdana, sans-serif;
+    padding: 10px;
+}
+
+
+a:link {
+    color: #3cffff;
+    background-color: transparent;
+    text-decoration: none;
+    opacity: 1 !important;
+}
+
+a:visited {
+    color: #3498db;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 1200px) {
+
+}
+
+@media screen and (max-width: 900px) {
+
+}
+
+@media screen and (max-width: 600px) {
+
+}
+

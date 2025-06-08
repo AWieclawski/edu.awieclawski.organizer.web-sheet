@@ -1,0 +1,36 @@
+# spring context variables
+server:
+  port: 4000
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  application:
+    name: web-sheet
+  main:
+    banner-mode: off
+  datasource:
+    url: jdbc:sqlite:/var/lib/sqlite/data.db
+    hikari:
+      connection-init-sql: PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA cache_size=-10000; PRAGMA temp_store=MEMORY;
+# end-points
+endpoint:
+  visitors: api/visitors
+# date time formatter
+date:
+  time:
+    format:
+      pattern: yyyyMMddHHmmssns
+# logging
+logging:
+  level:
+    root: ERROR
+    org.springframework.web: WARN
+    edu.albedo.mangas: ${LOG_LEVEL:WARN}
+    edu.albedo.connection: ${LOG_LEVEL_CON:WARN}
+# general variables
+lackValue: lack-of-value
+cronMonitorDefault: ${CRON:1 2 3 * * *}
+cronMonitorCustom: ${CRON_URL_SRC_MONITOR:${cronMonitorDefault}}
+# individual comics variables
+application:
