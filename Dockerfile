@@ -16,4 +16,4 @@ ENV DB_DIR=/var/lib/sqlite
 RUN mkdir -p $DB_DIR && touch $DB_DIR/data.db
 VOLUME $DB_DIR
 EXPOSE 4000
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=dev", "/app/runner.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "/app/runner.jar"]
