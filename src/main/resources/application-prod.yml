@@ -26,11 +26,7 @@ logging:
   level:
     root: ERROR
     org.springframework.web: WARN
-    edu.springoot.organizer: ${LOG_LEVEL:WARN}
-    edu.springoot.organizer.data: ${LOG_LEVEL_CON:INFO}
+    edu.springboot.organizer: ${LOG_LEVEL:WARN}
+    edu.springboot.organizer.data: ${LOG_LEVEL_CON:INFO}
 # general variables
-lackValue: lack-of-value
-cronMonitorDefault: ${CRON:1 2 3 * * *}
-cronMonitorCustom: ${CRON_URL_SRC_MONITOR:${cronMonitorDefault}}
-# individual comics variables
-application:
+populate.initial.data: ${POPULATE_DATA:false}

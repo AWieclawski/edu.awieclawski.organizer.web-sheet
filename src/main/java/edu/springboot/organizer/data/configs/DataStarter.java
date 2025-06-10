@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 @Slf4j
 @Component()
@@ -20,10 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DataStarter {
 
-    private static final List<String> DEMO_ALLOWED_PROFILES = Arrays.asList("dev", "test", "prod");
-
-    @Value("${spring.profiles.active:test}")
-    private String activeProfile;
+    @Value("${populate.initial.data:false}")
+    private String populateData;
 
     private final VisitorService service;
 
@@ -31,8 +27,8 @@ public class DataStarter {
     public void displaySystemInfo() {
         try {
             initDataDefinition();
-            if (DEMO_ALLOWED_PROFILES.contains(activeProfile)) {
-                log.info("activeProfile: {} - start demo data population", activeProfile);
+            if (Boolean.TRUE.equals(Boolean.valueOf(populateData))) {
+                log.info("start demo data population");
                 operateDemoData();
                 log.info("demo data population finished");
             }

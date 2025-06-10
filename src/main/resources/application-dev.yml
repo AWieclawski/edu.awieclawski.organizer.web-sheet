@@ -29,11 +29,7 @@ logging:
   level:
     root: WARN
     org.springframework.web: INFO
-    edu.springoot.organizer: ${LOG_LEVEL:INFO}
-    edu.springoot.organizer.data: ${LOG_LEVEL_CON:DEBUG}
+    edu.springboot.organizer: ${LOG_LEVEL:INFO}
+    edu.springboot.organizer.data: ${LOG_LEVEL_CON:DEBUG}
 # general variables
-lackValue: lack-of-value
-cronMonitorDefault: ${CRON:* */1 * * * *}
-cronMonitorCustom: ${CRON_URL_SRC_MONITOR:${cronMonitorDefault}}
-# individual comics variables
-application:
+populate.initial.data: true
