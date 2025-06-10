@@ -16,6 +16,7 @@ public class VisitorMapper {
                 .name(entity.getName())
                 .url(entity.getUrl())
                 .id(entity.getId())
+                .hashId(entity.hashCode())
                 .build();
     }
 
