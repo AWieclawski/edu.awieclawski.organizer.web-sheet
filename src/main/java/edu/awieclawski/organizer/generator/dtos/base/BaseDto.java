@@ -25,7 +25,7 @@ public class BaseDto {
     @Override
     public int hashCode() {
         if (hashId == null) {
-            this.hashId = Cryptor.decryptWord(this.id);
+            this.hashId = Cryptor.encryptWord(this.id);
         }
         return this.hashId;
     }

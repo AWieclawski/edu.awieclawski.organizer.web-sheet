@@ -10,7 +10,7 @@ public class Cryptor {
 
     private static final int PRIME_FACTOR = 73;
 
-    public static Integer decryptWord(String word) {
+    public static Integer encryptWord(String word) {
         if (word == null) {
             return null;
         }
