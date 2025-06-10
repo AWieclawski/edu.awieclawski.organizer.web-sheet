@@ -23,7 +23,7 @@ endpoint:
 date:
   time:
     format:
-      pattern: yyyyMMddHHmmssns
+      pattern: yyyyMMddHHmmssSSS
 # logging
 logging:
   level:
