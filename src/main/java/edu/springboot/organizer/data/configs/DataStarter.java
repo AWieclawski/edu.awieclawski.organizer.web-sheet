@@ -11,12 +11,16 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Component()
 @DependsOn(value = VisitorService.BEAN_NAME)
 @RequiredArgsConstructor
 public class DataStarter {
+
+    private static final List<String> DEMO_ALLOWED_PROFILES = Arrays.asList("dev", "test", "prod");
 
     @Value("${spring.profiles.active:test}")
     private String activeProfile;
@@ -27,11 +31,10 @@ public class DataStarter {
     public void displaySystemInfo() {
         try {
             initDataDefinition();
-            if (activeProfile.equals("dev")
-                    || activeProfile.equals("test")
-                    || activeProfile.equals("prod")
-            ) {
+            if (DEMO_ALLOWED_PROFILES.contains(activeProfile)) {
+                log.info("activeProfile: {} - start demo data population", activeProfile);
                 operateDemoData();
+                log.info("demo data population finished");
             }
         } catch (Exception ex) {
             log.error("Demo data failed! {} | {}", ex.getCause(), ex.getMessage());
