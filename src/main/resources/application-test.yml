@@ -24,7 +24,7 @@ logging:
   level:
     root: INFO
     org.springframework.web: INFO
-    edu.awieclawski.organizer: DEBUG
+    edu.springoot.organizer: DEBUG
 # general variables
 lackValue: lack-of-value
 cronMonitorDefault: ${CRON:* */1 * * * *}

@@ -6,7 +6,7 @@ add datastore/appdata.db
 
 # endpoints
 
- .../api/visitors
+ .../api/visitors/all
 
  .../api/visitors/between/2025-04-02/2025-04-04
 
