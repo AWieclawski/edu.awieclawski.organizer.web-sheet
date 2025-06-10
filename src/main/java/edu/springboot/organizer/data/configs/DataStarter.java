@@ -27,7 +27,10 @@ public class DataStarter {
     public void displaySystemInfo() {
         try {
             initDataDefinition();
-            if (activeProfile.equals("dev") || activeProfile.equals("test")) {
+            if (activeProfile.equals("dev")
+                    || activeProfile.equals("test")
+                    || activeProfile.equals("prod")
+            ) {
                 operateDemoData();
             }
         } catch (Exception ex) {
