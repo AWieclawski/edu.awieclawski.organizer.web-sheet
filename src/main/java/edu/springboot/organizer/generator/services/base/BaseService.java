@@ -24,7 +24,6 @@ public abstract class BaseService<T extends BaseEntity> {
         try {
             String timeStampId = visitor.getId() != null ? visitor.getId() : LocalDateTime.now().format(getBaseFormatter().getFormatter());
             visitor.setId(timeStampId);
-            visitor.hashCode();
         } catch (Exception e) {
             log.error("Id create failed! {}", e.getMessage());
         }

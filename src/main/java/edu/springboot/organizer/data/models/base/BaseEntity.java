@@ -4,11 +4,9 @@ import edu.springboot.organizer.data.decriptor.Cryptor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
@@ -30,6 +28,13 @@ public class BaseEntity {
             this.hashId = Cryptor.encryptWord(this.id);
         }
         return this.hashId;
+    }
+
+    public void setId(String timeStampId) {
+        if (this.id == null) {
+            this.id = timeStampId;
+            this.hashId = Cryptor.encryptWord(this.id);
+        }
     }
 
     @Getter
