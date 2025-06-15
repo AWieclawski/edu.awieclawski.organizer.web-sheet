@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true, of = {})
-public class Visitor extends BaseEntity  {
+public class Visitor extends BaseEntity {
     public static final String TABLE_NAME = "visitors";
     private String name;
     private LocalDateTime timestamp;
@@ -34,9 +34,20 @@ public class Visitor extends BaseEntity  {
         IP("ip"),
         TIMESTAMP("timestamp");
         private final String column;
+
         Const(String column) {
             this.column = column;
         }
+    }
+
+    public static String getSqlTableCreator() {
+        return String.format("CREATE TABLE IF NOT EXISTS %s ( %s TEXT PRIMARY KEY, %s TEXT, %s DATETIME DEFAULT CURRENT_TIMESTAMP, %s TEXT, %s TEXT);",
+                Visitor.TABLE_NAME,
+                BaseConst.ID.getColumn(),
+                Const.NAME.getColumn(),
+                Const.TIMESTAMP.getColumn(),
+                Const.URL.getColumn(),
+                Const.IP.getColumn());
     }
 
 }

@@ -1,5 +1,8 @@
 package edu.springboot.organizer.utils;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,6 +14,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateUtils {
 
     public static String getStringFromDate(LocalDate date, String pattern) {

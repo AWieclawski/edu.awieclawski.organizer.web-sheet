@@ -19,4 +19,5 @@ public class DateCellDto extends BaseDto {
     private CellType cellType;
     private Integer beginHour;
     private Integer endHour;
+    private String monthRecordId;
 }

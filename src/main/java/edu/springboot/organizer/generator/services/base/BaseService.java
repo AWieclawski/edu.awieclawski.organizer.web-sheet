@@ -2,35 +2,37 @@ package edu.springboot.organizer.generator.services.base;
 
 
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.data.repositories.BaseIdDateTimeFormater;
+import edu.springboot.organizer.data.repositories.base.BaseRepository;
+import edu.springboot.organizer.generator.dtos.base.BaseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component(BaseService.BEAN_NAME)
-@DependsOn(BaseIdDateTimeFormater.BEAN_NAME)
-public abstract class BaseService<T extends BaseEntity> {
+public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
 
-    public static final String BEAN_NAME = "base.services.generator.edu.springboot.organizer.BaseService";
+    public static final String BEAN_NAME = "edu.springboot.organizer.generator.services.base.BaseService";
 
-    private final BaseIdDateTimeFormater baseIdFormater;
+    private static final int MAX_TRY_COUNT = 3;
 
-    public void createVisitorId(T visitor) {
+    protected T insertVisitor(S visitor) {
+        return insertVisitorExecute(visitor, 0);
+    }
+
+    private T insertVisitorExecute(S visitor, int count) {
         try {
-            String timeStampId = visitor.getId() != null ? visitor.getId() : LocalDateTime.now().format(getBaseFormatter().getFormatter());
-            visitor.setId(timeStampId);
+            return getRepository().insert(visitor);
         } catch (Exception e) {
-            log.error("Id create failed! {}", e.getMessage());
+            log.error("Save failed! {}", e.getMessage());
+            if (count < MAX_TRY_COUNT) {
+                insertVisitorExecute(visitor, ++count);
+            }
         }
+        return null;
     }
 
-    public BaseIdDateTimeFormater getBaseFormatter() {
-        return this.baseIdFormater;
-    }
+    protected abstract BaseRepository<S, T> getRepository();
 
 }

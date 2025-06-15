@@ -17,7 +17,7 @@ public class Cryptor {
         int result = 0;
         for (int i = 0; i < word.length(); ++i) {
             char c = word.charAt(i);
-            int tmp = Integer.parseInt(String.valueOf(c + i)) * PRIME_FACTOR;
+            int tmp = (int) (Math.pow(Double.parseDouble(String.valueOf(c + i)), 3) * PRIME_FACTOR);
             result = result + tmp;
         }
         return result;

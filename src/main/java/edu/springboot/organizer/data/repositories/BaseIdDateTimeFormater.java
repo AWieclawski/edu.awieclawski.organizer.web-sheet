@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 @Component(value = BaseIdDateTimeFormater.BEAN_NAME)
 public class BaseIdDateTimeFormater {
 
-    public static final String BEAN_NAME = "repositories.data.edu.springboot.organizer.BaseIdDateTimeFormater";
+    public static final String BEAN_NAME = "edu.springboot.organizer.data.repositories.BaseIdDateTimeFormater";
 
     @Value("${date.time.format.pattern}")
     private String pattern;

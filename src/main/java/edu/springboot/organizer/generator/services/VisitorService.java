@@ -1,7 +1,6 @@
 package edu.springboot.organizer.generator.services;
 
 import edu.springboot.organizer.data.models.Visitor;
-import edu.springboot.organizer.data.repositories.BaseIdDateTimeFormater;
 import edu.springboot.organizer.data.repositories.VisitorRepository;
 import edu.springboot.organizer.generator.dtos.VisitorDto;
 import edu.springboot.organizer.generator.services.base.BaseService;
@@ -16,33 +15,21 @@ import java.util.List;
 @Slf4j
 @Service(value = VisitorService.BEAN_NAME)
 @DependsOn(VisitorRepository.BEAN_NAME)
-public class VisitorService extends BaseService<Visitor> {
+public class VisitorService extends BaseService<Visitor, VisitorDto> {
 
-    public static final String BEAN_NAME = "edu.springoot.organizer.generator.services";
+    public static final String BEAN_NAME = "edu.springboot.organizer.generator.services.VisitorService";
 
     private final VisitorRepository visitorRepository;
 
-    public VisitorService(VisitorRepository visitorRepository, BaseIdDateTimeFormater baseIdFormater) {
-        super(baseIdFormater);
+    public VisitorService(VisitorRepository visitorRepository) {
         this.visitorRepository = visitorRepository;
     }
 
     public VisitorDto createVisitor(Visitor visitor) {
         LocalDateTime timeStamp = LocalDateTime.now();
         visitor.setTimestamp(timeStamp);
-        return saveVisitor(visitor);
+        return insertVisitor(visitor);
     }
-
-    public VisitorDto saveVisitor(Visitor visitor) {
-        createVisitorId(visitor);
-        try {
-            return visitorRepository.save(visitor);
-        } catch (Exception e) {
-            log.error("Save failed! {}", e.getMessage());
-        }
-        return null;
-    }
-
 
     public List<VisitorDto> getAllVisitors() {
         return visitorRepository.findAll();
@@ -65,12 +52,19 @@ public class VisitorService extends BaseService<Visitor> {
         }
     }
 
-    public void modifyDataBase(String sql) {
+    public void initTable() {
+        String sql = Visitor.getSqlTableCreator();
+        log.warn("Crating table [{}]", Visitor.TABLE_NAME);
         try {
             visitorRepository.modifyDataBase(sql);
         } catch (Exception e) {
             log.error("Modify failed! {}", e.getMessage());
         }
+    }
+
+    @Override
+    protected VisitorRepository getRepository() {
+        return this.visitorRepository;
     }
 }
 

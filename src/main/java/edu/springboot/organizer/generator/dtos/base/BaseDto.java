@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class BaseDto {
-    private String id;
+    private String created;
     private Integer hashId;
 
     @Override
@@ -19,13 +19,13 @@ public class BaseDto {
         if (o == null || getClass() != o.getClass()) return false;
 
         BaseDto that = (BaseDto) o;
-        return id.equals(that.id);
+        return created.equals(that.created);
     }
 
     @Override
     public int hashCode() {
         if (hashId == null) {
-            this.hashId = Cryptor.encryptWord(this.id);
+            this.hashId = Cryptor.encryptWord(this.created);
         }
         return this.hashId;
     }

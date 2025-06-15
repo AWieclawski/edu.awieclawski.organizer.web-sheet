@@ -1,7 +1,6 @@
 package edu.springboot.organizer.data.configs;
 
 import edu.springboot.organizer.data.models.Visitor;
-import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.generator.services.VisitorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,14 +38,7 @@ public class DataStarter {
     }
 
     private void initDataDefinition() {
-        String sql = String.format("CREATE TABLE IF NOT EXISTS %s ( %s TEXT PRIMARY KEY, %s TEXT, %s DATETIME DEFAULT CURRENT_TIMESTAMP, %s TEXT, %s TEXT);",
-                Visitor.TABLE_NAME,
-                BaseEntity.BaseConst.ID.getColumn(),
-                Visitor.Const.NAME.getColumn(),
-                Visitor.Const.TIMESTAMP.getColumn(),
-                Visitor.Const.URL.getColumn(),
-                Visitor.Const.IP.getColumn());
-        service.modifyDataBase(sql);
+        service.initTable();
     }
 
     private void operateDemoData() {
@@ -55,10 +47,10 @@ public class DataStarter {
 
         // save a couple of demo visitors
         service.createVisitor(Visitor.builder().url("example/url/test0").name("test0").ip("ip0").build());
-        service.saveVisitor(Visitor.builder().url("example/url/test1").name("test1").ip("ip1").timestamp(LocalDateTime.now().minusDays(1)).build());
-        service.saveVisitor(Visitor.builder().url("example/url/test2").name("test2").ip("ip2").timestamp(LocalDateTime.now().minusDays(2)).build());
-        service.saveVisitor(Visitor.builder().url("example/url/test3").name("test3").ip("ip3").timestamp(LocalDateTime.now().minusDays(3)).build());
-        service.saveVisitor(Visitor.builder().url("example/url/test4").name("test4").ip("ip4").timestamp(LocalDateTime.now().minusDays(4)).build());
-        service.saveVisitor(Visitor.builder().url("example/url/test5").name("test5").ip("ip5").timestamp(LocalDateTime.now().minusDays(5)).build());
+        service.createVisitor(Visitor.builder().url("example/url/test1").name("test1").ip("ip1").timestamp(LocalDateTime.now().minusDays(1)).build());
+        service.createVisitor(Visitor.builder().url("example/url/test2").name("test2").ip("ip2").timestamp(LocalDateTime.now().minusDays(2)).build());
+        service.createVisitor(Visitor.builder().url("example/url/test3").name("test3").ip("ip3").timestamp(LocalDateTime.now().minusDays(3)).build());
+        service.createVisitor(Visitor.builder().url("example/url/test4").name("test4").ip("ip4").timestamp(LocalDateTime.now().minusDays(4)).build());
+        service.createVisitor(Visitor.builder().url("example/url/test5").name("test5").ip("ip5").timestamp(LocalDateTime.now().minusDays(5)).build());
     }
 }
