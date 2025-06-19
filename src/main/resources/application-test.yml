@@ -14,11 +14,6 @@ spring:
 # end-points
 endpoint:
   visitors: api/visitors
-# date time formatter
-date:
-  time:
-    format:
-      pattern: yyyyMMddHHmmssSSS
 # logging
 logging:
   level:

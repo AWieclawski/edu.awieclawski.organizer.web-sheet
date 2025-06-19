@@ -7,6 +7,8 @@ import edu.springboot.organizer.generator.services.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,12 +27,14 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
         this.visitorRepository = visitorRepository;
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public VisitorDto createVisitor(Visitor visitor) {
         LocalDateTime timeStamp = LocalDateTime.now();
         visitor.setTimestamp(timeStamp);
-        return insertVisitor(visitor);
+        return insertEntity(visitor);
     }
 
+    @Transactional(readOnly = true)
     public List<VisitorDto> getAllVisitors() {
         return visitorRepository.findAll();
     }
@@ -44,6 +48,7 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
         return new ArrayList<>();
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void purgeVisitors() {
         try {
             visitorRepository.deleteAll();

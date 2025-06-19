@@ -13,6 +13,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -66,6 +68,7 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
         jdbcExecuteUnsafe(sql);
     }
 
+    @Transactional(readOnly = true)
     public Long howMany() {
         String query = String.format("SELECT COUNT(*) FROM %s;", getTableName());
         return jdbcQueryForObjectQuantity(query);
@@ -75,6 +78,7 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
      * @param visitor
      * @return timestamp String value key
      */
+    @Transactional
     public Visitor createVisitor(Visitor visitor) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(BaseEntity.BaseConst.ID.getColumn(), visitor.getId());
@@ -84,6 +88,7 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
         parameters.put(Visitor.Const.NAME.getColumn(), visitor.getName());
         return createEntity(parameters, visitor);
     }
+
 
     @Override
     public RowMapper<VisitorDto> getRowMapper() {

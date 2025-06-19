@@ -10,13 +10,11 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BaseDateUtils {
 
-    private static final String PATTERN = "yyyyMMddHHmmssSSS";
+    private static final String PATTERN = "yyyyMMddHHmmssns";
 
     public static String getBaseTimestampId() {
         LocalDateTime now = LocalDateTime.now();
-        String reversed = BaseStringUtils.reverse(String.valueOf(now.getNano()));
-        int nano = Integer.parseInt(reversed);
-        return now.format(getBaseFormatter()) + nano;
+        return now.format(getBaseFormatter());
     }
 
     private static DateTimeFormatter getBaseFormatter() {

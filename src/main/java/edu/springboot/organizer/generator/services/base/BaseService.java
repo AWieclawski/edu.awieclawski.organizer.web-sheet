@@ -7,6 +7,8 @@ import edu.springboot.organizer.generator.dtos.base.BaseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,17 +19,19 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
 
     private static final int MAX_TRY_COUNT = 3;
 
-    protected T insertVisitor(S visitor) {
-        return insertVisitorExecute(visitor, 0);
+    @Transactional()
+    public T insertEntity(S visitor) {
+        return insertEntityExecute(visitor, 0);
     }
 
-    private T insertVisitorExecute(S visitor, int count) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public T insertEntityExecute(S visitor, int count) {
         try {
             return getRepository().insert(visitor);
         } catch (Exception e) {
             log.error("Save failed! {}", e.getMessage());
             if (count < MAX_TRY_COUNT) {
-                insertVisitorExecute(visitor, ++count);
+                insertEntityExecute(visitor, ++count);
             }
         }
         return null;

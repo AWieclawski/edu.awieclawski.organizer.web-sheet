@@ -19,8 +19,8 @@ public class BaseStringUtils {
         }
         String lastChar = dto.inputString.substring(dto.inputString.length() - dto.digitsQuantity);
         int deco = (int) Math.pow(10, dto.digitsQuantity);
-        int lastDigits = parseInt(lastChar);
-        if (lastDigits != 0) {
+        Integer lastDigits = parseInt(lastChar);
+        if (lastDigits != null) {
             dto.replacement = lastDigits + 1;
             if (dto.replacement > deco - 1) {
                 dto.digitsQuantity = dto.digitsQuantity + 1;
@@ -30,11 +30,11 @@ public class BaseStringUtils {
         return dto;
     }
 
-    private static int parseInt(String lastChar) {
+    private static Integer parseInt(String lastChar) {
         try {
             return Integer.parseInt(lastChar);
         } catch (Exception e) {
-            return 0;
+            return null;
         }
     }
 
