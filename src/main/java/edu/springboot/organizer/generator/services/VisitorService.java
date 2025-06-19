@@ -3,6 +3,7 @@ package edu.springboot.organizer.generator.services;
 import edu.springboot.organizer.data.models.Visitor;
 import edu.springboot.organizer.data.repositories.VisitorRepository;
 import edu.springboot.organizer.generator.dtos.VisitorDto;
+import edu.springboot.organizer.generator.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.generator.services.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
@@ -36,7 +37,12 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
 
     @Transactional(readOnly = true)
     public List<VisitorDto> getAllVisitors() {
-        return visitorRepository.findAll();
+        try {
+            return visitorRepository.findAll();
+        } catch (Exception e) {
+            log.error("All Visitors not found! {}", e.getMessage());
+        }
+        throw new ResultNotFoundException("All Visitors found failed!");
     }
 
     public List<VisitorDto> getVisitorsBetween(String startDate, String endDate) {
@@ -45,7 +51,7 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
         } catch (Exception e) {
             log.error("Get between failed! {}", e.getMessage());
         }
-        return new ArrayList<>();
+        throw new ResultNotFoundException(String.format("Visitors find between %s %s failed!", startDate, endDate));
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

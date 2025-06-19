@@ -46,6 +46,10 @@ public class DateUtils {
         return Timestamp.valueOf(dateTime);
     }
 
+    public static Timestamp localDateToTimestamp(LocalDate dateTime) {
+        return Timestamp.valueOf(dateTime.atStartOfDay());
+    }
+
     public static Timestamp stringToTimestampFormatted(String timestampAsString, DateTimeFormatter dateFormatter) {
         LocalDateTime localDateTime;
         try {

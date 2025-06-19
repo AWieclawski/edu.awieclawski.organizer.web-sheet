@@ -10,10 +10,6 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-/**
- * Encja użytkownika korzystającego z aplikacji (po zalogowaniu)
- * i posiadającego dostęp do zapisów w BD, które utworzył
- */
 @Getter
 @Setter
 @AllArgsConstructor
@@ -42,7 +38,7 @@ public class Visitor extends BaseEntity {
 
     public static String getSqlTableCreator() {
         return String.format("CREATE TABLE IF NOT EXISTS %s ( %s TEXT PRIMARY KEY, %s TEXT, %s DATETIME DEFAULT CURRENT_TIMESTAMP, %s TEXT, %s TEXT);",
-                Visitor.TABLE_NAME,
+                TABLE_NAME,
                 BaseConst.ID.getColumn(),
                 Const.NAME.getColumn(),
                 Const.TIMESTAMP.getColumn(),

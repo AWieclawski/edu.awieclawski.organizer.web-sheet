@@ -43,4 +43,15 @@ public class DateCell extends BaseEntity {
             this.column = column;
         }
     }
+
+    public static String getSqlTableCreator() {
+        return String.format("CREATE TABLE IF NOT EXISTS %s (%s TEXT PRIMARY KEY, %s DATETIME, %s INTEGER, %s INTEGER, %s INTEGER, %s TEXT);",
+                TABLE_NAME,
+                BaseConst.ID.getColumn(),
+                Const.DATE.getColumn(),
+                Const.BEGIN_HOUR.getColumn(),
+                Const.END_HOUR.getColumn(),
+                Const.HOURS.getColumn(),
+                Const.MONTH_RECORD.getColumn());
+    }
 }

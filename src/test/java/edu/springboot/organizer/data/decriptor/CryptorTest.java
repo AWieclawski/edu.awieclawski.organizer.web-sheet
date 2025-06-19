@@ -16,7 +16,7 @@ class CryptorTest {
         for (int i = 0; i < 999; i++) {
             String timeStampId = BaseDateUtils.getBaseTimestampId();
             int hashId = assignHashId(testIntList, Cryptor.encryptWord(timeStampId), i);
-            Assertions.assertFalse(testList.contains(timeStampId), (i + " - found: " + timeStampId));
+            Assertions.assertFalse(testList.contains(timeStampId), (String.format("%3d - found: %s", i, timeStampId)));
             testIntList.add(hashId);
             testList.add(timeStampId);
         }

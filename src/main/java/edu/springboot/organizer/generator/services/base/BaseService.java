@@ -27,7 +27,7 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public T insertEntityExecute(S visitor, int count) {
         try {
-            return getRepository().insert(visitor);
+            return getRepository().persistEntity(visitor);
         } catch (Exception e) {
             log.error("Save failed! {}", e.getMessage());
             if (count < MAX_TRY_COUNT) {

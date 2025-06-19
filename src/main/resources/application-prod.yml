@@ -16,6 +16,7 @@ spring:
 # end-points
 endpoint:
   visitors: api/visitors
+  users: api/users
 # logging
 logging:
   level:

@@ -1,11 +1,11 @@
 package edu.springboot.organizer.data.repositories;
 
-import edu.springboot.organizer.data.models.Visitor;
+import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.data.repositories.base.BaseRepository;
-import edu.springboot.organizer.generator.dtos.VisitorDto;
-import edu.springboot.organizer.generator.mappers.VisitorMapper;
-import edu.springboot.organizer.generator.mappers.VisitorRowMapper;
+import edu.springboot.organizer.generator.dtos.DateCellDto;
+import edu.springboot.organizer.generator.mappers.DateCellMapper;
+import edu.springboot.organizer.generator.mappers.DateCellRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,41 +17,49 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
-@Repository(VisitorRepository.BEAN_NAME)
-public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
+@Repository(DateCellRepository.BEAN_NAME)
+public class DateCellRepository extends BaseRepository<DateCell, DateCellDto> {
 
     public static final String BEAN_NAME = "edu.springboot.organizer.data.repositories.VisitorRepository";
 
-    public VisitorRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public DateCellRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
-    public List<VisitorDto> findVisitorsByTimestampIsBetween(String startDate, String endDate) {
+    public List<DateCellDto> findDateCellsByTimestamp(String dateTime) {
         SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("start", startDate)
-                .addValue("end", endDate);
-        String query = String.format("SELECT * FROM %s WHERE %s >= DATETIME(:start) AND %s <= DATETIME(:end) ",
-                getTableName(), Visitor.Const.TIMESTAMP.getColumn(), Visitor.Const.TIMESTAMP.getColumn());
+                .addValue("date", dateTime);
+        String query = String.format("SELECT * FROM %s WHERE %s = DATETIME(:date)",
+                getTableName(), DateCell.Const.DATE.getColumn());
         return jdbcNamedParametersQuery(query, namedParameters);
     }
 
-    public VisitorDto findById(String id) {
+
+    public List<DateCellDto> findDateCellsByMonthRecordId(String monthRecordId) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("monthId", monthRecordId);
+        String query = String.format("SELECT * FROM %s WHERE %s = :monthId",
+                getTableName(), DateCell.Const.MONTH_RECORD.getColumn());
+        return jdbcNamedParametersQuery(query, namedParameters);
+    }
+
+    public DateCellDto findById(String id) {
         String query = String.format("SELECT * FROM %s  WHERE %s = ?;",
                 getTableName(), BaseEntity.BaseConst.ID.getColumn());
         return jdbcQueryForObject(query, id);
     }
 
-    public List<VisitorDto> findAll() {
+    public List<DateCellDto> findAll() {
         String query = String.format("SELECT * FROM %s;", getTableName());
         return jdbcQuery(query);
     }
 
     @Transactional
     @Override
-    public VisitorDto persistEntity(Visitor visitor) {
-        Visitor created = createVisitor(visitor);
+    public DateCellDto persistEntity(DateCell visitor) {
+        DateCell created = createDateCell(visitor);
         if (created != null) {
-            return VisitorMapper.toDto(visitor);
+            return DateCellMapper.toDto(visitor);
         }
         return null;
     }
@@ -73,20 +81,20 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
     }
 
     @Transactional
-    public Visitor createVisitor(Visitor visitor) {
-        Map<String, Object> parameters = VisitorMapper.toMap(visitor);
+    public DateCell createDateCell(DateCell visitor) {
+        Map<String, Object> parameters = DateCellMapper.toMap(visitor);
         return insertEntity(parameters, visitor);
     }
 
 
     @Override
-    public RowMapper<VisitorDto> getRowMapper() {
-        return new VisitorRowMapper();
+    public RowMapper<DateCellDto> getRowMapper() {
+        return new DateCellRowMapper();
     }
 
     @Override
     protected String getTableName() {
-        return Visitor.TABLE_NAME;
+        return DateCell.TABLE_NAME;
     }
 
 }

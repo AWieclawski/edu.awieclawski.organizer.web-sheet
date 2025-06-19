@@ -77,8 +77,8 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public S createEntity(Map<String, Object> entityParameters, S entity) {
-        String timestampId = createEntityExecute(entityParameters, 0);
+    public S insertEntity(Map<String, Object> entityParameters, S entity) {
+        String timestampId = insertEntityExecute(entityParameters, 0);
         entity.setId(timestampId);
         return entity;
     }
@@ -93,7 +93,7 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String createEntityExecute(Map<String, Object> entityParameters, int count) {
+    public String insertEntityExecute(Map<String, Object> entityParameters, int count) {
         String timeStampId;
         String key = S.BaseConst.ID.getColumn();
         Object objId = entityParameters.get(key);
@@ -109,7 +109,7 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> {
             if (count < MAX_TRY_COUNT) {
                 BaseStringUtils.replaceLastDigitsIncreasedByOne(timeStampId);
                 entityParameters.put(key, timeStampId);
-                createEntityExecute(entityParameters, ++count);
+                insertEntityExecute(entityParameters, ++count);
             }
         }
         return timeStampId;
@@ -155,5 +155,5 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> {
 
     protected abstract RowMapper<T> getRowMapper();
 
-    public abstract T insert(S entity);
+    public abstract T persistEntity(S entity);
 }

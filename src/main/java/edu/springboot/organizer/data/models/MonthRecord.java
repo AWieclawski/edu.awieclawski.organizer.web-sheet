@@ -23,13 +23,15 @@ public class MonthRecord extends BaseEntity {
     public static final String TABLE_NAME = "month_records";
     private Integer year;
     private Integer month;
-    private String visitorId;
+    private String userId;
+    private String employeeId;
 
     @Getter
     public enum Const {
         MONTH("month"),
         YEAR("year"),
-        VISITOR("visitor_id");
+        USER("user_id"),
+        EMPLOYEE("employee_id");
         private final String column;
 
         Const(String column) {
