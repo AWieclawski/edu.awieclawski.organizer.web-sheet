@@ -2,13 +2,11 @@ package edu.springboot.organizer.generator.services.base;
 
 
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.data.repositories.base.BaseRepository;
+import edu.springboot.organizer.data.repositories.base.BaseDao;
 import edu.springboot.organizer.generator.dtos.base.BaseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,24 +17,24 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
 
     private static final int MAX_TRY_COUNT = 3;
 
-    @Transactional()
-    public T insertEntity(S visitor) {
-        return insertEntityExecute(visitor, 0);
+    //    @Transactional()
+    public T insertEntity(S entity) {
+        return insertEntityExecute(entity, 0);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public T insertEntityExecute(S visitor, int count) {
+//        @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public T insertEntityExecute(S entity, int count) {
         try {
-            return getRepository().persistEntity(visitor);
+            return getRepository().persistEntity(entity);
         } catch (Exception e) {
-            log.error("Save failed! {}", e.getMessage());
+            log.error("Save [{}] failed! {}", entity.getClass(), e.getMessage());
             if (count < MAX_TRY_COUNT) {
-                insertEntityExecute(visitor, ++count);
+                insertEntityExecute(entity, ++count);
             }
         }
         return null;
     }
 
-    protected abstract BaseRepository<S, T> getRepository();
+    protected abstract BaseDao<S, T> getRepository();
 
 }

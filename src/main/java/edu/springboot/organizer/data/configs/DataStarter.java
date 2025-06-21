@@ -63,5 +63,7 @@ public class DataStarter {
         userService.createUser(User.builder().name("Examplename1").surName("Examplesurname1").login("examplelogin1").password("somepass1").build());
         userService.createUser(User.builder().name("Examplename2").surName("Examplesurname2").login("examplelogin2").password("somepass2").build());
 
+
+
     }
 }

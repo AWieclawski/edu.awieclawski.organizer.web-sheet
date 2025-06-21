@@ -2,10 +2,12 @@ package edu.springboot.organizer.data.repositories;
 
 import edu.springboot.organizer.data.models.User;
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.data.repositories.base.BaseRepository;
+import edu.springboot.organizer.data.repositories.base.BaseRepositoryTransactional;
+import edu.springboot.organizer.data.repositories.handlers.TransactionHandler;
 import edu.springboot.organizer.generator.dtos.UserDto;
 import edu.springboot.organizer.generator.mappers.UserMapper;
 import edu.springboot.organizer.generator.mappers.UserRowMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,13 +17,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository(UserRepository.BEAN_NAME)
-public class UserRepository extends BaseRepository<User, UserDto> {
+public class UserRepository extends BaseRepositoryTransactional<User, UserDto> {
 
     public static final String BEAN_NAME = "edu.springboot.organizer.data.repositories.UserRepository";
 
-    public UserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    private final TransactionHandler transactionHandler;
+
+    public UserRepository(JdbcTemplate jdbcTemplate,
+                          NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+                          TransactionHandler transactionHandler) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
+        this.transactionHandler = transactionHandler;
     }
 
     public UserDto findById(String id) {
@@ -38,7 +46,7 @@ public class UserRepository extends BaseRepository<User, UserDto> {
     @Transactional
     @Override
     public UserDto persistEntity(User user) {
-        User created = createUser(user);
+        User created = transactionHandler.runInNewTransactionFunction(this::createUser, user);
         if (created != null) {
             return UserMapper.toDto(user);
         }
@@ -61,10 +69,14 @@ public class UserRepository extends BaseRepository<User, UserDto> {
         return jdbcQueryForObjectQuantity(query);
     }
 
-    @Transactional
-    public User createUser(User user) {
+    private User createUser(User user) {
         Map<String, Object> parameters = UserMapper.toMap(user);
-        return insertEntity(parameters, user);
+        try {
+            return insertEntity(parameters, user);
+        } catch (InstantiationException i) {
+            log.warn("Inserting DateCele failed {} | {}", parameters, i.getMessage());
+        }
+        return null;
     }
 
 

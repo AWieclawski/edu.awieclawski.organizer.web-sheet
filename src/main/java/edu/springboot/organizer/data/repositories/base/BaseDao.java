@@ -1,8 +1,6 @@
 package edu.springboot.organizer.data.repositories.base;
 
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.data.utils.BaseDateUtils;
-import edu.springboot.organizer.data.utils.BaseStringUtils;
 import edu.springboot.organizer.generator.dtos.base.BaseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +9,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.Collections;
@@ -27,12 +22,7 @@ import java.util.stream.Stream;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component(BaseRepository.BEAN_NAME)
-public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> {
-
-    public static final String BEAN_NAME = "edu.springboot.organizer.data.repositories.base.BaseRepository";
-
-    private static final int MAX_TRY_COUNT = 3;
+public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
 
     private static final Set<String> FORBIDDEN_EXP = Collections
             .unmodifiableSet((Set<String>) Stream.of("DROPDATABASE", "DROPTABLE")
@@ -76,14 +66,7 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> {
                         (rs, rowNum) -> getRowMapper().mapRow(rs, rowNum));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public S insertEntity(Map<String, Object> entityParameters, S entity) {
-        String timestampId = insertEntityExecute(entityParameters, 0);
-        entity.setId(timestampId);
-        return entity;
-    }
-
-    private void jdbcExecute(String query, Boolean safe) {
+    private void jdbcExecute(String query, boolean safe) {
         if (safe) {
             sanitizeQuery(query);
         } else {
@@ -92,30 +75,7 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> {
         getJdbcTemplate().execute(query);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public String insertEntityExecute(Map<String, Object> entityParameters, int count) {
-        String timeStampId;
-        String key = S.BaseConst.ID.getColumn();
-        Object objId = entityParameters.get(key);
-        timeStampId = objId != null ? (String) objId : BaseDateUtils.getBaseTimestampId();
-        entityParameters.put(key, timeStampId);
-        try {
-            int result = executeEntityInsert(entityParameters);
-            if (result > 0) {
-                return timeStampId;
-            }
-        } catch (Exception e) {
-            log.error("Base Id [{}] creation failed! {}", timeStampId, e.getMessage());
-            if (count < MAX_TRY_COUNT) {
-                BaseStringUtils.replaceLastDigitsIncreasedByOne(timeStampId);
-                entityParameters.put(key, timeStampId);
-                insertEntityExecute(entityParameters, ++count);
-            }
-        }
-        return timeStampId;
-    }
-
-    private int executeEntityInsert(Map<String, Object> entityParameters) throws InstantiationException {
+    int executeEntityInsert(Map<String, Object> entityParameters) throws InstantiationException {
         return getEntityInsert().withTableName(getTableName()).execute(entityParameters);
     }
 
@@ -132,8 +92,9 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> {
     }
 
     private SimpleJdbcInsert getEntityInsert() throws InstantiationException {
-        if (getDataSource() != null) {
-            return new SimpleJdbcInsert(getDataSource());
+        DataSource dataSource = getDataSource();
+        if (dataSource != null) {
+            return new SimpleJdbcInsert(dataSource);
         }
         throw new InstantiationException("No DataSource instantiation!");
     }

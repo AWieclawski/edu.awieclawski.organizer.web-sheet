@@ -2,10 +2,12 @@ package edu.springboot.organizer.data.repositories;
 
 import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.data.repositories.base.BaseRepository;
+import edu.springboot.organizer.data.repositories.base.BaseRepositoryTransactional;
+import edu.springboot.organizer.data.repositories.handlers.TransactionHandler;
 import edu.springboot.organizer.generator.dtos.DateCellDto;
 import edu.springboot.organizer.generator.mappers.DateCellMapper;
 import edu.springboot.organizer.generator.mappers.DateCellRowMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,13 +19,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository(DateCellRepository.BEAN_NAME)
-public class DateCellRepository extends BaseRepository<DateCell, DateCellDto> {
+public class DateCellRepository extends BaseRepositoryTransactional<DateCell, DateCellDto> {
 
-    public static final String BEAN_NAME = "edu.springboot.organizer.data.repositories.VisitorRepository";
+    public static final String BEAN_NAME = "edu.springboot.organizer.data.repositories.DateCellRepository";
 
-    public DateCellRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    private final TransactionHandler transactionHandler;
+
+    public DateCellRepository(JdbcTemplate jdbcTemplate,
+                              NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+                              TransactionHandler transactionHandler) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
+        this.transactionHandler = transactionHandler;
     }
 
     public List<DateCellDto> findDateCellsByTimestamp(String dateTime) {
@@ -56,10 +64,10 @@ public class DateCellRepository extends BaseRepository<DateCell, DateCellDto> {
 
     @Transactional
     @Override
-    public DateCellDto persistEntity(DateCell visitor) {
-        DateCell created = createDateCell(visitor);
+    public DateCellDto persistEntity(DateCell dateCell) {
+        DateCell created = transactionHandler.runInNewTransactionFunction(this::createDateCell, dateCell);
         if (created != null) {
-            return DateCellMapper.toDto(visitor);
+            return DateCellMapper.toDto(dateCell);
         }
         return null;
     }
@@ -80,10 +88,14 @@ public class DateCellRepository extends BaseRepository<DateCell, DateCellDto> {
         return jdbcQueryForObjectQuantity(query);
     }
 
-    @Transactional
-    public DateCell createDateCell(DateCell visitor) {
-        Map<String, Object> parameters = DateCellMapper.toMap(visitor);
-        return insertEntity(parameters, visitor);
+    private DateCell createDateCell(DateCell dateCell) {
+        Map<String, Object> parameters = DateCellMapper.toMap(dateCell);
+        try {
+            return insertEntity(parameters, dateCell);
+        } catch (InstantiationException i) {
+            log.warn("Inserting DateCele failed {} | {}", parameters, i.getMessage());
+        }
+        return null;
     }
 
 

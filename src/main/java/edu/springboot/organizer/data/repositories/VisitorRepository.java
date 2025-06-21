@@ -2,10 +2,12 @@ package edu.springboot.organizer.data.repositories;
 
 import edu.springboot.organizer.data.models.Visitor;
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.data.repositories.base.BaseRepository;
+import edu.springboot.organizer.data.repositories.base.BaseRepositoryTransactional;
+import edu.springboot.organizer.data.repositories.handlers.TransactionHandler;
 import edu.springboot.organizer.generator.dtos.VisitorDto;
 import edu.springboot.organizer.generator.mappers.VisitorMapper;
 import edu.springboot.organizer.generator.mappers.VisitorRowMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,13 +19,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository(VisitorRepository.BEAN_NAME)
-public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
+public class VisitorRepository extends BaseRepositoryTransactional<Visitor, VisitorDto> {
 
     public static final String BEAN_NAME = "edu.springboot.organizer.data.repositories.VisitorRepository";
 
-    public VisitorRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    private final TransactionHandler transactionHandler;
+
+    public VisitorRepository(JdbcTemplate jdbcTemplate,
+                             NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+                             TransactionHandler transactionHandler) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
+        this.transactionHandler = transactionHandler;
     }
 
     public List<VisitorDto> findVisitorsByTimestampIsBetween(String startDate, String endDate) {
@@ -49,7 +57,7 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
     @Transactional
     @Override
     public VisitorDto persistEntity(Visitor visitor) {
-        Visitor created = createVisitor(visitor);
+        Visitor created = transactionHandler.runInNewTransactionFunction(this::createVisitor, visitor);
         if (created != null) {
             return VisitorMapper.toDto(visitor);
         }
@@ -72,10 +80,14 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
         return jdbcQueryForObjectQuantity(query);
     }
 
-    @Transactional
-    public Visitor createVisitor(Visitor visitor) {
+    private Visitor createVisitor(Visitor visitor) {
         Map<String, Object> parameters = VisitorMapper.toMap(visitor);
-        return insertEntity(parameters, visitor);
+        try {
+            return insertEntity(parameters, visitor);
+        } catch (InstantiationException i) {
+            log.warn("Inserting DateCele failed {} | {}", parameters, i.getMessage());
+        }
+        return null;
     }
 
 

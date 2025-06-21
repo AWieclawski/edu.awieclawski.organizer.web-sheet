@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @Service(value = UserService.BEAN_NAME)
-@DependsOn(VisitorRepository.BEAN_NAME)
+@DependsOn(UserRepository.BEAN_NAME)
 public class UserService extends BaseService<User, UserDto> {
 
     public static final String BEAN_NAME = "edu.springboot.organizer.generator.services.UserService";
