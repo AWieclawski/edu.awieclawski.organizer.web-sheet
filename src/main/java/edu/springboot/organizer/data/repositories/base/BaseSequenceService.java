@@ -35,11 +35,11 @@ public class BaseSequenceService<S extends BaseEntity, T extends BaseDto> {
         try {
             retryDataDto.getInsertMethod().apply(parameters, entity);
         } catch (Exception e) {
-            log.warn("[{}] Inserting Entity [{}] failed {} | {}", count, entity.getClass().getSimpleName(), parameters, e.getMessage());
-            if (count < MAX_TRY_NUMBER) {
+            log.warn("[{}] Inserting Entity [{}] failed {} | {}", ++count, entity.getClass().getSimpleName(), parameters, e.getMessage());
+            if (count <= MAX_TRY_NUMBER) {
                 incrementId(entity, retryDataDto.getBaseIdKey());
                 retryDataDto.setEntity(entity);
-                handleEntityInn(retryDataDto, ++count);
+                handleEntityInn(retryDataDto, count);
             }
         }
         return null;

@@ -8,7 +8,6 @@ import edu.springboot.organizer.utils.DateUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,9 +17,10 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
     public DateCellDto mapRow(ResultSet rs, int rowNum) throws SQLException {
         DateCellDto dto = DateCellDto.builder()
                 .beginHour(rs.getInt(DateCell.Const.BEGIN_HOUR.getColumn()))
+                .cellType(rs.getString(DateCell.Const.CELL_TYPE.getColumn()))
                 .endHour(rs.getInt(DateCell.Const.END_HOUR.getColumn()))
                 .hours(rs.getInt(DateCell.Const.HOURS.getColumn()))
-                .localDate(DateUtils.timestampToToString(rs.getTimestamp(DateCell.Const.DATE.getColumn())))
+                .localDate(DateUtils.getStringFromTimestamp(rs.getTimestamp(DateCell.Const.DATE.getColumn()), "dd-MM-yyy"))
                 .monthRecordId(rs.getString(DateCell.Const.MONTH_RECORD.getColumn()))
                 .created(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
                 .build();
@@ -33,8 +33,8 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
                 .beginHour(entity.getBeginHour())
                 .endHour(entity.getEndHour())
                 .hours(entity.getHours())
-                .cellType(entity.getCellType())
-                .localDate(entity.getLocalDate().format(DateTimeFormatter.ofPattern("dd-MM-yyy")))
+                .cellType(entity.getCellType().name())
+                .localDate(DateUtils.getStringFromLocalDate(entity.getLocalDate(), "dd-MM-yyy"))
                 .monthRecordId(entity.getMonthRecordId())
                 .created(entity.getId())
                 .hashId(entity.hashCode())
@@ -47,11 +47,10 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
         parameters.put(DateCell.Const.BEGIN_HOUR.getColumn(), entity.getBeginHour());
         parameters.put(DateCell.Const.END_HOUR.getColumn(), entity.getEndHour());
         parameters.put(DateCell.Const.HOURS.getColumn(), entity.getHours());
-        parameters.put(DateCell.Const.CELL_TYPE.getColumn(), entity.getCellType());
+        parameters.put(DateCell.Const.CELL_TYPE.getColumn(), entity.getCellType().name());
         parameters.put(DateCell.Const.DATE.getColumn(), DateUtils.localDateToTimestamp(entity.getLocalDate()));
         parameters.put(DateCell.Const.MONTH_RECORD.getColumn(), entity.getMonthRecordId());
         return parameters;
     }
-
 
 }

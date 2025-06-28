@@ -1,7 +1,10 @@
 package edu.springboot.organizer.data.configs;
 
+import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.data.models.User;
 import edu.springboot.organizer.data.models.Visitor;
+import edu.springboot.organizer.generator.enums.CellType;
+import edu.springboot.organizer.generator.services.DateCellService;
 import edu.springboot.organizer.generator.services.UserService;
 import edu.springboot.organizer.generator.services.VisitorService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class DataStarter {
 
     private final VisitorService visitorService;
     private final UserService userService;
+    private final DateCellService dateCellService;
 
     @PostConstruct
     public void displaySystemInfo() {
@@ -43,6 +47,7 @@ public class DataStarter {
     private void initDataDefinition() {
         visitorService.initTable();
         userService.initTable();
+        dateCellService.initTable();
     }
 
     private void operateDemoData() {
@@ -63,6 +68,13 @@ public class DataStarter {
         userService.createUser(User.builder().name("Examplename1").surName("Examplesurname1").login("examplelogin1").password("somepass1").build());
         userService.createUser(User.builder().name("Examplename2").surName("Examplesurname2").login("examplelogin2").password("somepass2").build());
 
+        dateCellService.purgeDateCells();
 
+        // save a couple date cells
+        dateCellService.createDateCell(DateCell.builder().monthRecordId("monthRecordId00").cellType(CellType.HOURS_RANGE).beginHour(8).endHour(16).localDate(LocalDateTime.now().minusDays(5).toLocalDate()).build());
+        dateCellService.createDateCell(DateCell.builder().monthRecordId("monthRecordId00").cellType(CellType.HOURS_RANGE).beginHour(8).endHour(16).localDate(LocalDateTime.now().minusDays(4).toLocalDate()).build());
+        dateCellService.createDateCell(DateCell.builder().monthRecordId("monthRecordId00").cellType(CellType.HOURS_RANGE).beginHour(8).endHour(16).localDate(LocalDateTime.now().minusDays(3).toLocalDate()).build());
+        dateCellService.createDateCell(DateCell.builder().monthRecordId("monthRecordId00").cellType(CellType.HOURS_RANGE).beginHour(8).endHour(16).localDate(LocalDateTime.now().minusDays(2).toLocalDate()).build());
+        dateCellService.createDateCell(DateCell.builder().monthRecordId("monthRecordId00").cellType(CellType.HOURS_RANGE).beginHour(8).endHour(16).localDate(LocalDateTime.now().minusDays(1).toLocalDate()).build());
     }
 }

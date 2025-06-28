@@ -17,6 +17,7 @@ spring:
 endpoint:
   visitors: api/visitors
   users: api/users
+  date-cells: api/date-cells
 # logging
 logging:
   level:

@@ -36,18 +36,27 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
         try {
             return dateCellRepository.findAll();
         } catch (Exception e) {
-            log.error("All Visitors not found! {}", e.getMessage());
+            log.error("All DateCells not found! {}", e.getMessage());
         }
-        throw new ResultNotFoundException("All Visitors found failed!");
+        throw new ResultNotFoundException("All DateCells found failed!");
     }
 
     public List<DateCellDto> getDateCellsByDate(String dayDate) {
         try {
             return dateCellRepository.findDateCellsByTimestamp(dayDate);
         } catch (Exception e) {
-            log.error("Get between failed! {}", e.getMessage());
+            log.error("Get by date failed! {}", e.getMessage());
         }
-        throw new ResultNotFoundException(String.format("DateCells find between %s failed!", dayDate));
+        throw new ResultNotFoundException(String.format("DateCells find by date %s failed!", dayDate));
+    }
+
+    public List<DateCellDto> getDateCellsByMonthRecord(String id) {
+        try {
+            return dateCellRepository.findDateCellsByMonthRecordId(id);
+        } catch (Exception e) {
+            log.error("Get by MonthRecord failed! {}", e.getMessage());
+        }
+        throw new ResultNotFoundException(String.format("DateCells find by MonthRecord %s failed!", id));
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

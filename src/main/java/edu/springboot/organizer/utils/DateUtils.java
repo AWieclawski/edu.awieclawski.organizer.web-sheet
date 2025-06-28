@@ -17,9 +17,14 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateUtils {
 
-    public static String getStringFromDate(LocalDate date, String pattern) {
+    public static String getStringFromLocalDate(LocalDate date, String pattern) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
         return date.format(format);
+    }
+
+    public static String getStringFromTimestamp(Timestamp timestamp, String pattern) {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern(pattern);
+        return timestamp.toLocalDateTime().format(format);
     }
 
     public static Instant stringToInstant(String stringDate, DateTimeFormatter dateFormatter, ZoneId zoneId) {
