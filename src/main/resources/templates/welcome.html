@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Strona główna</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+    <script type="text/javascript" th:src="@{/js/functions.js}"></script>
+
+</head>
+
+<body>
+
+<div class="containeer">
+
+    <div th:replace="~{fragments/welcome-header :: header}"></div>
+
+    <div class="mainframe">
+
+        <div th:replace="~{fragments/pop-up :: pop-up}"></div>
+
+        <div role="group" class="btnbig-group">
+
+            <a th:href="@{/tytuly}" title="Prezentacja tytułów">
+                <button th:id="ok" class="klawisz" type="button" th:text="|OK! Wchodzę dalej|"
+                        th:onclick="disableByClass(this.className)"
+                        style="position:relative; top:50%; left:50%; transform: translateX(-50%);"></button>
+            </a>
+
+        </div>
+
+    </div>
+
+    <div th:replace="~{fragments/main-footer :: footer}"></div>
+
+</div>
+</body>
+</html>

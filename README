@@ -1,0 +1,13 @@
+# https://stackoverflow.com/questions/27767264/how-to-dockerize-a-maven-project-how-many-ways-to-accomplish-it/27768965#27768965
+
+# https://stackoverflow.com/questions/26050899/how-to-mount-host-volumes-into-docker-containers-in-dockerfile-during-build/52762779#52762779
+
+add datastore/appdata.db
+
+# endpoints
+
+ .../api/visitors/all
+
+ .../api/visitors/between/2025-04-02/2025-04-04
+
+
