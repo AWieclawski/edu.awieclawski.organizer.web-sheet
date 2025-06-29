@@ -1,22 +1,26 @@
 package edu.springboot.organizer.generator.dtos;
 
 import edu.springboot.organizer.generator.dtos.base.BaseDto;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
-@RequiredArgsConstructor
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true, of = {})
 public class MonthRecordDto extends BaseDto {
-    private Integer year;
-    private Integer month;
-    private List<DateCellDto> dateCellDtos;
-    private EmployeeDto employeeDto;
+    private final Integer year;
+    private final Integer month;
+    private final List<DateCellDto> dateCellDtos;
+    private final EmployeeDto employeeDto;
+
+    @Builder
+    public MonthRecordDto(String created, Integer hashId, Integer year, Integer month, List<DateCellDto> dateCellDtos, EmployeeDto employeeDto) {
+        super(created, hashId);
+        this.year = year;
+        this.month = month;
+        this.dateCellDtos = dateCellDtos;
+        this.employeeDto = employeeDto;
+    }
 }

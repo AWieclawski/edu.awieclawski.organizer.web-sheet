@@ -15,15 +15,13 @@ public class VisitorRowMapper implements BaseRowMapper<Visitor, VisitorDto> {
 
     @Override
     public VisitorDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-        VisitorDto dto = VisitorDto.builder()
+        return VisitorDto.builder()
                 .name(rs.getString(Visitor.Const.NAME.getColumn()))
                 .url(rs.getString(Visitor.Const.URL.getColumn()))
                 .ip(rs.getString(Visitor.Const.IP.getColumn()))
                 .timestamp(DateUtils.timestampToToString(rs.getTimestamp(Visitor.Const.TIMESTAMP.getColumn())))
                 .created(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
                 .build();
-        dto.hashCode();
-        return dto;
     }
 
     public VisitorDto toDto(Visitor entity) {

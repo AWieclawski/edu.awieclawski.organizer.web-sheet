@@ -8,27 +8,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-/**
- * Encja użytkownika korzystającego z aplikacji (po zalogowaniu)
- * i posiadającego dostęp do zapisów w BD, które utworzył
- */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true, of = {})
-public class User extends BaseEntity {
-    public static final String TABLE_NAME = "users";
-    private String name;
-    private String surName;
-    private String credentialsId;
+public class Credentials extends BaseEntity {
+    public static final String TABLE_NAME = "credentials";
+    private String login;
+    private String password;
+    private String email;
 
     @Getter
     public enum Const {
-        NAME("name"),
-        SUR_NAME("sur_name"),
-        CREDENTIALS("credentials_id");
+        LOGIN("login"),
+        PASS("password"),
+        EMAIL("email");
         private final String column;
 
         Const(String column) {
@@ -42,13 +38,18 @@ public class User extends BaseEntity {
                         "%s TEXT, " +
                         "%s TEXT, " +
                         "%s TEXT, " +
+                        "UNIQUE(%s), " +
+                        "UNIQUE(%s), " +
                         "UNIQUE(%s));",
                 TABLE_NAME,
-                BaseConst.ID.getColumn(),
-                Const.NAME.getColumn(),
-                Const.SUR_NAME.getColumn(),
-                Const.CREDENTIALS.getColumn(),
-                Const.CREDENTIALS.getColumn());
+                BaseEntity.BaseConst.ID.getColumn(),
+                Const.LOGIN.getColumn(),
+                Const.PASS.getColumn(),
+                Const.EMAIL.getColumn(),
+                Const.LOGIN.getColumn(),
+                Const.PASS.getColumn(),
+                Const.EMAIL.getColumn()
+        );
     }
 
 }

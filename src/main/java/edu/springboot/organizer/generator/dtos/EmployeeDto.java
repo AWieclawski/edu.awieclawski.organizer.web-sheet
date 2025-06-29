@@ -1,19 +1,24 @@
 package edu.springboot.organizer.generator.dtos;
 
 import edu.springboot.organizer.generator.dtos.base.BaseDto;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
-@RequiredArgsConstructor
-@SuperBuilder
 @EqualsAndHashCode(callSuper = true, of = {})
 public class EmployeeDto extends BaseDto {
+    private final String surName;
+    private final String uniqNick;
+    @Setter
     private String name;
-    private String surName;
-    private String uniqNick;
+
+    @Builder
+    public EmployeeDto(String created, Integer hashId, String name, String surName, String uniqNick) {
+        super(created, hashId);
+        this.name = name;
+        this.surName = surName;
+        this.uniqNick = uniqNick;
+    }
 }

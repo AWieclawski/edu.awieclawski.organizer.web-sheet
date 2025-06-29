@@ -37,7 +37,12 @@ public class Visitor extends BaseEntity {
     }
 
     public static String getSqlTableCreator() {
-        return String.format("CREATE TABLE IF NOT EXISTS %s ( %s TEXT PRIMARY KEY, %s TEXT, %s DATETIME DEFAULT CURRENT_TIMESTAMP, %s TEXT, %s TEXT);",
+        return String.format("CREATE TABLE IF NOT EXISTS %s ( " +
+                        "%s TEXT PRIMARY KEY, " +
+                        "%s TEXT, " +
+                        "%s DATETIME DEFAULT CURRENT_TIMESTAMP, " +
+                        "%s TEXT, " +
+                        "%s TEXT); ",
                 TABLE_NAME,
                 BaseConst.ID.getColumn(),
                 Const.NAME.getColumn(),

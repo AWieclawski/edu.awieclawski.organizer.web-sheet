@@ -15,7 +15,7 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
 
     @Override
     public DateCellDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-        DateCellDto dto = DateCellDto.builder()
+        return DateCellDto.builder()
                 .beginHour(rs.getInt(DateCell.Const.BEGIN_HOUR.getColumn()))
                 .cellType(rs.getString(DateCell.Const.CELL_TYPE.getColumn()))
                 .endHour(rs.getInt(DateCell.Const.END_HOUR.getColumn()))
@@ -24,8 +24,6 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
                 .monthRecordId(rs.getString(DateCell.Const.MONTH_RECORD.getColumn()))
                 .created(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
                 .build();
-        dto.hashCode();
-        return dto;
     }
 
     public DateCellDto toDto(DateCell entity) {

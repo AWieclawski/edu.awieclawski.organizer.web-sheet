@@ -2,7 +2,6 @@ package edu.springboot.organizer.generator.services;
 
 import edu.springboot.organizer.data.models.User;
 import edu.springboot.organizer.data.repositories.UserRepository;
-import edu.springboot.organizer.data.repositories.VisitorRepository;
 import edu.springboot.organizer.generator.dtos.UserDto;
 import edu.springboot.organizer.generator.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.generator.services.base.BaseService;

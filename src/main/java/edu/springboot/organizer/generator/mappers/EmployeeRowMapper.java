@@ -14,14 +14,12 @@ public class EmployeeRowMapper implements BaseRowMapper<Employee, EmployeeDto> {
 
     @Override
     public EmployeeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-        EmployeeDto dto = EmployeeDto.builder()
+        return EmployeeDto.builder()
                 .name(rs.getString(Employee.Const.NAME.getColumn()))
                 .surName(rs.getString(Employee.Const.SURNAME.getColumn()))
                 .uniqNick(rs.getString(Employee.Const.NICK.getColumn()))
                 .created(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
                 .build();
-        dto.hashCode();
-        return dto;
     }
 
     public EmployeeDto toDto(Employee entity) {

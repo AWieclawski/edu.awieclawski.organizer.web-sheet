@@ -53,8 +53,6 @@ public class DataStarter {
     private void operateDemoData() {
 
         visitorService.purgeVisitors();
-
-        // save a couple of demo visitors
         visitorService.createVisitor(Visitor.builder().url("example/url/test0").name("test0").ip("ip0").build());
         visitorService.createVisitor(Visitor.builder().url("example/url/test1").name("test1").ip("ip1").timestamp(LocalDateTime.now().minusDays(1)).build());
         visitorService.createVisitor(Visitor.builder().url("example/url/test2").name("test2").ip("ip2").timestamp(LocalDateTime.now().minusDays(2)).build());
@@ -63,14 +61,10 @@ public class DataStarter {
         visitorService.createVisitor(Visitor.builder().url("example/url/test5").name("test5").ip("ip5").timestamp(LocalDateTime.now().minusDays(5)).build());
 
         userService.purgeUsers();
-
-        // save a couple of demo users
-        userService.createUser(User.builder().name("Examplename1").surName("Examplesurname1").login("examplelogin1").password("somepass1").build());
-        userService.createUser(User.builder().name("Examplename2").surName("Examplesurname2").login("examplelogin2").password("somepass2").build());
+        userService.createUser(User.builder().name("Examplename1").surName("Examplesurname1").credentialsId("examplecredentials1").build());
+        userService.createUser(User.builder().name("Examplename2").surName("Examplesurname2").credentialsId("examplecredentials2").build());
 
         dateCellService.purgeDateCells();
-
-        // save a couple date cells
         dateCellService.createDateCell(DateCell.builder().monthRecordId("monthRecordId00").cellType(CellType.HOURS_RANGE).beginHour(8).endHour(16).localDate(LocalDateTime.now().minusDays(5).toLocalDate()).build());
         dateCellService.createDateCell(DateCell.builder().monthRecordId("monthRecordId00").cellType(CellType.HOURS_RANGE).beginHour(8).endHour(16).localDate(LocalDateTime.now().minusDays(4).toLocalDate()).build());
         dateCellService.createDateCell(DateCell.builder().monthRecordId("monthRecordId00").cellType(CellType.HOURS_RANGE).beginHour(8).endHour(16).localDate(LocalDateTime.now().minusDays(3).toLocalDate()).build());
