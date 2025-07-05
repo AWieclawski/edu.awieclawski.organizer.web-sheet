@@ -3,11 +3,11 @@ package edu.springboot.organizer.data.models;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class CredentialsTest {
+class CredentialTest {
 
     @Test
     void createTable_notThrow() {
-        Assertions.assertDoesNotThrow(Credentials::getSqlTableCreator);
+        Assertions.assertDoesNotThrow(Credential::getSqlTableCreator);
     }
 
 }

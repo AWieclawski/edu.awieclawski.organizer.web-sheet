@@ -14,13 +14,13 @@ import java.util.Map;
 public class VisitorRowMapper implements BaseRowMapper<Visitor, VisitorDto> {
 
     @Override
-    public VisitorDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return VisitorDto.builder()
+    public Visitor mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return Visitor.builder()
                 .name(rs.getString(Visitor.Const.NAME.getColumn()))
                 .url(rs.getString(Visitor.Const.URL.getColumn()))
                 .ip(rs.getString(Visitor.Const.IP.getColumn()))
-                .timestamp(DateUtils.timestampToToString(rs.getTimestamp(Visitor.Const.TIMESTAMP.getColumn())))
-                .created(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
+                .timestamp(DateUtils.timestampToLocalDateTime(rs.getTimestamp(Visitor.Const.TIMESTAMP.getColumn())))
+                .id(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
                 .build();
     }
 

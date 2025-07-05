@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -16,6 +17,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, of = {})
 public class Employee extends BaseEntity {
     public static final String TABLE_NAME = "employees";
@@ -28,10 +30,25 @@ public class Employee extends BaseEntity {
         NAME("name"),
         SURNAME("sur_name"),
         NICK("uniq_nick");
+
         private final String column;
 
         Const(String column) {
             this.column = column;
         }
+
+    }
+
+    public static String getSqlTableCreator() {
+        return String.format("CREATE TABLE IF NOT EXISTS %s ( " +
+                        "%s TEXT PRIMARY KEY, " +
+                        "%s TEXT, " +
+                        "%s TEXT, " +
+                        "%s TEXT);",
+                TABLE_NAME,
+                BaseConst.ID.getColumn(),
+                Const.NAME.getColumn(),
+                Const.SURNAME.getColumn(),
+                Const.NICK.getColumn());
     }
 }

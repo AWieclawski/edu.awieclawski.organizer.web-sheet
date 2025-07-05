@@ -8,6 +8,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/**
+ * Type parameters:
+ * <T> – the type of the first argument to the function
+ * <U> – the type of the second argument to the function
+ * <R> – the type of the result of the function
+ */
 @Component
 public class TransactionHandler {
 
@@ -23,24 +29,24 @@ public class TransactionHandler {
 
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public <T, R> R runInTransactionFunction(Function<T, R> supplier, T t) {
-        return supplier.apply(t);
+    public <T, R> R runInTransactionFunction(Function<T, R> supplier, T firstArgument) {
+        return supplier.apply(firstArgument);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public <T, R> R runInNewTransactionFunction(Function<T, R> supplier, T t) {
-        return supplier.apply(t);
+    public <T, R> R runInNewTransactionFunction(Function<T, R> supplier, T firstArgument) {
+        return supplier.apply(firstArgument);
     }
 
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public <T, U, R> R runInTransactionBiFunction(BiFunction<T, U, R> supplier, T t, U u) {
-        return supplier.apply(t, u);
+    public <T, U, R> R runInTransactionBiFunction(BiFunction<T, U, R> supplier, T firstArgument, U secondArgument) {
+        return supplier.apply(firstArgument, secondArgument);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public <T, U, R> R runInNewTransactionBiFunction(BiFunction<T, U, R> supplier, T t, U u) {
-        return supplier.apply(t, u);
+    public <T, U, R> R runInNewTransactionBiFunction(BiFunction<T, U, R> supplier, T firstArgument, U secondArgument) {
+        return supplier.apply(firstArgument, secondArgument);
     }
 
 }

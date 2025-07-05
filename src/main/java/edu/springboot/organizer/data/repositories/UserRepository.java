@@ -1,7 +1,6 @@
 package edu.springboot.organizer.data.repositories;
 
 import edu.springboot.organizer.data.models.User;
-import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.data.repositories.base.BaseRepository;
 import edu.springboot.organizer.data.repositories.base.BaseSequenceService;
 import edu.springboot.organizer.generator.dtos.UserDto;
@@ -28,49 +27,33 @@ public class UserRepository extends BaseRepository<User, UserDto> {
         super(jdbcTemplate, namedParameterJdbcTemplate, userRetryHandler);
     }
 
-    public UserDto findById(String id) {
-        String query = String.format("SELECT * FROM %s  WHERE %s = ?;",
-                getTableName(), BaseEntity.BaseConst.ID.getColumn());
-        return jdbcQueryForObject(query, id);
-    }
-
-    public List<UserDto> findAll() {
-        String query = String.format("SELECT * FROM %s;", getTableName());
-        return jdbcQuery(query);
+    @Override
+    public User findById(String id) {
+        return super.findById(id);
     }
 
     @Override
-    public UserDto persistEntity(User user) {
-        User created = getBaseIdGenerator().handleEntityInn(getRetryDataDto(user));
-        if (created != null) {
-            return getRowMapper().toDto(user);
-        }
-        return null;
+    public List<User> findAll() {
+        return super.findAll();
     }
 
-    public void deleteAll() {
-        String query = String.format("DELETE FROM %s;", getTableName());
-        jdbcExecuteSafe(query);
-    }
-
-
-    public void modifyDataBase(String sql) {
-        jdbcExecuteUnsecured(sql);
-    }
-
+    @Override
     public Long howMany() {
-        String query = String.format("SELECT COUNT(*) FROM %s;", getTableName());
-        return jdbcQueryForObjectQuantity(query);
+        return super.howMany();
     }
 
     @Override
-    public BaseRowMapper<User, UserDto> getRowMapper() {
+    public BaseRowMapper<User, UserDto> getBaseRowMapper() {
         return new UserRowMapper();
     }
 
     @Override
-    protected String getTableName() {
+    public String getTableName() {
         return User.TABLE_NAME;
     }
 
+    @Override
+    public String getSqlTableCreator() {
+        return User.getSqlTableCreator();
+    }
 }

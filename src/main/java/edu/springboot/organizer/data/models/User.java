@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -17,18 +18,19 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, of = {})
 public class User extends BaseEntity {
     public static final String TABLE_NAME = "users";
     private String name;
     private String surName;
-    private String credentialsId;
+    private String credentialId;
 
     @Getter
     public enum Const {
         NAME("name"),
-        SUR_NAME("sur_name"),
-        CREDENTIALS("credentials_id");
+        SURNAME("sur_name"),
+        CREDENTIAL("credential_id");
         private final String column;
 
         Const(String column) {
@@ -41,14 +43,14 @@ public class User extends BaseEntity {
                         "%s TEXT PRIMARY KEY, " +
                         "%s TEXT, " +
                         "%s TEXT, " +
-                        "%s TEXT, " +
+                        "%s TEXT NOT NULL, " +
                         "UNIQUE(%s));",
                 TABLE_NAME,
                 BaseConst.ID.getColumn(),
                 Const.NAME.getColumn(),
-                Const.SUR_NAME.getColumn(),
-                Const.CREDENTIALS.getColumn(),
-                Const.CREDENTIALS.getColumn());
+                Const.SURNAME.getColumn(),
+                Const.CREDENTIAL.getColumn(),
+                Const.CREDENTIAL.getColumn());
     }
 
 }

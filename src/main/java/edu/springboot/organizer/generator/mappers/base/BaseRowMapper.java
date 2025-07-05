@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.util.Map;
 
-public interface BaseRowMapper<S extends BaseEntity, T extends BaseDto> extends RowMapper<T> {
+public interface BaseRowMapper<S extends BaseEntity, T extends BaseDto> extends RowMapper<S> {
 
     T toDto(S entity);
 

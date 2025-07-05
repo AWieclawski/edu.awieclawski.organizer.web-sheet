@@ -45,7 +45,7 @@ public class BaseSequenceService<S extends BaseEntity, T extends BaseDto> {
         assignTimestampId(entity);
         Map<String, Object> parameters = retryDataDto.getRowMapper().toMap(entity);
         try {
-            retryDataDto.getInsertMethod().apply(parameters, entity);
+            return retryDataDto.getInsertMethod().apply(parameters, entity);
         } catch (DataAccessException e) {
             log.warn("[{}] Inserting Entity [{}] failed {} | {}", ++count, entity.getClass().getSimpleName(), parameters, e.getMessage());
             if (count <= MAX_TRY_NUMBER) {

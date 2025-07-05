@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -13,8 +14,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, of = {})
-public class Credentials extends BaseEntity {
+public class Credential extends BaseEntity {
     public static final String TABLE_NAME = "credentials";
     private String login;
     private String password;

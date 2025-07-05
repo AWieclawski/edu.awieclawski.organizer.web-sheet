@@ -1,9 +1,8 @@
 package edu.springboot.organizer.data.repositories;
 
 import edu.springboot.organizer.data.models.Visitor;
-import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.data.repositories.base.BaseSequenceService;
 import edu.springboot.organizer.data.repositories.base.BaseRepository;
+import edu.springboot.organizer.data.repositories.base.BaseSequenceService;
 import edu.springboot.organizer.generator.dtos.VisitorDto;
 import edu.springboot.organizer.generator.mappers.VisitorRowMapper;
 import edu.springboot.organizer.generator.mappers.base.BaseRowMapper;
@@ -30,7 +29,7 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
         super(jdbcTemplate, namedParameterJdbcTemplate, visitorRetryHandler);
     }
 
-    public List<VisitorDto> findVisitorsByTimestampIsBetween(String startDate, String endDate) {
+    public List<Visitor> findVisitorsByTimestampIsBetween(String startDate, String endDate) {
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("start", startDate)
                 .addValue("end", endDate);
@@ -39,49 +38,33 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
         return jdbcNamedParametersQuery(query, namedParameters);
     }
 
-    public VisitorDto findById(String id) {
-        String query = String.format("SELECT * FROM %s  WHERE %s = ?;",
-                getTableName(), BaseEntity.BaseConst.ID.getColumn());
-        return jdbcQueryForObject(query, id);
-    }
-
-    public List<VisitorDto> findAll() {
-        String query = String.format("SELECT * FROM %s;", getTableName());
-        return jdbcQuery(query);
+    @Override
+    public Visitor findById(String id) {
+        return super.findById(id);
     }
 
     @Override
-    public VisitorDto persistEntity(Visitor visitor) {
-        Visitor created = getBaseIdGenerator().handleEntityInn(getRetryDataDto(visitor));
-        if (created != null) {
-            return getRowMapper().toDto(visitor);
-        }
-        return null;
+    public List<Visitor> findAll() {
+        return super.findAll();
     }
 
-    public void deleteAll() {
-        String query = String.format("DELETE FROM %s;", getTableName());
-        jdbcExecuteSafe(query);
-    }
-
-
-    public void modifyDataBase(String sql) {
-        jdbcExecuteUnsecured(sql);
-    }
-
+    @Override
     public Long howMany() {
-        String query = String.format("SELECT COUNT(*) FROM %s;", getTableName());
-        return jdbcQueryForObjectQuantity(query);
+        return super.howMany();
     }
 
     @Override
-    public BaseRowMapper<Visitor, VisitorDto> getRowMapper() {
+    public BaseRowMapper<Visitor, VisitorDto> getBaseRowMapper() {
         return new VisitorRowMapper();
     }
 
     @Override
-    protected String getTableName() {
+    public String getTableName() {
         return Visitor.TABLE_NAME;
     }
 
+    @Override
+    public String getSqlTableCreator() {
+        return Visitor.getSqlTableCreator();
+    }
 }

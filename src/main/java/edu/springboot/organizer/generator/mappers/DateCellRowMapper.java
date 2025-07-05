@@ -3,6 +3,7 @@ package edu.springboot.organizer.generator.mappers;
 import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.generator.dtos.DateCellDto;
+import edu.springboot.organizer.generator.enums.CellType;
 import edu.springboot.organizer.generator.mappers.base.BaseRowMapper;
 import edu.springboot.organizer.utils.DateUtils;
 
@@ -14,15 +15,15 @@ import java.util.Map;
 public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
 
     @Override
-    public DateCellDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return DateCellDto.builder()
+    public DateCell mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return DateCell.builder()
                 .beginHour(rs.getInt(DateCell.Const.BEGIN_HOUR.getColumn()))
-                .cellType(rs.getString(DateCell.Const.CELL_TYPE.getColumn()))
+                .cellType(CellType.getByName(rs.getString(DateCell.Const.CELL_TYPE.getColumn())))
                 .endHour(rs.getInt(DateCell.Const.END_HOUR.getColumn()))
                 .hours(rs.getInt(DateCell.Const.HOURS.getColumn()))
-                .localDate(DateUtils.getStringFromTimestamp(rs.getTimestamp(DateCell.Const.DATE.getColumn()), "dd-MM-yyy"))
+                .localDate(DateUtils.timestampToLocalDate(rs.getTimestamp(DateCell.Const.DATE.getColumn())))
                 .monthRecordId(rs.getString(DateCell.Const.MONTH_RECORD.getColumn()))
-                .created(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
+                .id(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
                 .build();
     }
 

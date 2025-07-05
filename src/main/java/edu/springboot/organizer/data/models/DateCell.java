@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true, of = {})
 public class DateCell extends BaseEntity {
     public static final String TABLE_NAME = "date_cells";
@@ -45,7 +47,14 @@ public class DateCell extends BaseEntity {
     }
 
     public static String getSqlTableCreator() {
-        return String.format("CREATE TABLE IF NOT EXISTS %s (%s TEXT PRIMARY KEY, %s DATETIME, %s INTEGER, %s INTEGER, %s INTEGER, %s TEXT, %s TEXT);",
+        return String.format("CREATE TABLE IF NOT EXISTS %s " +
+                        "(%s TEXT PRIMARY KEY, " +
+                        "%s DATETIME, " +
+                        "%s INTEGER, " +
+                        "%s INTEGER, " +
+                        "%s INTEGER, " +
+                        "%s TEXT, " +
+                        "%s TEXT);",
                 TABLE_NAME,
                 BaseConst.ID.getColumn(),
                 Const.DATE.getColumn(),

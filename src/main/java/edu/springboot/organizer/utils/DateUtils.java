@@ -47,6 +47,10 @@ public class DateUtils {
         return timestamp.toLocalDateTime();
     }
 
+    public static LocalDate timestampToLocalDate(Timestamp timestamp) {
+        return timestampToLocalDateTime(timestamp).toLocalDate();
+    }
+
     public static Timestamp localDateTimeToTimestamp(LocalDateTime dateTime) {
         return Timestamp.valueOf(dateTime);
     }

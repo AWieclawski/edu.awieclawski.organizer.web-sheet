@@ -4,6 +4,7 @@ import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.data.repositories.DateCellRepository;
 import edu.springboot.organizer.generator.dtos.DateCellDto;
 import edu.springboot.organizer.generator.exceptions.ResultNotFoundException;
+import edu.springboot.organizer.generator.mappers.base.BaseRowMapper;
 import edu.springboot.organizer.generator.services.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service(value = DateCellService.BEAN_NAME)
@@ -28,59 +30,81 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public DateCellDto createDateCell(DateCell dateCell) {
-        return insertEntity(dateCell);
+        DateCell entity = insertEntity(dateCell);
+        log.info("Saved [{}]", entity);
+        return getRowMapper().toDto(entity);
     }
 
     @Transactional(readOnly = true)
     public List<DateCellDto> getAllDateCells() {
         try {
-            return dateCellRepository.findAll();
+            List<DateCell> dateCells = dateCellRepository.findAll();
+            return dateCells.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
         } catch (Exception e) {
             log.error("All DateCells not found! {}", e.getMessage());
         }
         throw new ResultNotFoundException("All DateCells found failed!");
     }
 
+    @Transactional(readOnly = true)
+    public DateCellDto getDateCellById(String id) {
+        try {
+            DateCell entity = dateCellRepository.findById(id);
+            return getRowMapper().toDto(entity);
+        } catch (Exception e) {
+            log.error("DateCell [{}] not found! {}", id, e.getMessage());
+        }
+        throw new ResultNotFoundException("DateCell search by id failed!");
+    }
+
     public List<DateCellDto> getDateCellsByDate(String dayDate) {
         try {
-            return dateCellRepository.findDateCellsByTimestamp(dayDate);
+            List<DateCell> dateCells = dateCellRepository.findDateCellsByDate(dayDate);
+            return dateCells.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
         } catch (Exception e) {
-            log.error("Get by date failed! {}", e.getMessage());
+            log.error("Get DateCell by date failed! {}", e.getMessage());
         }
-        throw new ResultNotFoundException(String.format("DateCells find by date %s failed!", dayDate));
+        throw new ResultNotFoundException(String.format("DateCell search by date %s failed!", dayDate));
     }
 
     public List<DateCellDto> getDateCellsByMonthRecord(String id) {
         try {
-            return dateCellRepository.findDateCellsByMonthRecordId(id);
+            List<DateCell> dateCells = dateCellRepository.findDateCellsByMonthRecordId(id);
+            return dateCells.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
         } catch (Exception e) {
             log.error("Get by MonthRecord failed! {}", e.getMessage());
         }
         throw new ResultNotFoundException(String.format("DateCells find by MonthRecord %s failed!", id));
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void purgeDateCells() {
+    public List<DateCellDto> findDateCellsByDateAndMonthRecord(String dayDate, String id) {
         try {
-            dateCellRepository.deleteAll();
+            List<DateCell> dateCells = dateCellRepository.findDateCellsByDateAndMonthRecordId(dayDate, id);
+            return dateCells.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
         } catch (Exception e) {
-            log.error("Purge failed! {}", e.getMessage());
+            log.error("Get by date and MonthRecord failed! {}", e.getMessage());
         }
+        throw new ResultNotFoundException(String.format("DateCells find by MonthRecord %s failed!", id));
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void purgeDateCells() {
+        purgeEntities(getRepository().getTableName());
+    }
+
+    @Override
     public void initTable() {
-        String sql = DateCell.getSqlTableCreator();
-        log.warn("Crating table [{}]", DateCell.TABLE_NAME);
-        try {
-            dateCellRepository.modifyDataBase(sql);
-        } catch (Exception e) {
-            log.error("Modify failed! {}", e.getMessage());
-        }
+        initTable(DateCell.getSqlTableCreator(), DateCell.TABLE_NAME);
     }
 
     @Override
     protected DateCellRepository getRepository() {
         return this.dateCellRepository;
+    }
+
+    @Override
+    protected BaseRowMapper<DateCell, DateCellDto> getRowMapper() {
+        return getRepository().getBaseRowMapper();
     }
 }
 

@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -19,6 +20,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true, of = {})
+@ToString(callSuper = true)
 public class MonthRecord extends BaseEntity {
     public static final String TABLE_NAME = "month_records";
     private Integer year;
@@ -32,10 +34,27 @@ public class MonthRecord extends BaseEntity {
         YEAR("year"),
         USER("user_id"),
         EMPLOYEE("employee_id");
-        private final String column;
 
+        private final String column;
         Const(String column) {
             this.column = column;
         }
+
+    }
+
+    public static String getSqlTableCreator() {
+        return String.format("CREATE TABLE IF NOT EXISTS %s ( " +
+                        "%s TEXT PRIMARY KEY, " +
+                        "%s INTEGER, " +
+                        "%s INTEGER, " +
+                        "%s TEXT, " +
+                        "%s TEXT);",
+                TABLE_NAME,
+                BaseConst.ID.getColumn(),
+                Const.MONTH.getColumn(),
+                Const.YEAR.getColumn(),
+                Const.USER.getColumn(),
+                Const.EMPLOYEE.getColumn()
+        );
     }
 }

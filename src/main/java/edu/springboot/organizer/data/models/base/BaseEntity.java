@@ -4,12 +4,14 @@ import edu.springboot.organizer.data.decriptor.Cryptor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
+@ToString
 public abstract class BaseEntity {
     private String id;
     private Integer hashId;
@@ -46,4 +48,5 @@ public abstract class BaseEntity {
             this.column = column;
         }
     }
+
 }

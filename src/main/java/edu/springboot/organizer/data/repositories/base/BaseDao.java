@@ -1,5 +1,6 @@
 package edu.springboot.organizer.data.repositories.base;
 
+import edu.springboot.organizer.data.exceptions.SanitizeQueryException;
 import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.generator.dtos.base.BaseDto;
 import edu.springboot.organizer.generator.mappers.base.BaseRowMapper;
@@ -43,14 +44,14 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
         jdbcExecute(query, true);
     }
 
-    protected List<T> jdbcQuery(String query) {
+    protected List<S> jdbcQuery(String query) {
         sanitizeQuery(query);
-        return getJdbcTemplate().query(query, getRowMapper());
+        return getJdbcTemplate().query(query, getBaseRowMapper());
     }
 
-    protected T jdbcQueryForObject(String query, String id) {
+    protected S jdbcQueryForObject(String query, String id) {
         sanitizeQuery(query);
-        return getJdbcTemplate().queryForObject(query, getRowMapper(), id);
+        return getJdbcTemplate().queryForObject(query, getBaseRowMapper(), id);
     }
 
     protected Long jdbcQueryForObjectQuantity(String query) {
@@ -58,12 +59,12 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
         return getJdbcTemplate().queryForObject(query, Long.class);
     }
 
-    protected List<T> jdbcNamedParametersQuery(String query, SqlParameterSource namedParameters) {
+    protected List<S> jdbcNamedParametersQuery(String query, SqlParameterSource namedParameters) {
         sanitizeQuery(query);
         return getNamedParameterJdbcTemplate()
                 .query(query,
                         namedParameters,
-                        (rs, rowNum) -> getRowMapper().mapRow(rs, rowNum));
+                        (rs, rowNum) -> getBaseRowMapper().mapRow(rs, rowNum));
     }
 
     private void jdbcExecute(String query, boolean safe) {
@@ -108,13 +109,13 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
             }
         });
         if (test.get()) {
-            throw new IllegalArgumentException("Forbidden expression in sql");
+            throw new SanitizeQueryException("Forbidden expression in sql");
         }
     }
 
+    public abstract S persistEntity(S entity);
+
     protected abstract String getTableName();
 
-    protected abstract BaseRowMapper<S,T> getRowMapper();
-
-    public abstract T persistEntity(S entity);
+    protected abstract BaseRowMapper<S, T> getBaseRowMapper();
 }

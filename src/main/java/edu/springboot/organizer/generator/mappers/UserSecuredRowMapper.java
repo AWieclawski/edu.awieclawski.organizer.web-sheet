@@ -2,7 +2,7 @@ package edu.springboot.organizer.generator.mappers;
 
 import edu.springboot.organizer.data.models.User;
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.generator.dtos.UserDto;
+import edu.springboot.organizer.generator.dtos.UserSecuredDto;
 import edu.springboot.organizer.generator.mappers.base.BaseRowMapper;
 
 import java.sql.ResultSet;
@@ -10,7 +10,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserRowMapper implements BaseRowMapper<User, UserDto> {
+/**
+ * used to safe handling credentials
+ */
+public class UserSecuredRowMapper implements BaseRowMapper<User, UserSecuredDto> {
 
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -22,10 +25,11 @@ public class UserRowMapper implements BaseRowMapper<User, UserDto> {
                 .build();
     }
 
-    public UserDto toDto(User entity) {
-        return UserDto.builder()
+    public UserSecuredDto toDto(User entity) {
+        return UserSecuredDto.builder()
                 .name(entity.getName())
                 .surName(entity.getSurName())
+                .credentialId(entity.getCredentialId())
                 .created(entity.getId())
                 .hashId(entity.hashCode())
                 .build();

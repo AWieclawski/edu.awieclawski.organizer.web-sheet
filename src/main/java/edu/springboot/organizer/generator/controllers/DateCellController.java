@@ -25,8 +25,8 @@ public class DateCellController {
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DateCellDto>> getAllDateCells() {
         try {
-            List<DateCellDto> visitors = dateCellService.getAllDateCells();
-            return new ResponseEntity<>(visitors, HttpStatus.OK);
+            List<DateCellDto> dateCells = dateCellService.getAllDateCells();
+            return new ResponseEntity<>(dateCells, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -35,8 +35,8 @@ public class DateCellController {
     @GetMapping(path = "/date/{date}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<DateCellDto>> getDateCellsByDate(@PathVariable String date) {
         try {
-            List<DateCellDto> visitors = dateCellService.getDateCellsByDate(date);
-            return new ResponseEntity<>(visitors, HttpStatus.OK);
+            List<DateCellDto> dateCells = dateCellService.getDateCellsByDate(date);
+            return new ResponseEntity<>(dateCells, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -47,6 +47,17 @@ public class DateCellController {
         try {
             List<DateCellDto> visitors = dateCellService.getDateCellsByMonthRecord(id);
             return new ResponseEntity<>(visitors, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/date/{date}/month-record/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<DateCellDto>> getDateCellsByDate(@PathVariable("date") String date,
+                                                                @PathVariable("id") String id) {
+        try {
+            List<DateCellDto> dateCells = dateCellService.findDateCellsByDateAndMonthRecord(date, id);
+            return new ResponseEntity<>(dateCells, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

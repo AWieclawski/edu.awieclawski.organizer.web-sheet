@@ -35,7 +35,7 @@ public class VisitorController {
     @GetMapping(path = "/between/{start}/{end}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<VisitorDto>> getVisitorsBetween(@PathVariable String start, @PathVariable String end) {
         try {
-            List<VisitorDto> visitors = visitorService.getVisitorsBetween(start, end);
+            List<VisitorDto> visitors = visitorService.getVisitorsBetweenDates(start, end);
             return new ResponseEntity<>(visitors, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -1,9 +1,8 @@
 package edu.springboot.organizer.data.repositories;
 
 import edu.springboot.organizer.data.models.DateCell;
-import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.data.repositories.base.BaseSequenceService;
 import edu.springboot.organizer.data.repositories.base.BaseRepository;
+import edu.springboot.organizer.data.repositories.base.BaseSequenceService;
 import edu.springboot.organizer.generator.dtos.DateCellDto;
 import edu.springboot.organizer.generator.mappers.DateCellRowMapper;
 import edu.springboot.organizer.generator.mappers.base.BaseRowMapper;
@@ -31,16 +30,45 @@ public class DateCellRepository extends BaseRepository<DateCell, DateCellDto> {
         super(jdbcTemplate, namedParameterJdbcTemplate, dateCellRetryHandler);
     }
 
-    public List<DateCellDto> findDateCellsByTimestamp(String dateTime) {
+    @Override
+    public DateCell findById(String id) {
+        return super.findById(id);
+    }
+
+    @Override
+    public List<DateCell> findAll() {
+        return super.findAll();
+    }
+
+    @Override
+    public Long howMany() {
+        return super.howMany();
+    }
+
+    @Override
+    public BaseRowMapper<DateCell, DateCellDto> getBaseRowMapper() {
+        return new DateCellRowMapper();
+    }
+
+    @Override
+    public String getTableName() {
+        return DateCell.TABLE_NAME;
+    }
+
+    @Override
+    public String getSqlTableCreator() {
+        return DateCell.getSqlTableCreator();
+    }
+
+    public List<DateCell> findDateCellsByDate(String dateTime) {
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("date", dateTime);
-        String query = String.format("SELECT * FROM %s WHERE %s = DATETIME(:date)",
+        String query = String.format("SELECT * FROM %s WHERE DATE(%s) = DATE(:date)",
                 getTableName(), DateCell.Const.DATE.getColumn());
         return jdbcNamedParametersQuery(query, namedParameters);
     }
 
-
-    public List<DateCellDto> findDateCellsByMonthRecordId(String monthRecordId) {
+    public List<DateCell> findDateCellsByMonthRecordId(String monthRecordId) {
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("monthId", monthRecordId);
         String query = String.format("SELECT * FROM %s WHERE %s = :monthId",
@@ -48,49 +76,13 @@ public class DateCellRepository extends BaseRepository<DateCell, DateCellDto> {
         return jdbcNamedParametersQuery(query, namedParameters);
     }
 
-    public DateCellDto findById(String id) {
-        String query = String.format("SELECT * FROM %s  WHERE %s = ?;",
-                getTableName(), BaseEntity.BaseConst.ID.getColumn());
-        return jdbcQueryForObject(query, id);
-    }
-
-    public List<DateCellDto> findAll() {
-        String query = String.format("SELECT * FROM %s;", getTableName());
-        return jdbcQuery(query);
-    }
-
-    @Override
-    public DateCellDto persistEntity(DateCell dateCell) {
-        DateCell created = getBaseIdGenerator().handleEntityInn(getRetryDataDto(dateCell));
-        if (created != null) {
-            return getRowMapper().toDto(dateCell);
-        }
-        return null;
-    }
-
-    public void deleteAll() {
-        String query = String.format("DELETE FROM %s;", getTableName());
-        jdbcExecuteSafe(query);
-    }
-
-
-    public void modifyDataBase(String sql) {
-        jdbcExecuteUnsecured(sql);
-    }
-
-    public Long howMany() {
-        String query = String.format("SELECT COUNT(*) FROM %s;", getTableName());
-        return jdbcQueryForObjectQuantity(query);
-    }
-
-    @Override
-    public BaseRowMapper<DateCell, DateCellDto> getRowMapper() {
-        return new DateCellRowMapper();
-    }
-
-    @Override
-    protected String getTableName() {
-        return DateCell.TABLE_NAME;
+    public List<DateCell> findDateCellsByDateAndMonthRecordId(String dateTime, String monthRecordId) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("date", dateTime)
+                .addValue("monthId", monthRecordId);
+        String query = String.format("SELECT * FROM %s WHERE DATE(%s) = DATE(:date) AND %s = :monthId",
+                getTableName(), DateCell.Const.DATE.getColumn(), DateCell.Const.MONTH_RECORD.getColumn());
+        return jdbcNamedParametersQuery(query, namedParameters);
     }
 
 }
