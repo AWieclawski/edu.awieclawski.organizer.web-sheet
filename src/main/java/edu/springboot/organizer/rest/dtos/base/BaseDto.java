@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BaseDto {
+public abstract class BaseDto {
     private String created;
     private Integer hashId;
 

@@ -2,8 +2,8 @@ package edu.springboot.organizer.rest.mappers;
 
 import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.rest.dtos.DateCellDto;
 import edu.springboot.organizer.generator.enums.CellType;
+import edu.springboot.organizer.rest.dtos.DateCellDto;
 import edu.springboot.organizer.rest.mappers.base.BaseRowMapper;
 import edu.springboot.organizer.utils.DateUtils;
 
@@ -33,7 +33,9 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
                 .endHour(entity.getEndHour())
                 .hours(entity.getHours())
                 .cellType(entity.getCellType().name())
-                .localDate(DateUtils.getStringFromLocalDate(entity.getLocalDate(), "dd-MM-yyy"))
+                .day(entity.getLocalDate().getDayOfMonth())
+                .month(entity.getLocalDate().getMonth().getValue())
+                .year(entity.getLocalDate().getYear())
                 .monthRecordId(entity.getMonthRecordId())
                 .created(entity.getId())
                 .hashId(entity.hashCode())

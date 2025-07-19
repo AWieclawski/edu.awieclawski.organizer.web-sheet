@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 @Getter
 @EqualsAndHashCode(callSuper = true, of = {})
@@ -30,5 +33,9 @@ public class MonthRecordDto extends BaseDto {
         this.employeeId = employeeId;
         this.userId = userId;
         this.dateCellDtos = dateCellDtos;
+    }
+
+    public String getMonthNameByLocale(Locale locale) {
+        return Month.of(month).getDisplayName(TextStyle.FULL_STANDALONE, locale);
     }
 }

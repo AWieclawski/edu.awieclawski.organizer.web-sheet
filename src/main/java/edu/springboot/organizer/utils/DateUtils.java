@@ -37,6 +37,12 @@ public class DateUtils {
         return LocalDateTime.parse(stringDate, dateFormatter);
     }
 
+    public static LocalDate stringToLocalDate(String stringDate, String pattern) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+        Timestamp timestamp = stringToTimestampFormatted(stringDate, dateFormatter);
+        return timestampToLocalDate(timestamp);
+    }
+
     public static Timestamp stringToTimestamp(String stringDate, String pattern) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         Date parsedDate = dateFormat.parse(stringDate);
