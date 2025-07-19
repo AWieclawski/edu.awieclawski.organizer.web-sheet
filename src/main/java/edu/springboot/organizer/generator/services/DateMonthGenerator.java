@@ -1,6 +1,5 @@
 package edu.springboot.organizer.generator.services;
 
-import edu.springboot.organizer.generator.contracts.DateMonthHolder;
 import edu.springboot.organizer.generator.services.bases.BaseDayMonthGenerator;
 import edu.springboot.organizer.rest.dtos.DateCellDto;
 import org.springframework.stereotype.Component;
@@ -17,12 +16,12 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
 
     @Override
     protected List<DateCellDto> dumbListGenerate(int monthNo, int year) {
+        validateMonth(monthNo);
+        validateYear(year);
         Month month = Month.of(monthNo);
-        return IntStream.range(1, month.maxLength()).mapToObj(dayNo -> {
-                    String locaLDate = DateMonthHolder.buildLocaLDate(dayNo, monthNo, year);
-                    return DateCellDto.builder().day(dayNo).month(monthNo).year(year).build();
-                }
-        ).collect(Collectors.toList());
+        return IntStream.range(1, month.maxLength())
+                .mapToObj(dayNo -> DateCellDto.builder().day(dayNo).month(monthNo).year(year).build())
+                .collect(Collectors.toList());
     }
 
     public List<DateCellDto> dateCellsGenerate(String cellType, String monthRecordId, int monthNo, int year) {
