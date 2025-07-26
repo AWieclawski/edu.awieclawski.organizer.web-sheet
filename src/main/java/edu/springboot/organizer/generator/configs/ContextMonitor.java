@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class ContextMonitor {
 
-    @Value("${spring.application.name:rest-sheet}")
+    @Value("${spring.application.name:web-sheet}")
     private String appName;
 
     @PostConstruct

@@ -6,7 +6,7 @@ import edu.springboot.organizer.data.repositories.handlers.TransactionHandler;
 import edu.springboot.organizer.utils.BaseDateUtils;
 import edu.springboot.organizer.utils.BaseStringUtils;
 import edu.springboot.organizer.utils.ReflectionUtils;
-import edu.springboot.organizer.rest.dtos.base.BaseDto;
+import edu.springboot.organizer.web.dtos.base.BaseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;

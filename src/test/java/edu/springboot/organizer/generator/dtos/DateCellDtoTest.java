@@ -1,6 +1,6 @@
 package edu.springboot.organizer.generator.dtos;
 
-import edu.springboot.organizer.rest.dtos.DateCellDto;
+import edu.springboot.organizer.web.dtos.DateCellDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

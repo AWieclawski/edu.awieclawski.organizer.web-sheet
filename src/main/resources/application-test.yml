@@ -17,6 +17,7 @@ endpoint:
   users: api/users
   date-cells: api/date-cells
   month-records: api/month-records
+  pick-date: form/date-picker
 # logging
 logging:
   level:

@@ -3,7 +3,7 @@ package edu.springboot.organizer.data.repositories.base;
 import edu.springboot.organizer.data.exceptions.NoEntitySavedException;
 import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.data.repositories.base.dto.RetryDataDto;
-import edu.springboot.organizer.rest.dtos.base.BaseDto;
+import edu.springboot.organizer.web.dtos.base.BaseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

@@ -2,8 +2,8 @@ package edu.springboot.organizer.data.repositories.base;
 
 import edu.springboot.organizer.data.exceptions.SanitizeQueryException;
 import edu.springboot.organizer.data.models.base.BaseEntity;
-import edu.springboot.organizer.rest.dtos.base.BaseDto;
-import edu.springboot.organizer.rest.mappers.base.BaseRowMapper;
+import edu.springboot.organizer.web.dtos.base.BaseDto;
+import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;

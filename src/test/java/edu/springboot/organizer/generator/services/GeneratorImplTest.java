@@ -2,7 +2,7 @@ package edu.springboot.organizer.generator.services;
 
 import edu.springboot.organizer.generator.exceptions.ValidateMonthException;
 import edu.springboot.organizer.generator.exceptions.ValidateYearException;
-import edu.springboot.organizer.rest.dtos.DateCellDto;
+import edu.springboot.organizer.web.dtos.DateCellDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package edu.springboot.organizer.generator.services;
 
 import edu.springboot.organizer.generator.services.bases.BaseDayMonthGenerator;
-import edu.springboot.organizer.rest.dtos.DateCellDto;
+import edu.springboot.organizer.web.dtos.DateCellDto;
 import org.springframework.stereotype.Component;
 
 import java.time.Month;
