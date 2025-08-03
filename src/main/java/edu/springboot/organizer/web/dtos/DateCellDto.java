@@ -26,11 +26,20 @@ public class DateCellDto extends BaseDto implements DateMonthHolder {
     public DateCellDto(String created, Integer hashId, Integer day, Integer month, Integer year, Integer hours, String cellType, Integer beginHour, Integer endHour, String monthRecordId) {
         super(created, hashId);
         if (endHour != null && endHour < 0)
-            throw new IllegalArgumentException(endHour + " <- EndHour cannot be negative!");
+            throw new IllegalArgumentException("EndHour cannot be negative! [" + endHour + "]");
+        else if (endHour != null && endHour > 24) {
+            throw new IllegalArgumentException("EndHour cannot be greater than 24! [" + endHour + "]");
+        }
         if (beginHour != null && beginHour < 0)
-            throw new IllegalArgumentException(beginHour + " <- BeginHour cannot be negative!");
+            throw new IllegalArgumentException("BeginHour cannot be negative! [" + beginHour + "]");
+        else if (beginHour != null && beginHour > 24) {
+            throw new IllegalArgumentException("BeginHour cannot be greater than 24! [" + beginHour + "]");
+        }
         if (hours != null && hours < 0)
-            throw new IllegalArgumentException(hours + " <- Hours cannot be negative!");
+            throw new IllegalArgumentException("Hours cannot be negative! [" + hours + "]");
+        else if (hours != null && hours > 24) {
+            throw new IllegalArgumentException("Hours cannot be greater than 24! [" + hours + "]");
+        }
         this.hours = hours;
         this.cellType = cellType;
         this.beginHour = beginHour;

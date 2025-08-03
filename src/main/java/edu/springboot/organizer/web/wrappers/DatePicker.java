@@ -1,4 +1,4 @@
-package edu.springboot.organizer.web.dtos;
+package edu.springboot.organizer.web.wrappers;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class DatePickerDto implements Serializable {
+public class DatePicker implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM")
     private Date lookDate; // html form handles only a Date type using this format
 

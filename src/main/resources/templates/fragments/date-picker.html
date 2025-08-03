@@ -1,6 +1,6 @@
 <span th:fragment="choose-look-date">
 
-    <form method="post" th:object="${datePicker}">
+    <form th:action="@{/{path} (path=${pathRedirect})}" method="post" th:object="${datePicker}">
         <div>
             <label for="look-date">Choose the year and month (yyyy-MM):</label>
             <input type="month" th:field="${datePicker.lookDate}" id="look-date"/>
