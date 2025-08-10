@@ -1,4 +1,4 @@
-package edu.springboot.organizer.web.controllers;
+package edu.springboot.organizer.web.controllers.rest;
 
 import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.services.DateCellService;

@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       lang="en-EN">
 <head>
-    <meta charset="UTF-8">
     <title>Submitted date</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
 </head>
 <body>
-<p>The chosen date is: <span th:text="${#dates.format(datePicker.lookDate, datePicker.dateFormat)}"></span></p>
+<p>The chosen date is: <span th:text="${#dates.format(datePickerForm.lookDate, datePickerForm.dateFormat)}"></span></p>
 <div th:each="monthRecord, iterStat : ${monthRecords}">
     <p>List counter: <span th:text="${iterStat.count}"></span></p>
     <p>The monthRecord id is: <span th:text="${monthRecord.getCreated()}"></span></p>
-    <p>The hoursRanges size is: <span th:text="${monthRecord.getDateCellHoursRangeDtos().size()}"></span></p>
-    <p>The workingHours size is: <span th:text="${monthRecord.getDateCellWorkingHoursDtos().size()}"></span></p>
-    <p>The overTimeHours size is: <span th:text="${monthRecord.getDateCellOverTimeHoursDtos().size()}"></span></p>
+    <p>The hoursRanges size is: <span th:text="${monthRecord.getDateCellsList().size()}"></span></p>
+
+    <div class="tableDiv">
+        <div th:if="${monthRecord.getDateCellsList()?.size()>0}"
+             th:replace="~{fragments/date-cell-hours-range :: date-cell-hours-range-table}"></div>
+    </div>
+
 </div>
 </body>
 </html>

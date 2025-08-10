@@ -1,8 +1,9 @@
-package edu.springboot.organizer.web.controllers;
+package edu.springboot.organizer.web.controllers.forms;
 
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import edu.springboot.organizer.web.facades.MonthRecordsFacade;
-import edu.springboot.organizer.web.wrappers.DatePicker;
+import edu.springboot.organizer.web.wrappers.DateCellsForm;
+import edu.springboot.organizer.web.wrappers.DatePickerForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Knowledge sources:
@@ -31,11 +33,21 @@ public class MonthRecordsFormController {
     private final MonthRecordsFacade monthRecordsFacade;
 
     @PostMapping(value = "")
-    public ModelAndView monthDateDisplay(Model model, @ModelAttribute("datePicker") DatePicker datePicker) {
-        model.addAttribute("datePicker", datePicker);
-        List<MonthRecordDto> monthRecordDtos = monthRecordsFacade.populateMonthRecords(datePicker.getLookDate());
+    public ModelAndView monthDateDisplay(Model model, @ModelAttribute("datePickerForm") DatePickerForm datePickerForm) {
+        model.addAttribute("datePickerForm", datePickerForm);
+        List<MonthRecordDto> monthRecordDtos = monthRecordsFacade.getMonthRecords(datePickerForm.getLookDate());
         model.addAttribute("monthRecords", monthRecordDtos);
         return new ModelAndView("display-date");
+    }
+
+    private void buildMonthRecordsForms(List<MonthRecordDto> monthRecordDtos, Model model) {
+        monthRecordDtos.stream().filter(Objects::nonNull).forEach(mrDto ->
+                {
+                    DateCellsForm dcfWh = new DateCellsForm(mrDto.getCreated());
+                    dcfWh.addDateCells(mrDto.getDateCellsList());
+                    model.addAttribute(dcfWh.getDateCellFormId(), dcfWh.getDateCellsList());
+                }
+        );
     }
 
 }

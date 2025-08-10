@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class DatePicker implements Serializable {
+public class DatePickerForm implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM")
     private Date lookDate; // html form handles only a Date type using this format
 

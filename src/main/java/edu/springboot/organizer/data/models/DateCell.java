@@ -35,7 +35,6 @@ public class DateCell extends BaseEntity {
     public enum Const {
         DATE("local_date"),
         HOURS("hours"),
-        CELL_TYPE("cell_type"),
         BEGIN_HOUR("begin_hour"),
         END_HOUR("end_hour"),
         MONTH_RECORD("month_record_id");
@@ -53,7 +52,6 @@ public class DateCell extends BaseEntity {
                         "%s INTEGER, " +
                         "%s INTEGER, " +
                         "%s INTEGER, " +
-                        "%s TEXT, " +
                         "%s TEXT);",
                 TABLE_NAME,
                 BaseConst.ID.getColumn(),
@@ -61,7 +59,6 @@ public class DateCell extends BaseEntity {
                 Const.BEGIN_HOUR.getColumn(),
                 Const.END_HOUR.getColumn(),
                 Const.HOURS.getColumn(),
-                Const.CELL_TYPE.getColumn(),
                 Const.MONTH_RECORD.getColumn());
     }
 }

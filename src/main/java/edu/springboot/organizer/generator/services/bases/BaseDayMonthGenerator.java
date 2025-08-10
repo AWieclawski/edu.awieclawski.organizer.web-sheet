@@ -1,12 +1,11 @@
 package edu.springboot.organizer.generator.services.bases;
 
-import edu.springboot.organizer.generator.contracts.DateMonthHolder;
 import edu.springboot.organizer.generator.exceptions.ValidateMonthException;
 import edu.springboot.organizer.generator.exceptions.ValidateYearException;
 
 import java.util.List;
 
-public abstract class BaseDayMonthGenerator<T extends DateMonthHolder> {
+public abstract class BaseDayMonthGenerator<T> {
 
     protected abstract List<T> dumbListGenerate(int monthNo, int year);
 

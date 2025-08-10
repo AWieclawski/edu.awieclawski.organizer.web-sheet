@@ -2,6 +2,7 @@ package edu.springboot.organizer.generator.services;
 
 import edu.springboot.organizer.generator.services.bases.BaseDayMonthGenerator;
 import edu.springboot.organizer.web.dtos.DateCellDto;
+import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import org.springframework.stereotype.Component;
 
 import java.time.Month;
@@ -20,19 +21,16 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
         validateYear(year);
         Month month = Month.of(monthNo);
         return IntStream.range(1, month.maxLength() + 1)
-                .mapToObj(dayNo -> DateCellDto.builder().day(dayNo).month(monthNo).year(year).build())
+                .mapToObj(dayNo -> DateCellDto.builder().day(dayNo).build())
                 .collect(Collectors.toList());
     }
 
-    public List<DateCellDto> dateCellsGenerate(String cellType, String monthRecordId, int monthNo, int year) {
-        List<DateCellDto> list = dumbListGenerate(monthNo, year);
+    public List<DateCellDto> dateCellsGenerate(MonthRecordDto monthRecordDto) {
+        List<DateCellDto> list = dumbListGenerate(monthRecordDto.getMonth(), monthRecordDto.getYear());
         return list.stream()
                 .map(it -> DateCellDto.builder()
-                        .cellType(cellType)
-                        .monthRecordId(monthRecordId)
+                        .monthRecordId(monthRecordDto.getCreated())
                         .day(it.getDay())
-                        .month(it.getMonth())
-                        .year(it.getYear())
                         .build())
                 .collect(Collectors.toList());
     }

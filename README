@@ -15,3 +15,5 @@ add datastore/appdata.db
  .../api/month-records/all
 
 .../api/month-records/month/7/year/2025/user/userd01
+
+.../form/date-picker/choose-date

@@ -1,0 +1,19 @@
+<table th:fragment="date-cell-hours-range-table" th:with="dateMonthsize=${monthRecord.getDateCellsList().size()}">
+    <thead class="tHead" >
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, (dateMonthsize*2) - 1)}">
+            <th colspan="2" th:if="${cellNo < dateMonthsize}">
+                <span th:text="${monthRecord.getDateCellsList()?.get(cellNo)?.getDay()}"></span>
+            </th>
+        </th:block>
+    </tr>
+    </thead>
+    <tbody class="tBody" >
+    <tr>
+        <th:block th:each="dateCellHr, dateCellHrStat : ${monthRecord.getDateCellsList()}">
+            <td colspan="1"><span th:text="${dateCellHr.getBeginHour()}"></span></td>
+            <td colspan="1"><span th:text="${dateCellHr.getEndHour()}"></span></td>
+        </th:block>
+    </tr>
+    </tbody>
+</table>

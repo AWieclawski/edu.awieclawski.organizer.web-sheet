@@ -6,6 +6,6 @@ public interface DateMonthHolder {
         return String.format("%02d-%02d-%4d", day, month, year);
     }
 
-    String getLocalDate();
+    String getLocalDate(int day);
 
 }

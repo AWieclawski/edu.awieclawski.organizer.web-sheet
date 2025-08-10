@@ -1,7 +1,6 @@
 package edu.springboot.organizer.web.facades;
 
 import edu.springboot.organizer.data.models.MonthRecord;
-import edu.springboot.organizer.generator.enums.CellType;
 import edu.springboot.organizer.generator.services.DateMonthGenerator;
 import edu.springboot.organizer.utils.CollectionUtils;
 import edu.springboot.organizer.web.dtos.DateCellDto;
@@ -30,20 +29,20 @@ public class MonthRecordsFacade {
 
     private final UserService userService;
 
-    public List<MonthRecordDto> populateMonthRecords(Date date) {
+    public List<MonthRecordDto> getMonthRecords(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         List<MonthRecordDto> monthRecordDtos;
-        monthRecordDtos = getMonthRecords(month, year);
+        monthRecordDtos = findMonthRecords(month, year);
         if (!CollectionUtils.isEmpty(monthRecordDtos)) {
             return monthRecordDtos;
         }
         return createMonthRecords(month, year);
     }
 
-    public List<MonthRecordDto> getMonthRecords(int month, int year) {
+    public List<MonthRecordDto> findMonthRecords(int month, int year) {
         String userId = getCtxUser() != null ? getCtxUser().getCreated() : "";
         return monthRecordService.getMonthRecordByMonthYearUser(month, year, userId);
     }
@@ -52,12 +51,8 @@ public class MonthRecordsFacade {
         String userId = getCtxUser() != null ? getCtxUser().getCreated() : "";
         MonthRecordDto monthRecordDto = monthRecordService
                 .createMonthRecord(MonthRecord.builder().month(month).year(year).userId(userId).employee(EmployeeDto.getDefaultName()).build());
-        List<DateCellDto> dateCellHoursRangeDtos = dateMonthGenerator.dateCellsGenerate(CellType.HOURS_RANGE.name(), monthRecordDto.getCreated(), month, year);
-        List<DateCellDto> dateCellWorkingHoursDtos = dateMonthGenerator.dateCellsGenerate(CellType.WORKING_HOURS.name(), monthRecordDto.getCreated(), month, year);
-        List<DateCellDto> dateCellOverTimeHoursDtos = dateMonthGenerator.dateCellsGenerate(CellType.OVER_TIME_HOURS.name(), monthRecordDto.getCreated(), month, year);
-        monthRecordDto.addDateCellHoursRangeDtos(dateCellHoursRangeDtos);
-        monthRecordDto.addDateCellWorkingHoursDtos(dateCellWorkingHoursDtos);
-        monthRecordDto.addDateCellOverTimeHoursDtos(dateCellOverTimeHoursDtos);
+        List<DateCellDto> dateCellHoursRangeDtos = dateMonthGenerator.dateCellsGenerate(monthRecordDto);
+        monthRecordDto.addDateCellsList(dateCellHoursRangeDtos);
         List<MonthRecordDto> monthRecordDtos = new ArrayList<>();
         monthRecordDtos.add(monthRecordDto);
         return monthRecordDtos;
