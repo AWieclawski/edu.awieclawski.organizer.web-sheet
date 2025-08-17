@@ -29,6 +29,7 @@ public class DateCell extends BaseEntity {
     private CellType cellType;
     private Integer beginHour;
     private Integer endHour;
+    private Integer holiday;
     private String monthRecordId;
 
     @Getter
@@ -37,6 +38,7 @@ public class DateCell extends BaseEntity {
         HOURS("hours"),
         BEGIN_HOUR("begin_hour"),
         END_HOUR("end_hour"),
+        HOLIDAY("holiday"),
         MONTH_RECORD("month_record_id");
         private final String column;
 
@@ -52,6 +54,7 @@ public class DateCell extends BaseEntity {
                         "%s INTEGER, " +
                         "%s INTEGER, " +
                         "%s INTEGER, " +
+                        "%s INTEGER DEFAULT 0 NOT NULL, " +
                         "%s TEXT);",
                 TABLE_NAME,
                 BaseConst.ID.getColumn(),
@@ -59,6 +62,7 @@ public class DateCell extends BaseEntity {
                 Const.BEGIN_HOUR.getColumn(),
                 Const.END_HOUR.getColumn(),
                 Const.HOURS.getColumn(),
+                Const.HOLIDAY.getColumn(),
                 Const.MONTH_RECORD.getColumn());
     }
 }

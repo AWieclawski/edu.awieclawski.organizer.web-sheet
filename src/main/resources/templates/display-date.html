@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      lang="en-EN">
+      xmlns:th="http://www.thymeleaf.org" lang="en-En">
 <head>
     <title>Submitted date</title>
 
@@ -8,11 +8,8 @@
 
 </head>
 <body>
-<p>The chosen date is: <span th:text="${#dates.format(datePickerForm.lookDate, datePickerForm.dateFormat)}"></span></p>
+<p>The chosen date is: <b><span th:text="${#dates.format(datePickerForm.lookDate, datePickerForm.dateFormat)}"></span></b></p>
 <div th:each="monthRecord, iterStat : ${monthRecords}">
-    <p>List counter: <span th:text="${iterStat.count}"></span></p>
-    <p>The monthRecord id is: <span th:text="${monthRecord.getCreated()}"></span></p>
-    <p>The hoursRanges size is: <span th:text="${monthRecord.getDateCellsList().size()}"></span></p>
 
     <div class="tableDiv">
         <div th:if="${monthRecord.getDateCellsList()?.size()>0}"

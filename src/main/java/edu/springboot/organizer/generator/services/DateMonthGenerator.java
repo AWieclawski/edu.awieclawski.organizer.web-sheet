@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Month;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -20,8 +21,9 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
         validateMonth(monthNo);
         validateYear(year);
         Month month = Month.of(monthNo);
+        Set<Integer> weekends = weekendDays(monthNo,year);
         return IntStream.range(1, month.maxLength() + 1)
-                .mapToObj(dayNo -> DateCellDto.builder().day(dayNo).build())
+                .mapToObj(dayNo -> DateCellDto.builder().day(dayNo).holiday(weekends.contains(dayNo)).build())
                 .collect(Collectors.toList());
     }
 
@@ -31,6 +33,7 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
                 .map(it -> DateCellDto.builder()
                         .monthRecordId(monthRecordDto.getCreated())
                         .day(it.getDay())
+                        .holiday(it.getHoliday())
                         .build())
                 .collect(Collectors.toList());
     }

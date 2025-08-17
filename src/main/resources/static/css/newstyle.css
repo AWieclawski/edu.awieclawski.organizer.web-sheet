@@ -105,6 +105,18 @@ td {
     min-width: 20px;
 }
 
+.holiday {
+    color: orange;
+}
+
+th.holiday {
+    background-color: #333333;
+}
+
+td.holiday {
+    background-color: #444444;
+}
+
 @media screen and (max-width: 1200px) {
 
 }

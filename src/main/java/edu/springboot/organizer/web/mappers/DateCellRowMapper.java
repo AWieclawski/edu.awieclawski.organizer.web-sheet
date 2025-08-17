@@ -28,6 +28,7 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
     public DateCellDto toDto(DateCell entity) {
         return DateCellDto.builder()
                 .beginHour(entity.getBeginHour())
+                .holiday(entity.getHoliday() != null && entity.getHoliday() > 0)
                 .endHour(entity.getEndHour())
                 .hours(entity.getHours())
                 .day(entity.getLocalDate().getDayOfMonth())
