@@ -79,42 +79,52 @@ a:active {
 
 .tBody {
     font-size: 12px;
-    color: #eeeeee;
+    color: #aaaaaa;
     text-align: right;
 }
 
 .tHead {
     font-size: 12px;
-    color: #aaaaaa;
+    color: #eeeeee;
     text-align: center;
 }
 
 table {
     border-collapse: collapse;
-    border: 2px solid #eeeeee;
+    border: 1px solid #eeeeee;
 }
 
 th {
-    border: 1px solid #dddddd;
-    padding: 5px;
+    background-color: #222222;
+    border-right: 1px dotted #aaaaaa;
+    padding: 2px;
 }
 
 td {
-    border: 1px solid #cccccc;
-    padding: 3px;
-    min-width: 20px;
+    background-color: #111111;
+    padding: 2px;
+    min-width: 15px;
+}
+
+td.hrCell {
+    color: skyblue;
+}
+
+td.hrCell:nth-child(even) {
+    border-right: 1px dotted #aaaaaa;
+    color: cornflowerblue;
 }
 
 .holiday {
-    color: orange;
+    color: yellow;
 }
 
 th.holiday {
-    background-color: #333333;
+    background-color: #444444;
 }
 
 td.holiday {
-    background-color: #444444;
+    background-color: #333333;
 }
 
 @media screen and (max-width: 1200px) {
