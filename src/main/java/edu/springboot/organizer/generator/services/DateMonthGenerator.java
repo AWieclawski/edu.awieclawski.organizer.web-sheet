@@ -5,7 +5,6 @@ import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import org.springframework.stereotype.Component;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
                     dateCellDtos.add(DateCellDto.builder()
                             .day(dayNo)
                             .weekDay(weekDay)
-                            .holiday(DayOfWeek.SATURDAY.name().equals(weekDay) || DayOfWeek.SUNDAY.name().equals(weekDay))
+                            .holiday(isHoliday(weekDay))
                             .build());
                 }
         );

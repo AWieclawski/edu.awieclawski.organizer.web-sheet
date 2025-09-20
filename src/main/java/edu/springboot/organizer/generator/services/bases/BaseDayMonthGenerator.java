@@ -3,6 +3,7 @@ package edu.springboot.organizer.generator.services.bases;
 import edu.springboot.organizer.generator.exceptions.ValidateMonthException;
 import edu.springboot.organizer.generator.exceptions.ValidateYearException;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashMap;
@@ -27,5 +28,9 @@ public abstract class BaseDayMonthGenerator<T> {
             map.put(i, LocalDate.of(year, month, i).getDayOfWeek().name());
         }
         return map;
+    }
+
+    protected boolean isHoliday(String weekDay) {
+        return DayOfWeek.SATURDAY.name().equals(weekDay) || DayOfWeek.SUNDAY.name().equals(weekDay);
     }
 }

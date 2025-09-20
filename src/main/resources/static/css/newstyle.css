@@ -100,21 +100,28 @@ th {
     padding: 2px;
 }
 
-td.leftLabel {
+th.leftLabel {
     border-right: 1px dotted #999999;
     font-weight: bold;
-    min-width: 80px;
+    min-width: 90px;
     text-align: left;
+    padding-left: 4px;
 }
 
 td {
     background-color: #111111;
     padding: 2px;
-    min-width: 15px;
+    min-width: 12px;
 }
 
 td.hrCell {
     color: skyblue;
+}
+
+td.hrPause {
+    padding: 1px;
+    min-width: 5px;
+    text-align: center;
 }
 
 td.hrEnd {
@@ -123,11 +130,26 @@ td.hrEnd {
     padding: 2px;
 }
 
+td.hrsCell {
+    border-right: 1px dotted #aaaaaa;
+    padding-right: 4px;
+    color: chartreuse;
+}
+
 td.leftLabel {
     border-right: 1px dotted #999999;
     font-weight: bold;
-    min-width: 80px;
+    min-width: 90px;
     text-align: left;
+    padding-left: 4px;
+}
+
+td.rightLabel {
+    border-left: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: right;
+    padding-right: 4px;
 }
 
 .holiday {

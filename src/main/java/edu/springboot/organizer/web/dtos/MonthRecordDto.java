@@ -11,6 +11,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @Getter
 @EqualsAndHashCode(callSuper = true, of = {})
@@ -39,6 +40,11 @@ public class MonthRecordDto extends BaseDto implements DateMonthHolder {
         this.dateCellsList = new ArrayList<>();
     }
 
+    @Override
+    public String getLocalDate(int day) {
+        return DateMonthHolder.buildLocaLDate(day, this.month, this.year);
+    }
+
     public String getMonthNameByLocale(Locale locale) {
         return Month.of(month).getDisplayName(TextStyle.FULL_STANDALONE, locale);
     }
@@ -47,8 +53,10 @@ public class MonthRecordDto extends BaseDto implements DateMonthHolder {
         this.dateCellsList.addAll(dateCellHoursRangeDtos);
     }
 
-    @Override
-    public String getLocalDate(int day) {
-        return DateMonthHolder.buildLocaLDate(day, this.month, this.year);
+    public Integer calculateHours() {
+        return dateCellsList.stream()
+                .map(DateCellDto::getHours)
+                .filter(Objects::nonNull)
+                .reduce(0, Integer::sum);
     }
 }

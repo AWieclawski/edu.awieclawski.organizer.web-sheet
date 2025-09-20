@@ -13,7 +13,7 @@
 
     <div class="tableDiv">
         <div th:if="${monthRecord.getDateCellsList()?.size()>0}"
-             th:replace="~{fragments/date-cell-hours-range :: date-cell-hours-range-table}"></div>
+             th:replace="~{fragments/date-cells-rows :: date-cells-table}"></div>
     </div>
 
 </div>

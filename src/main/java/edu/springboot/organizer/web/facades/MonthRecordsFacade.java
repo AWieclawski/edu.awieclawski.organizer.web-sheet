@@ -31,6 +31,7 @@ public class MonthRecordsFacade {
 
     public List<MonthRecordDto> getMonthRecords(Date date) {
         Calendar calendar = Calendar.getInstance();
+        date = checkDate(date);
         calendar.setTime(date);
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -40,6 +41,13 @@ public class MonthRecordsFacade {
             return monthRecordDtos;
         }
         return createMonthRecords(month, year);
+    }
+
+    private Date checkDate(Date date) {
+        if (date == null) {
+            date = new Date();
+        }
+        return date;
     }
 
     public List<MonthRecordDto> findMonthRecords(int month, int year) {
