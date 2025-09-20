@@ -12,6 +12,7 @@ public class DateCellDto extends BaseDto {
     private final Integer day;
     private final String monthRecordId;
     private final Boolean holiday;
+    private final String weekDay;
     @Setter
     private Integer hours;
     @Setter
@@ -20,7 +21,7 @@ public class DateCellDto extends BaseDto {
     private Integer endHour;
 
     @Builder
-    public DateCellDto(String created, Integer hashId, Integer day, Integer hours, Integer beginHour, Integer endHour, String monthRecordId, Boolean holiday) {
+    public DateCellDto(String created, Integer hashId, Integer day, Integer hours, Integer beginHour, Integer endHour, String monthRecordId, Boolean holiday, String weekDay) {
         super(created, hashId);
         if (beginHour != null && beginHour < 0)
             throw new IllegalArgumentException("BeginHour cannot be negative! [" + beginHour + "]");
@@ -51,6 +52,7 @@ public class DateCellDto extends BaseDto {
         this.monthRecordId = monthRecordId;
         this.day = day;
         this.holiday = holiday != null && holiday;
+        this.weekDay = weekDay;
     }
 
 }

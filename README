@@ -2,6 +2,8 @@
 
 # https://stackoverflow.com/questions/26050899/how-to-mount-host-volumes-into-docker-containers-in-dockerfile-during-build/52762779#52762779
 
+# https://www.baeldung.com/thymeleaf-custom-html-attributes
+
 add datastore/appdata.db
 
 # endpoints

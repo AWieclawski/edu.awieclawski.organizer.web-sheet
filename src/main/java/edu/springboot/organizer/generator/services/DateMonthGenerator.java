@@ -5,11 +5,11 @@ import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import org.springframework.stereotype.Component;
 
-import java.time.Month;
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Component(value = DateMonthGenerator.BEAN_NAME)
 public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
@@ -20,11 +20,17 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
     protected List<DateCellDto> dumbListGenerate(int monthNo, int year) {
         validateMonth(monthNo);
         validateYear(year);
-        Month month = Month.of(monthNo);
-        Set<Integer> weekends = weekendDays(monthNo,year);
-        return IntStream.range(1, month.maxLength() + 1)
-                .mapToObj(dayNo -> DateCellDto.builder().day(dayNo).holiday(weekends.contains(dayNo)).build())
-                .collect(Collectors.toList());
+        Map<Integer, String> weekDays = weekDays(monthNo, year);
+        List<DateCellDto> dateCellDtos = new ArrayList<>();
+        weekDays.forEach((dayNo, weekDay) -> {
+                    dateCellDtos.add(DateCellDto.builder()
+                            .day(dayNo)
+                            .weekDay(weekDay)
+                            .holiday(DayOfWeek.SATURDAY.name().equals(weekDay) || DayOfWeek.SUNDAY.name().equals(weekDay))
+                            .build());
+                }
+        );
+        return dateCellDtos;
     }
 
     public List<DateCellDto> dateCellsGenerate(MonthRecordDto monthRecordDto) {
@@ -34,6 +40,7 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
                         .monthRecordId(monthRecordDto.getCreated())
                         .day(it.getDay())
                         .holiday(it.getHoliday())
+                        .weekDay(it.getWeekDay())
                         .build())
                 .collect(Collectors.toList());
     }

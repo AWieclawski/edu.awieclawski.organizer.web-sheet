@@ -3,13 +3,11 @@ package edu.springboot.organizer.generator.services.bases;
 import edu.springboot.organizer.generator.exceptions.ValidateMonthException;
 import edu.springboot.organizer.generator.exceptions.ValidateYearException;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.Map;
 
 public abstract class BaseDayMonthGenerator<T> {
 
@@ -23,12 +21,11 @@ public abstract class BaseDayMonthGenerator<T> {
         if (year < 2000 || year > 2100) throw new ValidateYearException("Year value not valid: " + year);
     }
 
-    protected Set<Integer> weekendDays(int month, int year) {
-        return IntStream.rangeClosed(1, YearMonth.of(year, month).lengthOfMonth())
-                .mapToObj(day -> LocalDate.of(year, month, day))
-                .filter(date -> date.getDayOfWeek() == DayOfWeek.SATURDAY ||
-                        date.getDayOfWeek() == DayOfWeek.SUNDAY)
-                .map(LocalDate::getDayOfMonth)
-                .collect(Collectors.toSet());
+    protected Map<Integer, String> weekDays(int month, int year) {
+        Map<Integer, String> map = new HashMap<>();
+        for (int i = 1; i <= YearMonth.of(year, month).lengthOfMonth(); i++) {
+            map.put(i, LocalDate.of(year, month, i).getDayOfWeek().name());
+        }
+        return map;
     }
 }

@@ -100,6 +100,13 @@ th {
     padding: 2px;
 }
 
+td.leftLabel {
+    border-right: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 80px;
+    text-align: left;
+}
+
 td {
     background-color: #111111;
     padding: 2px;
@@ -110,9 +117,17 @@ td.hrCell {
     color: skyblue;
 }
 
-td.hrCell:nth-child(even) {
+td.hrEnd {
     border-right: 1px dotted #aaaaaa;
     color: cornflowerblue;
+    padding: 2px;
+}
+
+td.leftLabel {
+    border-right: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 80px;
+    text-align: left;
 }
 
 .holiday {
