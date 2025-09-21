@@ -5,6 +5,7 @@ import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import org.springframework.stereotype.Component;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,5 +43,9 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
                         .weekDay(it.getWeekDay())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public String getMonthName(Month month) {
+        return getLocalDisplayName(month);
     }
 }

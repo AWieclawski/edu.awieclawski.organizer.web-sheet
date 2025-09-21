@@ -31,10 +31,7 @@ public class MonthRecordDto extends BaseDto implements DateMonthHolder {
                           String userId) {
         super(created, hashId);
         this.year = year;
-        if (month != null && (month > 12 || month < 1)) {
-            throw new IllegalArgumentException((month + " <- Month value not valid!"));
-        }
-        this.month = month;
+        this.month = handleMonth(month);
         this.employee = employee;
         this.userId = userId;
         this.dateCellsList = new ArrayList<>();
@@ -58,5 +55,12 @@ public class MonthRecordDto extends BaseDto implements DateMonthHolder {
                 .map(DateCellDto::getHours)
                 .filter(Objects::nonNull)
                 .reduce(0, Integer::sum);
+    }
+
+    private Integer handleMonth(Integer month) {
+        if (month != null && (month > 12 || month < 1)) {
+            throw new IllegalArgumentException((month + " <- Month value not valid!"));
+        }
+        return month;
     }
 }

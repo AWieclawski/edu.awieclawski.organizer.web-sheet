@@ -33,3 +33,4 @@ logging:
     edu.springboot.organizer.data: ${LOG_LEVEL_CON:DEBUG}
 # general variables
 populate.initial.data: true
+locale.language.tag: ${LANG_TAG:pl-PL}

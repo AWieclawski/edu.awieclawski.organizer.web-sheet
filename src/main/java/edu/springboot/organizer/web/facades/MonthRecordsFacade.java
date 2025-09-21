@@ -3,6 +3,7 @@ package edu.springboot.organizer.web.facades;
 import edu.springboot.organizer.data.models.MonthRecord;
 import edu.springboot.organizer.generator.services.DateMonthGenerator;
 import edu.springboot.organizer.utils.CollectionUtils;
+import edu.springboot.organizer.utils.DateUtils;
 import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.EmployeeDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
@@ -10,6 +11,7 @@ import edu.springboot.organizer.web.dtos.UserDto;
 import edu.springboot.organizer.web.services.MonthRecordService;
 import edu.springboot.organizer.web.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @DependsOn(MonthRecordService.BEAN_NAME)
@@ -30,21 +33,29 @@ public class MonthRecordsFacade {
     private final UserService userService;
 
     public List<MonthRecordDto> getMonthRecords(Date date) {
-        Calendar calendar = Calendar.getInstance();
         date = checkDate(date);
-        calendar.setTime(date);
+        Calendar calendar = DateUtils.getCalendarFromDate(date);
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH) + 1;
+        int monthNo = calendar.get(Calendar.MONTH) + 1;
         List<MonthRecordDto> monthRecordDtos;
-        monthRecordDtos = findMonthRecords(month, year);
+        monthRecordDtos = findMonthRecords(monthNo, year);
         if (!CollectionUtils.isEmpty(monthRecordDtos)) {
             return monthRecordDtos;
         }
-        return createMonthRecords(month, year);
+        return createMonthRecords(monthNo, year);
+    }
+
+    public String getMonthName(Date date) {
+        checkDate(date);
+        Calendar calendar = DateUtils.getCalendarFromDate(date);
+        int monthNo = calendar.get(Calendar.MONTH) + 1;
+        java.time.Month month = java.time.Month.of(monthNo);
+        return dateMonthGenerator.getMonthName(month);
     }
 
     private Date checkDate(Date date) {
         if (date == null) {
+            log.info("No date found. Default set.");
             date = new Date();
         }
         return date;

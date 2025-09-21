@@ -27,3 +27,4 @@ logging:
     edu.springboot.organizer: DEBUG
 # general variables
 populate.initial.data: false
+locale.language.tag: en-EN

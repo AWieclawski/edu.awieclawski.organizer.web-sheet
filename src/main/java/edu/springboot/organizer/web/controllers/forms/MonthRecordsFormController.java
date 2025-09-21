@@ -36,6 +36,8 @@ public class MonthRecordsFormController {
     public ModelAndView monthDateDisplay(Model model, @ModelAttribute("datePickerForm") DatePickerForm datePickerForm) {
         model.addAttribute("datePickerForm", datePickerForm);
         List<MonthRecordDto> monthRecordDtos = monthRecordsFacade.getMonthRecords(datePickerForm.getLookDate());
+        String monthName = monthRecordsFacade.getMonthName(datePickerForm.getLookDate());
+        model.addAttribute("monthName", monthName);
         model.addAttribute("monthRecords", monthRecordDtos);
         return new ModelAndView("display-date");
     }

@@ -23,20 +23,16 @@ public class DateCellDto extends BaseDto {
     @Builder
     public DateCellDto(String created, Integer hashId, Integer day, Integer hours, Integer beginHour, Integer endHour, String monthRecordId, Boolean holiday, String weekDay) {
         super(created, hashId);
-        if (beginHour != null && beginHour < 0)
-            throw new IllegalArgumentException("BeginHour cannot be negative! [" + beginHour + "]");
-        else if (beginHour != null && beginHour > 24) {
-            throw new IllegalArgumentException("BeginHour cannot be greater than 24! [" + beginHour + "]");
-        } else if (beginHour == null && !holiday) {
-            beginHour = 7;
-        }
-        if (endHour != null && endHour < 0) {
-            throw new IllegalArgumentException("EndHour cannot be negative! [" + endHour + "]");
-        } else if (endHour != null && endHour > 24) {
-            throw new IllegalArgumentException("EndHour cannot be greater than 24! [" + endHour + "]");
-        } else if (endHour == null && !holiday) {
-            endHour = 15;
-        }
+        this.holiday = holiday != null && holiday;
+        this.beginHour = handleBeginHour(beginHour);
+        this.endHour = handleEndHour(endHour);
+        this.hours = handleHours(hours);
+        this.monthRecordId = monthRecordId;
+        this.day = day;
+        this.weekDay = weekDay;
+    }
+
+    private Integer handleHours(Integer hours) {
         if (hours != null && hours < 0)
             throw new IllegalArgumentException("Hours cannot be negative! [" + hours + "]");
         else if (hours != null && hours > 24) {
@@ -46,13 +42,29 @@ public class DateCellDto extends BaseDto {
         } else if (beginHour != null && endHour != null && endHour > beginHour) {
             hours = endHour - beginHour;
         }
-        this.hours = hours;
-        this.beginHour = beginHour;
-        this.endHour = endHour;
-        this.monthRecordId = monthRecordId;
-        this.day = day;
-        this.holiday = holiday != null && holiday;
-        this.weekDay = weekDay;
+        return hours;
+    }
+
+    private Integer handleBeginHour(Integer beginHour) {
+        if (beginHour != null && beginHour < 0)
+            throw new IllegalArgumentException("BeginHour cannot be negative! [" + beginHour + "]");
+        else if (beginHour != null && beginHour > 24) {
+            throw new IllegalArgumentException("BeginHour cannot be greater than 24! [" + beginHour + "]");
+        } else if (beginHour == null && !holiday) {
+            beginHour = 7;
+        }
+        return beginHour;
+    }
+
+    private Integer handleEndHour(Integer endHour) {
+        if (endHour != null && endHour < 0) {
+            throw new IllegalArgumentException("EndHour cannot be negative! [" + endHour + "]");
+        } else if (endHour != null && endHour > 24) {
+            throw new IllegalArgumentException("EndHour cannot be greater than 24! [" + endHour + "]");
+        } else if (endHour == null && !holiday) {
+            endHour = 15;
+        }
+        return endHour;
     }
 
 }

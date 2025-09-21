@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -81,5 +82,11 @@ public class DateUtils {
 
     public static String timestampToToString(Timestamp timestamp) {
         return timestamp.toString();
+    }
+
+    public static Calendar getCalendarFromDate(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar;
     }
 }
