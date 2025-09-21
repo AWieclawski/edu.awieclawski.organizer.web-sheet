@@ -57,6 +57,13 @@ public class MonthRecordDto extends BaseDto implements DateMonthHolder {
                 .reduce(0, Integer::sum);
     }
 
+    public Integer calculateOvertime() {
+        return dateCellsList.stream()
+                .map(DateCellDto::getOvertime)
+                .filter(Objects::nonNull)
+                .reduce(0, Integer::sum);
+    }
+
     private Integer handleMonth(Integer month) {
         if (month != null && (month > 12 || month < 1)) {
             throw new IllegalArgumentException((month + " <- Month value not valid!"));

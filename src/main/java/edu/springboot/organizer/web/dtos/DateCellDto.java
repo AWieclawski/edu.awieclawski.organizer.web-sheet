@@ -19,14 +19,17 @@ public class DateCellDto extends BaseDto {
     private Integer beginHour;
     @Setter
     private Integer endHour;
+    @Setter
+    private Integer overtime;
 
     @Builder
-    public DateCellDto(String created, Integer hashId, Integer day, Integer hours, Integer beginHour, Integer endHour, String monthRecordId, Boolean holiday, String weekDay) {
+    public DateCellDto(String created, Integer hashId, Integer day, Integer hours, Integer beginHour, Integer endHour, String monthRecordId, Boolean holiday, String weekDay, Integer overtime) {
         super(created, hashId);
         this.holiday = holiday != null && holiday;
         this.beginHour = handleBeginHour(beginHour);
         this.endHour = handleEndHour(endHour);
         this.hours = handleHours(hours);
+        this.overtime = handleOvertime(overtime);
         this.monthRecordId = monthRecordId;
         this.day = day;
         this.weekDay = weekDay;
@@ -43,6 +46,18 @@ public class DateCellDto extends BaseDto {
             hours = endHour - beginHour;
         }
         return hours;
+    }
+
+
+    private Integer handleOvertime(Integer overtime) {
+        if (overtime != null && overtime < 0)
+            throw new IllegalArgumentException("Overtime cannot be negative! [" + hours + "]");
+        else if (overtime != null && overtime > 24) {
+            throw new IllegalArgumentException("Overtime cannot be greater than 24! [" + hours + "]");
+        } else if (hours != null && overtime != null && ( hours + overtime) > 24) {
+            throw new IllegalArgumentException("Overtime and hours sum cannot be greater than 24! [" + overtime + "+" + hours + "]");
+        }
+        return overtime;
     }
 
     private Integer handleBeginHour(Integer beginHour) {

@@ -124,6 +124,12 @@ td.hrPause {
     text-align: center;
 }
 
+td.ovrHrsCell {
+    border-right: 1px dotted #aaaaaa;
+    padding-right: 4px;
+    color: orange;
+}
+
 td.hrEnd {
     border-right: 1px dotted #aaaaaa;
     color: cornflowerblue;

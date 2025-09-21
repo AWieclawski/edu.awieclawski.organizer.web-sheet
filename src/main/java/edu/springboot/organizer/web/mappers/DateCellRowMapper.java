@@ -19,6 +19,9 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
                 .beginHour(rs.getInt(DateCell.Const.BEGIN_HOUR.getColumn()))
                 .endHour(rs.getInt(DateCell.Const.END_HOUR.getColumn()))
                 .hours(rs.getInt(DateCell.Const.HOURS.getColumn()))
+                .holiday(rs.getInt(DateCell.Const.HOLIDAY.getColumn()))
+                .weekDay(rs.getString(DateCell.Const.WEEK_DAY.getColumn()))
+                .overtime(rs.getInt(DateCell.Const.OVERTIME.getColumn()))
                 .localDate(DateUtils.timestampToLocalDate(rs.getTimestamp(DateCell.Const.DATE.getColumn())))
                 .monthRecordId(rs.getString(DateCell.Const.MONTH_RECORD.getColumn()))
                 .id(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
@@ -32,6 +35,8 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
                 .endHour(entity.getEndHour())
                 .hours(entity.getHours())
                 .day(entity.getLocalDate().getDayOfMonth())
+                .weekDay(entity.getWeekDay())
+                .overtime(entity.getOvertime())
                 .monthRecordId(entity.getMonthRecordId())
                 .created(entity.getId())
                 .hashId(entity.hashCode())
@@ -44,6 +49,9 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
         parameters.put(DateCell.Const.BEGIN_HOUR.getColumn(), entity.getBeginHour());
         parameters.put(DateCell.Const.END_HOUR.getColumn(), entity.getEndHour());
         parameters.put(DateCell.Const.HOURS.getColumn(), entity.getHours());
+        parameters.put(DateCell.Const.WEEK_DAY.getColumn(), entity.getWeekDay());
+        parameters.put(DateCell.Const.HOLIDAY.getColumn(), entity.getHoliday());
+        parameters.put(DateCell.Const.OVERTIME.getColumn(), entity.getOvertime());
         parameters.put(DateCell.Const.DATE.getColumn(), DateUtils.localDateToTimestamp(entity.getLocalDate()));
         parameters.put(DateCell.Const.MONTH_RECORD.getColumn(), entity.getMonthRecordId());
         return parameters;
