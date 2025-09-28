@@ -44,10 +44,24 @@ public class DateUtils {
         return timestampToLocalDate(timestamp);
     }
 
+    public static LocalDate getStandardLocalDate(String stringDate) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        Timestamp timestamp = stringToTimestampFormatted(stringDate, dateFormatter);
+        return timestampToLocalDate(timestamp);
+    }
+
     public static Timestamp stringToTimestamp(String stringDate, String pattern) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         Date parsedDate = dateFormat.parse(stringDate);
         return new java.sql.Timestamp(parsedDate.getTime());
+    }
+
+    public static Timestamp getStandardTimestamp(String date) {
+        try {
+            return stringToTimestamp(date, "yyyy-MM-dd");
+        } catch (Exception e) {
+            return Timestamp.valueOf(LocalDateTime.now());
+        }
     }
 
     public static LocalDateTime timestampToLocalDateTime(Timestamp timestamp) {

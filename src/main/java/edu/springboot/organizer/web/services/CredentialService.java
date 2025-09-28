@@ -31,7 +31,7 @@ public class CredentialService extends BaseService<Credential, CredentialDto> {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public CredentialDto createCredential(Credential credential) {
         Credential entity = insertEntity(credential);
-        log.info("Saved [{}]", entity);
+        log.info("Saved [{}|{}]", entity, BEAN_NAME);
         return getRowMapper().toDto(entity);
     }
 

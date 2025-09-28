@@ -1,14 +1,18 @@
 package edu.springboot.organizer.web.facades;
 
 import edu.springboot.organizer.data.models.MonthRecord;
+import edu.springboot.organizer.data.models.RecordsSet;
 import edu.springboot.organizer.generator.services.DateMonthGenerator;
 import edu.springboot.organizer.utils.CollectionUtils;
 import edu.springboot.organizer.utils.DateUtils;
 import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.EmployeeDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
+import edu.springboot.organizer.web.dtos.RecordsSetDto;
 import edu.springboot.organizer.web.dtos.UserDto;
+import edu.springboot.organizer.web.services.DateCellService;
 import edu.springboot.organizer.web.services.MonthRecordService;
+import edu.springboot.organizer.web.services.RecordsSetService;
 import edu.springboot.organizer.web.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,32 +27,41 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@DependsOn(MonthRecordService.BEAN_NAME)
-public class MonthRecordsFacade {
+@DependsOn(RecordsSetService.BEAN_NAME)
+public class RecordsSetFacade {
 
     private final DateMonthGenerator dateMonthGenerator;
 
+    private final RecordsSetService recordsSetService;
+
     private final MonthRecordService monthRecordService;
+
+    private final DateCellService dateCellService;
 
     private final UserService userService;
 
-    public List<MonthRecordDto> getMonthRecords(Date date) {
+    public List<RecordsSetDto> getRecordsSets(Date date) {
         date = checkDate(date);
         Calendar calendar = DateUtils.getCalendarFromDate(date);
         int year = calendar.get(Calendar.YEAR);
         int monthNo = calendar.get(Calendar.MONTH) + 1;
-        List<MonthRecordDto> monthRecordDtos;
-        monthRecordDtos = findMonthRecords(monthNo, year);
+        List<RecordsSetDto> monthRecordDtos;
+        monthRecordDtos = findRecordsSets(monthNo, year);
         if (!CollectionUtils.isEmpty(monthRecordDtos)) {
             return monthRecordDtos;
         }
-        return createMonthRecords(monthNo, year);
+        return createRecordsSets(monthNo, year);
     }
 
     public String getMonthName(Date date) {
         checkDate(date);
         Calendar calendar = DateUtils.getCalendarFromDate(date);
         int monthNo = calendar.get(Calendar.MONTH) + 1;
+        java.time.Month month = java.time.Month.of(monthNo);
+        return dateMonthGenerator.getMonthName(month);
+    }
+
+    public String getMonthName(int monthNo) {
         java.time.Month month = java.time.Month.of(monthNo);
         return dateMonthGenerator.getMonthName(month);
     }
@@ -61,17 +74,33 @@ public class MonthRecordsFacade {
         return date;
     }
 
-    public List<MonthRecordDto> findMonthRecords(int month, int year) {
+    public List<RecordsSetDto> findRecordsSets(int month, int year) {
         String userId = getCtxUser() != null ? getCtxUser().getCreated() : "";
-        return monthRecordService.getMonthRecordByMonthYearUser(month, year, userId);
+        return recordsSetService.getMonthRecordByMonthYearUser(month, year, userId);
     }
 
-    private List<MonthRecordDto> createMonthRecords(int month, int year) {
+
+    public RecordsSetDto findRecordsSets(String id) {
+        return recordsSetService.getRecordsSetById(id);
+    }
+
+    private List<RecordsSetDto> createRecordsSets(int month, int year) {
         String userId = getCtxUser() != null ? getCtxUser().getCreated() : "";
+        RecordsSetDto recordsSetDto = recordsSetService
+                .createRecordsSet(RecordsSet.builder().month(month).year(year).userId(userId).build());
+        List<MonthRecordDto> monthRecordDtos = createMonthRecords(recordsSetDto);
+        recordsSetDto.addMonthRecords(monthRecordDtos);
+        List<RecordsSetDto> recordsSetDtos = new ArrayList<>();
+        recordsSetDtos.add(recordsSetDto);
+        return recordsSetDtos;
+    }
+
+    private List<MonthRecordDto> createMonthRecords(RecordsSetDto setDto) {
         MonthRecordDto monthRecordDto = monthRecordService
-                .createMonthRecord(MonthRecord.builder().month(month).year(year).userId(userId).employee(EmployeeDto.getDefaultName()).build());
-        List<DateCellDto> dateCellHoursRangeDtos = dateMonthGenerator.dateCellsGenerate(monthRecordDto);
-        monthRecordDto.addDateCellsList(dateCellHoursRangeDtos);
+                .createMonthRecord(MonthRecord.builder().setId(setDto.getCreated()).employee(EmployeeDto.getDefaultName()).build());
+        List<DateCellDto> dateCellDtos = dateMonthGenerator.dateCellsGenerate(monthRecordDto, setDto.getMonth(), setDto.getYear());
+        dateCellService.createDateCells(dateCellDtos);
+        monthRecordDto.addDateCellsList(dateCellDtos);
         List<MonthRecordDto> monthRecordDtos = new ArrayList<>();
         monthRecordDtos.add(monthRecordDto);
         return monthRecordDtos;

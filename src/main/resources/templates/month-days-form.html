@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en-En">
+<head>
+    <title>Month days form</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+</head>
+<body>
+<p>The chosen year-month is:
+    <b><span th:text="${year}+'-'+${month}"></span></b>
+    (<span th:text="${monthName}"></span>)
+</p>
+<p>List size: <span th:text="${monthRecords?.size()}"></span></p>
+</body>
+</html>

@@ -43,4 +43,14 @@ public class EmployeeRowMapper implements BaseRowMapper<Employee, EmployeeDto> {
         return parameters;
     }
 
+    @Override
+    public Employee toEntity(EmployeeDto dto) {
+        return Employee.builder()
+                .id(dto.getCreated())
+                .name(dto.getName())
+                .surName(dto.getSurName())
+                .uniqNick(dto.getUniqNick())
+                .build();
+    }
+
 }

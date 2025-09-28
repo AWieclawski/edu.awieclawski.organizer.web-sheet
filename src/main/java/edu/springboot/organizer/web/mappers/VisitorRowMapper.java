@@ -2,9 +2,9 @@ package edu.springboot.organizer.web.mappers;
 
 import edu.springboot.organizer.data.models.Visitor;
 import edu.springboot.organizer.data.models.base.BaseEntity;
+import edu.springboot.organizer.utils.DateUtils;
 import edu.springboot.organizer.web.dtos.VisitorDto;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
-import edu.springboot.organizer.utils.DateUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,6 +43,16 @@ public class VisitorRowMapper implements BaseRowMapper<Visitor, VisitorDto> {
         parameters.put(Visitor.Const.IP.getColumn(), entity.getIp());
         parameters.put(Visitor.Const.NAME.getColumn(), entity.getName());
         return parameters;
+    }
+
+    @Override
+    public Visitor toEntity(VisitorDto dto) {
+        return Visitor.builder().id(dto.getCreated())
+                .timestamp(DateUtils.getStandardLocalDate(dto.getTimestamp()).atStartOfDay())
+                .url(dto.getUrl())
+                .ip(dto.getIp())
+                .name(dto.getName())
+                .build();
     }
 
 }

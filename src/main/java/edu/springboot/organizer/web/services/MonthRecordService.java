@@ -37,7 +37,7 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public MonthRecordDto createMonthRecord(MonthRecord monthRecord) {
         MonthRecord entity = insertEntity(monthRecord);
-        log.info("Saved [{}]", entity);
+        log.info("Saved [{}|{}]", entity, BEAN_NAME);
         return getRepository().getBaseRowMapper().toDto(entity);
     }
 
@@ -71,26 +71,16 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
     }
 
     @Transactional(readOnly = true)
-    public List<MonthRecordDto> getMonthRecordByUser(String userId) {
+    public List<MonthRecordDto> getMonthRecordBySet(String setId) {
         try {
-            List<MonthRecord> entities = monthRecordRepository.findMonthRecordByUser(userId);
+            List<MonthRecord> entities = monthRecordRepository.findMonthRecordBySet(setId);
             return assignDateCellsToEntities(entities);
         } catch (Exception e) {
-            log.error("MonthRecords by User [{}] not found! {}", userId, e.getMessage());
+            log.error("MonthRecords by Set [{}] not found! {}", setId, e.getMessage());
         }
-        throw new ResultNotFoundException("All MonthRecords search failed!");
+        throw new ResultNotFoundException("MonthRecords search failed!");
     }
 
-    @Transactional(readOnly = true)
-    public List<MonthRecordDto> getMonthRecordByMonthYearUser(int month, int year, String userId) {
-        try {
-            List<MonthRecord> entities = monthRecordRepository.findMonthRecordByMonthYearUser(month, year, userId);
-            return assignDateCellsToEntities(entities);
-        } catch (Exception e) {
-            log.error("MonthRecords by month, year, User [{}|{}|{}] not found! {}", month, year, userId, e.getMessage());
-        }
-        throw new ResultNotFoundException("MonthRecords by month, year, User search failed!");
-    }
 
     @Override
     public void initTable() {
@@ -116,7 +106,7 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
     private void assignDateCells(MonthRecordDto monthRecord) {
         if (monthRecord.getCreated() != null) {
             List<DateCellDto> dateCellDtos = dateCellService.getDateCellsByMonthRecord(monthRecord.getCreated());
-            ReflectionUtils.setFieldValue(monthRecord, "dateCellDtos", dateCellDtos, true);
+            ReflectionUtils.setFieldValue(monthRecord, "dateCellsList", dateCellDtos, true);
         }
     }
 

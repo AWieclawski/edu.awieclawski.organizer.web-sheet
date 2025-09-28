@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,7 +32,14 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public DateCellDto createDateCell(DateCell dateCell) {
         DateCell entity = insertEntity(dateCell);
-        log.info("Saved [{}]", entity);
+        log.info("Saved [{}|{}]", entity, BEAN_NAME);
+        return getRowMapper().toDto(entity);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public DateCellDto createDateCell(DateCellDto dateCellDto) {
+        DateCell entity = insertEntity(getRowMapper().toEntity(dateCellDto));
+        log.info("Saved [{}|{}]", entity, BEAN_NAME);
         return getRowMapper().toDto(entity);
     }
 
@@ -85,6 +93,13 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
             log.error("Get by date and MonthRecord failed! {}", e.getMessage());
         }
         throw new ResultNotFoundException(String.format("DateCells find by MonthRecord %s failed!", id));
+    }
+
+    public List<DateCellDto> createDateCells(List<DateCellDto> dateCells) {
+        return dateCells.stream()
+                .filter(Objects::nonNull)
+                .map(this::createDateCell)
+                .collect(Collectors.toList());
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

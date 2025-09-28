@@ -15,33 +15,38 @@ public class MonthRecordRowMapper implements BaseRowMapper<MonthRecord, MonthRec
     @Override
     public MonthRecord mapRow(ResultSet rs, int rowNum) throws SQLException {
         return MonthRecord.builder()
-                .month(rs.getInt(MonthRecord.Const.MONTH.getColumn()))
-                .year(rs.getInt(MonthRecord.Const.YEAR.getColumn()))
                 .employee(rs.getString(MonthRecord.Const.EMPLOYEE.getColumn()))
-                .userId(rs.getString(MonthRecord.Const.USER.getColumn()))
+                .setId(rs.getString(MonthRecord.Const.SET.getColumn()))
                 .id(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
                 .build();
     }
 
+    @Override
     public MonthRecordDto toDto(MonthRecord entity) {
         return MonthRecordDto.builder()
-                .month(entity.getMonth())
-                .year(entity.getYear())
-                .userId(entity.getUserId())
+                .setId(entity.getSetId())
                 .employee(entity.getEmployee())
                 .created(entity.getId())
                 .hashId(entity.hashCode())
                 .build();
     }
 
+    @Override
     public Map<String, Object> toMap(MonthRecord entity) {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put(BaseEntity.BaseConst.ID.getColumn(), entity.getId());
-        parameters.put(MonthRecord.Const.MONTH.getColumn(), entity.getMonth());
-        parameters.put(MonthRecord.Const.YEAR.getColumn(), entity.getYear());
-        parameters.put(MonthRecord.Const.USER.getColumn(), entity.getUserId());
+        parameters.put(MonthRecord.Const.SET.getColumn(), entity.getSetId());
         parameters.put(MonthRecord.Const.EMPLOYEE.getColumn(), entity.getEmployee());
         return parameters;
+    }
+
+    @Override
+    public MonthRecord toEntity(MonthRecordDto dto) {
+        return MonthRecord.builder()
+                .id(dto.getCreated())
+                .setId(dto.getSetId())
+                .employee(dto.getEmployee())
+                .build();
     }
 
 }

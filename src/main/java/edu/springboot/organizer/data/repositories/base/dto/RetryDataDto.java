@@ -16,6 +16,7 @@ import java.util.function.BiFunction;
 public class RetryDataDto<S extends BaseEntity, T extends BaseDto> {
     private String baseIdKey;
     private S entity;
+    private T dto;
     private BaseRowMapper<S, T> rowMapper;
     private BiFunction<Map<String, Object>, S, S> insertMethod;
 }

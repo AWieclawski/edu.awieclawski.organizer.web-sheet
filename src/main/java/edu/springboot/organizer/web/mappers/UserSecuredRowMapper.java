@@ -44,4 +44,13 @@ public class UserSecuredRowMapper implements BaseRowMapper<User, UserSecuredDto>
         return parameters;
     }
 
+    @Override
+    public User toEntity(UserSecuredDto dto) {
+        return User.builder().id(dto.getCreated())
+                .name(dto.getName())
+                .surName(dto.getSurName())
+                .credentialId(dto.getCredentialId())
+                .build();
+    }
+
 }

@@ -19,3 +19,4 @@ add datastore/appdata.db
 .../api/month-records/month/7/year/2025/user/userd01
 
 .../form/date-picker/choose-date
+# ex. http://localhost:8080/form/date-picker/choose-date

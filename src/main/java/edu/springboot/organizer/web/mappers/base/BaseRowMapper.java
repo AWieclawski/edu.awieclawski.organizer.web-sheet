@@ -11,4 +11,6 @@ public interface BaseRowMapper<S extends BaseEntity, T extends BaseDto> extends 
     T toDto(S entity);
 
     Map<String, Object> toMap(S entity);
+
+    S toEntity(T dto);
 }

@@ -21,9 +21,10 @@ public class DateCellDto extends BaseDto {
     private Integer endHour;
     @Setter
     private Integer overtime;
+    private final String date;
 
     @Builder
-    public DateCellDto(String created, Integer hashId, Integer day, Integer hours, Integer beginHour, Integer endHour, String monthRecordId, Boolean holiday, String weekDay, Integer overtime) {
+    public DateCellDto(String created, Integer hashId, Integer day, Integer hours, Integer beginHour, Integer endHour, String monthRecordId, Boolean holiday, String weekDay, Integer overtime, String date) {
         super(created, hashId);
         this.holiday = holiday != null && holiday;
         this.beginHour = handleBeginHour(beginHour);
@@ -33,6 +34,7 @@ public class DateCellDto extends BaseDto {
         this.monthRecordId = monthRecordId;
         this.day = day;
         this.weekDay = weekDay;
+        this.date = date;
     }
 
     private Integer handleHours(Integer hours) {

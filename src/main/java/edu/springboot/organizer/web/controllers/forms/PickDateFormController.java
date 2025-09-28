@@ -15,19 +15,19 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class PickDateFormController {
 
-    @Value("${endpoint.form-date}")
-    private String pathRedirect;
+    @Value("${endpoint.view-date}")
+    private String viewRedirect;
 
     @GetMapping("/choose-date")
     public ModelAndView chooseDateForm(Model model) {
         model.addAttribute("datePickerForm", new DatePickerForm());
-        model.addAttribute("pathRedirect", getPathRedirect());
+        model.addAttribute("viewRedirect", getViewRedirect());
         return new ModelAndView("pick-date");
     }
 
-    private String getPathRedirect() {
-        if (pathRedirect != null) {
-            return pathRedirect;
+    private String getViewRedirect() {
+        if (viewRedirect != null) {
+            return viewRedirect;
         }
         throw new ControllerException("Path variable not found!");
     }

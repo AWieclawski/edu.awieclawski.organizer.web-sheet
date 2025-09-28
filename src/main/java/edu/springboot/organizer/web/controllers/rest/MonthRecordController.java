@@ -42,27 +42,27 @@ public class MonthRecordController {
         }
     }
 
-    @GetMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<MonthRecordDto>> getMonthRecordsByUser(@PathVariable("userId") String userId) {
+    @GetMapping(path = "/set/{setId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<MonthRecordDto>> getMonthRecordsByUser(@PathVariable("setId") String setId) {
         try {
-            List<MonthRecordDto> monthRecords = monthRecordService.getMonthRecordByUser(userId);
+            List<MonthRecordDto> monthRecords = monthRecordService.getMonthRecordBySet(setId);
             return new ResponseEntity<>(monthRecords, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping(path = "/month/{month}/year/{year}/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<MonthRecordDto>> getMonthRecordsByMonthYearUser(
-            @PathVariable("month") int month,
-            @PathVariable("year") int year,
-            @PathVariable("userId") String userId) {
-        try {
-            List<MonthRecordDto> dateCells = monthRecordService.getMonthRecordByMonthYearUser(month, year,userId);
-            return new ResponseEntity<>(dateCells, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @GetMapping(path = "/month/{month}/year/{year}/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<List<MonthRecordDto>> getMonthRecordsByMonthYearUser(
+//            @PathVariable("month") int month,
+//            @PathVariable("year") int year,
+//            @PathVariable("userId") String userId) {
+//        try {
+//            List<MonthRecordDto> dateCells = monthRecordService.getMonthRecordByMonthYearUser(month, year,userId);
+//            return new ResponseEntity<>(dateCells, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 }

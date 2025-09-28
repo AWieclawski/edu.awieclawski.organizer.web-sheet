@@ -41,4 +41,13 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
         return parameters;
     }
 
+    @Override
+    public Credential toEntity(CredentialDto dto) {
+        return Credential.builder().id(dto.getCreated())
+                .login(dto.getLogin())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .build();
+    }
+
 }

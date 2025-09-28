@@ -10,7 +10,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Dane pracownika dla, którego utworzony jest dany rekord miesięczny
+ * Details of the employee for whom a given monthly record is created
  */
 @Getter
 @Setter

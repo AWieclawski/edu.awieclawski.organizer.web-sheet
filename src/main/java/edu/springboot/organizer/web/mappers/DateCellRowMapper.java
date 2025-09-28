@@ -35,6 +35,7 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
                 .endHour(entity.getEndHour())
                 .hours(entity.getHours())
                 .day(entity.getLocalDate().getDayOfMonth())
+                .date(DateUtils.localDateTimeToToString(entity.getLocalDate().atStartOfDay()))
                 .weekDay(entity.getWeekDay())
                 .overtime(entity.getOvertime())
                 .monthRecordId(entity.getMonthRecordId())
@@ -55,6 +56,20 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
         parameters.put(DateCell.Const.DATE.getColumn(), DateUtils.localDateToTimestamp(entity.getLocalDate()));
         parameters.put(DateCell.Const.MONTH_RECORD.getColumn(), entity.getMonthRecordId());
         return parameters;
+    }
+
+    @Override
+    public DateCell toEntity(DateCellDto dto) {
+        return DateCell.builder().id(dto.getCreated())
+                .beginHour(dto.getBeginHour())
+                .endHour(dto.getEndHour())
+                .hours(dto.getHours())
+                .weekDay(dto.getWeekDay())
+                .holiday(dto.getHoliday() ? 1 : 0)
+                .overtime(dto.getOvertime())
+                .localDate(DateUtils.getStandardLocalDate(dto.getDate()))
+                .monthRecordId(dto.getMonthRecordId())
+                .build();
     }
 
 }

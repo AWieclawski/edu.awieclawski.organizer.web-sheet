@@ -10,9 +10,9 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 /**
- * Rekord miesięczny utworzony dla danego miesiąca (roku) i użytkownika,
- * który zawiera wiersze z listami elementów typu:
- * zakres godzin, ilość godzin, nadgodziny <- na każdy dzień tego miesiąca
+ * A monthly record created for a given month (year) and user,
+ * containing rows with lists of elements such as: hour range,
+ * number of hours, overtime <- for each day of that month
  */
 @Getter
 @Setter
@@ -23,17 +23,13 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public class MonthRecord extends BaseEntity {
     public static final String TABLE_NAME = "month_records";
-    private Integer year;
-    private Integer month;
-    private String userId;
     private String employee;
+    private String setId;
 
     @Getter
     public enum Const {
-        MONTH("month"),
-        YEAR("year"),
-        USER("user_id"),
-        EMPLOYEE("employee");
+        EMPLOYEE("employee"),
+        SET("set_id");
 
         private final String column;
         Const(String column) {
@@ -45,15 +41,11 @@ public class MonthRecord extends BaseEntity {
     public static String getSqlTableCreator() {
         return String.format("CREATE TABLE IF NOT EXISTS %s ( " +
                         "%s TEXT PRIMARY KEY, " +
-                        "%s INTEGER, " +
-                        "%s INTEGER, " +
                         "%s TEXT, " +
                         "%s TEXT);",
                 TABLE_NAME,
                 BaseConst.ID.getColumn(),
-                Const.MONTH.getColumn(),
-                Const.YEAR.getColumn(),
-                Const.USER.getColumn(),
+                Const.SET.getColumn(),
                 Const.EMPLOYEE.getColumn()
         );
     }

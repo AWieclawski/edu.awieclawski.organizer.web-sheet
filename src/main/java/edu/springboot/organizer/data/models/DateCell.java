@@ -13,7 +13,8 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 
 /**
- * Komórka opisująca dany dzień, która jest elementem listy komórek danego typu
+ * A cell containing data for the day of the month,
+ * from which rows of cells of a given type are built
  */
 @Getter
 @Setter

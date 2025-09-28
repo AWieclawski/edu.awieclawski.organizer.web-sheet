@@ -40,4 +40,10 @@ public class UserRowMapper implements BaseRowMapper<User, UserDto> {
         return parameters;
     }
 
+    public User toEntity(UserDto dto) {
+        return User.builder().id(dto.getCreated())
+                .name(dto.getName())
+                .surName(dto.getSurName())
+                .build();
+    }
 }

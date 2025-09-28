@@ -21,5 +21,10 @@
     </div>
 
 </div>
+<p>Form redirect: <span th:text="${formRedirect}"></span></p>
+<p>Record set id: <span th:text="${recordsSet.getCreated()}"></span></p>
+<a th:href="@{/{targetPath} (targetPath=${formRedirect} + '/' + ${recordsSet.getCreated()})}">
+    <button type="button">Go to Form Page</button>
+</a>
 </body>
 </html>

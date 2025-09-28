@@ -1,4 +1,4 @@
-package edu.springboot.organizer.web.controllers.forms;
+package edu.springboot.organizer.web.controllers.views;
 
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import edu.springboot.organizer.web.dtos.RecordsSetDto;
@@ -6,12 +6,13 @@ import edu.springboot.organizer.web.exceptions.ControllerException;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.facades.RecordsSetFacade;
 import edu.springboot.organizer.web.wrappers.DateCellsForm;
+import edu.springboot.organizer.web.wrappers.DatePickerForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,39 +21,30 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Knowledge sources:
- * https://www.baeldung.com/thymeleaf-variables
- * https://www.concretepage.com/thymeleaf/thymeleaf-form-action
- * https://www.baeldung.com/thymeleaf-list
- * https://codingtechroom.com/question/bind-object-list-thymeleaf
  */
 
 @Slf4j
 @RestController
-@RequestMapping("/${endpoint.form-date}")
+@RequestMapping("/${endpoint.view-date}")
 @RequiredArgsConstructor
-public class MonthRecordsFormController {
+public class MonthRecordsViewController {
 
-    @Value("${endpoint.view-date}")
-    private String viewRedirect;
+    @Value("${endpoint.form-date}")
+    private String formRedirect;
 
     private final RecordsSetFacade monthRecordsFacade;
 
-    @GetMapping(path = "{id}")
-    public ModelAndView monthDateForm(Model model, @PathVariable String id) {
-        model.addAttribute("monthRecordId", id);
-        RecordsSetDto recordsSetDto = monthRecordsFacade.findRecordsSets(id);
-        if (recordsSetDto == null) {
-            throw new ResultNotFoundException();
-        }
-        String monthName = monthRecordsFacade.getMonthName(recordsSetDto.getMonth());
+    @PostMapping(value = "")
+    public ModelAndView monthDateDisplay(Model model, @ModelAttribute("datePickerForm") DatePickerForm datePickerForm) {
+        model.addAttribute("datePickerForm", datePickerForm);
+        List<RecordsSetDto> recordsSets = monthRecordsFacade.getRecordsSets(datePickerForm.getLookDate());
+        RecordsSetDto recordsSetDto = recordsSets.stream().findFirst().orElseThrow(ResultNotFoundException::new);
+        String monthName = monthRecordsFacade.getMonthName(datePickerForm.getLookDate());
         model.addAttribute("monthName", monthName);
-        model.addAttribute("month", recordsSetDto.getMonth());
-        model.addAttribute("year", recordsSetDto.getYear());
         model.addAttribute("monthRecords", recordsSetDto.getMonthRecordDtoList());
         model.addAttribute("recordsSet", recordsSetDto);
-        model.addAttribute("viewRedirect", getViewRedirect());
-        return new ModelAndView("month-days-form");
+        model.addAttribute("formRedirect", getFormRedirect());
+        return new ModelAndView("display-date");
     }
 
     private void buildMonthRecordsForms(List<MonthRecordDto> monthRecordDtos, Model model) {
@@ -66,9 +58,9 @@ public class MonthRecordsFormController {
     }
 
 
-    private String getViewRedirect() {
-        if (viewRedirect != null) {
-            return viewRedirect;
+    private String getFormRedirect() {
+        if (formRedirect != null) {
+            return formRedirect;
         }
         throw new ControllerException("Path variable not found!");
     }

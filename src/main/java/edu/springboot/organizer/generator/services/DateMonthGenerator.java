@@ -33,14 +33,15 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
         return dateCellDtos;
     }
 
-    public List<DateCellDto> dateCellsGenerate(MonthRecordDto monthRecordDto) {
-        List<DateCellDto> list = dumbListGenerate(monthRecordDto.getMonth(), monthRecordDto.getYear());
+    public List<DateCellDto> dateCellsGenerate(MonthRecordDto monthRecordDto, int monthNo, int year) {
+        List<DateCellDto> list = dumbListGenerate(monthNo, year);
         return list.stream()
                 .map(it -> DateCellDto.builder()
                         .monthRecordId(monthRecordDto.getCreated())
                         .day(it.getDay())
                         .holiday(it.getHoliday())
                         .weekDay(it.getWeekDay())
+                        .date(year + "-" + String.format("%02d", monthNo) + "-" + String.format("%02d", it.getDay()))
                         .build())
                 .collect(Collectors.toList());
     }

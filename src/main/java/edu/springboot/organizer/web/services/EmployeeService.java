@@ -31,7 +31,7 @@ public class EmployeeService extends BaseService<Employee, EmployeeDto> {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public EmployeeDto createEmployee(Employee employee) {
         Employee entity = insertEntity(employee);
-        log.info("Saved [{}]", entity);
+        log.info("Saved [{}|{}]", entity, BEAN_NAME);
         return getRepository().getBaseRowMapper().toDto(entity);
     }
 

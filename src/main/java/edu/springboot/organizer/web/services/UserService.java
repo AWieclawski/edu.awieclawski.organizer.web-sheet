@@ -37,11 +37,16 @@ public class UserService extends BaseService<User, UserDto> {
     private CredentialService credentialService;
 
     public UserDto getCtxUser() {
-        // TODO User secure registry and service to get User form context
+        return findCtxUser();
+    }
+
+    // TODO User secure registry and service to get User form context
+    private UserDto findCtxUser() {
+        String userId = "TEST_USER_ID";
         return UserDto.builder()
-                .created(UUID.randomUUID().toString())
-                .name("Examplename1")
-                .surName("Examplesurname1")
+                .created(userId)
+                .name("ExampleUserName")
+                .surName("ExampleUserSurname")
                 .build();
     }
 
@@ -49,7 +54,7 @@ public class UserService extends BaseService<User, UserDto> {
     public UserDto createUser(User user) {
         assignCredentials(user);
         User entity = insertEntity(user);
-        log.info("Saved [{}]", entity);
+        log.info("Saved [{}|{}]", entity, BEAN_NAME);
         return getRowMapper().toDto(entity);
     }
 

@@ -60,24 +60,11 @@ public class MonthRecordRepository extends BaseRepository<MonthRecord, MonthReco
         return MonthRecord.getSqlTableCreator();
     }
 
-    public List<MonthRecord> findMonthRecordByUser(String userId) {
+    public List<MonthRecord> findMonthRecordBySet(String setId) {
         SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("userId", userId);
-        String query = String.format("SELECT * FROM %s WHERE %s = :userId",
-                getTableName(), MonthRecord.Const.USER.getColumn());
-        return jdbcNamedParametersQuery(query, namedParameters);
-    }
-
-    public List<MonthRecord> findMonthRecordByMonthYearUser(int month, int year, String userId) {
-        SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("month", month)
-                .addValue("year", year)
-                .addValue("userId", userId);
-        String query = String.format("SELECT * FROM %s WHERE %s = :month AND %s = :year AND %s = :userId",
-                getTableName(),
-                MonthRecord.Const.MONTH.getColumn(),
-                MonthRecord.Const.YEAR.getColumn(),
-                MonthRecord.Const.USER.getColumn());
+                .addValue("setId", setId);
+        String query = String.format("SELECT * FROM %s WHERE %s = :setId",
+                getTableName(), MonthRecord.Const.SET.getColumn());
         return jdbcNamedParametersQuery(query, namedParameters);
     }
 
