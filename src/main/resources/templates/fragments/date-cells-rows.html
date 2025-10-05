@@ -1,0 +1,57 @@
+<table th:fragment="date-cells-table" th:with="dateMonthsize=${monthRecord.getDateCellsList().size()}">
+    <thead class="tHead">
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, (dateMonthsize*2) - 1)}">
+            <th th:if="${cellNo == 0}" class="leftLabel"><span>Day of month</span></th>
+            <th colspan="3" th:if="${cellNo < dateMonthsize}"
+                th:with="dateCell=${monthRecord.getDateCellsList()?.get(cellNo)}" class="baseCell"
+                th:title="${dateCell?.getWeekDay()}"
+                th:classappend="${dateCell?.getHoliday() ? 'holiday' : ''}">
+                <span th:text="${dateCell?.getDay()}"></span>
+            </th>
+        </th:block>
+    </tr>
+    </thead>
+    <tbody class="tBody">
+    <tr>
+        <th:block th:each="dateCellHr, dateCellHrStat : ${monthRecord.getDateCellsList()}">
+            <td th:if="${dateCellHrStat.index == 0}" class="leftLabel hrCell"><span>Hours range</span></td>
+            <td colspan="1" class="hrCell hrBegin" th:classappend="${dateCellHr?.getHoliday() ? 'holiday' : ''}"
+                th:title="${dateCellHr?.getWeekDay()} + '/' + ${dateCellHr?.getDate()}">
+                <span th:text="${dateCellHr.getBeginHour()}"></span></td>
+            <td colspan="1" class="hrPause" th:classappend="${dateCellHr?.getHoliday() ? 'holiday' : ''}">-</td>
+            <td colspan="1" class="hrCell hrEnd" th:classappend="${dateCellHr?.getHoliday() ? 'holiday' : ''}"
+                th:title="${dateCellHr?.getWeekDay()} + '/' + ${dateCellHr?.getDate()}">
+                <span th:text="${dateCellHr.getEndHour()}"></span></td>
+        </th:block>
+    </tr>
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, (dateMonthsize*2) - 1)}">
+            <td th:if="${cellNo == 0}" class="leftLabel hrsCell"><span>Working hours</span></td>
+            <td colspan="3" th:if="${cellNo < dateMonthsize}"
+                th:with="dateCell=${monthRecord.getDateCellsList()?.get(cellNo)}" class="hrsCell"
+                th:title="${dateCell?.getWeekDay()} + '/' + ${dateCell?.getDate()}"
+                th:classappend="${dateCell?.getHoliday() ? 'holiday' : ''}">
+                <span th:text="${dateCell?.getHours()}"></span>
+            </td>
+            <td th:if="${cellNo == dateMonthsize}" class="rightLabel hrsCell">
+                <span th:text="${monthRecord?.calculateHours()}"></span>
+            </td>
+        </th:block>
+    </tr>
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, (dateMonthsize*2) - 1)}">
+            <td th:if="${cellNo == 0}" class="leftLabel ovrHrsCell"><span>Overtime</span></td>
+            <td colspan="3" th:if="${cellNo < dateMonthsize}"
+                th:with="dateCell=${monthRecord.getDateCellsList()?.get(cellNo)}" class="ovrHrsCell"
+                th:title="${dateCell?.getWeekDay()} + '/' + ${dateCell?.getDate()}"
+                th:classappend="${dateCell?.getHoliday() ? 'holiday' : ''}">
+                <span th:text="${dateCell?.getOvertime()}"></span>
+            </td>
+            <td th:if="${cellNo == dateMonthsize}" class="rightLabel ovrHrsCell">
+                <span th:text="${monthRecord?.calculateOvertime()}"></span>
+            </td>
+        </th:block>
+    </tr>
+    </tbody>
+</table>

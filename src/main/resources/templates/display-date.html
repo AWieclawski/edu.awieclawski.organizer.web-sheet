@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en-En">
+<head>
+    <title>Submitted date</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+</head>
+<body>
+<p>The chosen year-month is:
+    <b><span th:text="${#dates.format(datePickerForm.lookDate, datePickerForm.dateFormat)}"></span></b>
+    (<span th:text="${monthName}"></span>)
+</p>
+<div th:each="monthRecord, iterStat : ${monthRecords}">
+
+    <div class="tableDiv">
+        <p>Employee time sheet for: <b><span th:text="${monthRecord.getEmployee()}"></span></b></p>
+        <div th:if="${monthRecord.getDateCellsList()?.size()>0}"
+             th:replace="~{fragments/date-cells-rows :: date-cells-table}"></div>
+    </div>
+
+</div>
+
+<a th:href="@{/{targetPath} (targetPath=${formRedirect} + '/' + ${recordsSet.getCreated()})}">
+    <button type="button">Click to edit rows</button>
+</a>
+
+</body>
+</html>

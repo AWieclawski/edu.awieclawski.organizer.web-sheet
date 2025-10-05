@@ -1,0 +1,184 @@
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+p,
+blockquote,
+em,
+img,
+q,
+strong,
+sub,
+sup,
+b,
+i,
+ol,
+ul,
+li,
+table,
+tbody,
+tfoot,
+tr,
+th,
+td,
+article,
+aside,
+figure,
+footer,
+header,
+menu,
+nav,
+section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    color: #eeeeee;
+    background-color: #111111;
+    font-family: Tahoma, Verdana, sans-serif;
+    padding: 10px;
+}
+
+a:link {
+    color: #3cffff;
+    background-color: transparent;
+    text-decoration: none;
+    opacity: 1 !important;
+}
+
+a:visited {
+    color: #3498db;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.tableDiv {
+    margin-top: 20px;
+}
+
+.tBody {
+    font-size: 12px;
+    color: #aaaaaa;
+    text-align: right;
+}
+
+.tHead {
+    font-size: 12px;
+    color: #eeeeee;
+    text-align: center;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #eeeeee;
+}
+
+th {
+    background-color: #222222;
+    border-right: 1px dotted #aaaaaa;
+    padding: 2px;
+}
+
+th.leftLabel {
+    border-right: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 90px;
+    text-align: left;
+    padding-left: 4px;
+}
+
+td {
+    background-color: #111111;
+    padding: 2px;
+    min-width: 12px;
+}
+
+td.hrCell {
+    color: skyblue;
+}
+
+td.hrPause {
+    padding: 1px;
+    min-width: 5px;
+    text-align: center;
+}
+
+td.ovrHrsCell {
+    border-right: 1px dotted #aaaaaa;
+    padding-right: 4px;
+    color: orange;
+}
+
+td.hrEnd {
+    border-right: 1px dotted #aaaaaa;
+    color: cornflowerblue;
+    padding: 2px;
+}
+
+td.hrsCell {
+    border-right: 1px dotted #aaaaaa;
+    padding-right: 4px;
+    color: chartreuse;
+}
+
+td.leftLabel {
+    border-right: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 90px;
+    text-align: left;
+    padding-left: 4px;
+}
+
+td.rightLabel {
+    border-left: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: right;
+    padding-right: 4px;
+}
+
+.holiday {
+    color: yellow;
+}
+
+th.holiday {
+    background-color: #444444;
+}
+
+td.holiday {
+    background-color: #333333;
+}
+
+@media screen and (max-width: 1200px) {
+
+}
+
+@media screen and (max-width: 900px) {
+
+}
+
+@media screen and (max-width: 600px) {
+
+}
+
