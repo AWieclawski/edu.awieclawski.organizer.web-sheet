@@ -1,0 +1,23 @@
+<header th:fragment="error-pop-up">
+
+    <div class="errorframe">
+
+        <section>
+            <p style="text-align:center"
+               th:if="${errorMessage != null}" th:text="| Kod błędu: ${errorMessage} |">
+            </p>
+
+            <!--
+                       <div class="errorimage">
+                          <a th:href="@{/}">
+                              <img th:src="@{/images/error100.png}" alt="Na stronę główną">
+                       </a>
+                      </div>
+            -->
+
+            <p style="text-align:center"> Wystąpił błąd. Proszę powrócić na stronę główną! </p>
+        </section>
+
+    </div>
+
+</header>

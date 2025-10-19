@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Strona główna</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+    <script type="text/javascript" th:src="@{/js/functions.js}"></script>
+
+</head>
+
+<body>
+
+<div class="containeer">
+
+    <div th:replace="~{fragments/welcome-header :: header}"></div>
+
+    <div class="mainframe">
+
+
+
+    </div>
+
+    <div th:replace="~{fragments/main-footer :: footer}"></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en-En">
+<head>
+    <title>Submitted date</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+</head>
+<body>
+<h1>View</h1>
+<p>The chosen year-month is:
+    <b><span th:text="${lookDate}"></span></b>
+    (<span th:text="${monthName}"></span>)
+</p>
+<div th:each="monthRecord, iterStat : ${recordsSet?.monthRecords}">
+
+    <div class="tableDiv">
+        <p>Employee time sheet for: <b><span th:text="${monthRecord?.employee}"></span></b> | standard hours: <span th:text="${monthRecord?.standardHours}"></span></p>
+        <div th:if="${monthRecord?.dateCellsSize>0}">
+            <span th:replace="~{fragments/date-cells-rows :: date-cells-table}"></span>
+        </div>
+        <div th:unless="${monthRecord.dateCellsSize>0}">
+            <span>No day date cells</span>
+        </div>
+    </div>
+
+</div>
+
+<a th:with="actionPath=${formRedirect} + '/' + ${lookDate}"
+   th:href="@{/{targetPath} (targetPath=${actionPath})}">
+    <button type="button">Click to edit rows</button>
+</a>
+
+</body>
+</html>
