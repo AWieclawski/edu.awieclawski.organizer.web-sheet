@@ -11,12 +11,25 @@
 <h1>View</h1>
 <p>The chosen year-month is:
     <b><span th:text="${lookDate}"></span></b>
-    (<span th:text="${monthName}"></span>)
+    (<span th:text="${monthName}"></span>) viewRedirect: <span th:text="${viewRedirect}"></span>
 </p>
+
+<a th:with="actionPath=${viewRedirect} + '/add/' + ${lookDate}"
+   th:href="@{/{targetPath} (targetPath=${actionPath})}">
+    <button type="button">Click to add month record</button>
+</a>
+
 <div th:each="monthRecord, iterStat : ${recordsSet?.monthRecords}">
 
     <div class="tableDiv">
-        <p>Employee time sheet for: <b><span th:text="${monthRecord?.employee}"></span></b> | standard hours: <span th:text="${monthRecord?.standardHours}"></span></p>
+        <p>Employee time sheet for: <b><span th:text="${monthRecord?.employee}"></span></b> | standard hours: <span
+                th:text="${monthRecord?.standardHours}"></span></p>
+
+        <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
+           th:href="@{/{targetPath} (targetPath=${actionPath})}">
+            <button type="button">Click to delete month record</button>
+        </a>
+
         <div th:if="${monthRecord?.dateCellsSize>0}">
             <span th:replace="~{fragments/date-cells-rows :: date-cells-table}"></span>
         </div>
@@ -29,7 +42,7 @@
 
 <a th:with="actionPath=${formRedirect} + '/' + ${lookDate}"
    th:href="@{/{targetPath} (targetPath=${actionPath})}">
-    <button type="button">Click to edit rows</button>
+    <button type="button">Click to edit all rows</button>
 </a>
 
 </body>

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-//@Setter
 @Getter
 @EqualsAndHashCode(callSuper = true, of = {})
 public class RecordsSetDto extends BaseDto implements DateMonthHolder {

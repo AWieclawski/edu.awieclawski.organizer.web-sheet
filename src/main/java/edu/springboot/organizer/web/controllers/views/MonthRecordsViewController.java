@@ -41,10 +41,11 @@ public class MonthRecordsViewController {
         mv.addObject("monthName", monthRecordsFacade.getMonthName(datePickerForm.getLookDate()));
         mv.addObject("recordsSet", recordsSetDto);
         mv.addObject("formRedirect", monthRecordsFacade.getFormRedirect());
+        mv.addObject("viewRedirect", monthRecordsFacade.getViewRedirect());
         return mv;
     }
 
-    @PostMapping(value = "{lookDate}")
+    @PostMapping(value = "show/{lookDate}")
     public ModelAndView monthDateView(@PathVariable String lookDate,
                                       @ModelAttribute("recordsSet") RecordsSetMV recordsSet) {
         Date date = monthRecordsFacade.getSearchDate(lookDate);
@@ -57,10 +58,35 @@ public class MonthRecordsViewController {
         mv.addObject("monthName", monthRecordsFacade.getMonthName(updatedRecordsSet.getMonth()));
         mv.addObject("recordsSet", updatedRecordsSet);
         mv.addObject("formRedirect", monthRecordsFacade.getFormRedirect());
+        mv.addObject("viewRedirect", monthRecordsFacade.getViewRedirect());
         return mv;
     }
 
-    @GetMapping(path = "{lookDate}")
+    @GetMapping(path = "add/{lookDate}")
+    public ModelAndView addMonthRecord(@PathVariable String lookDate) {
+        Date date = monthRecordsFacade.getSearchDate(lookDate);
+        List<RecordsSetMV> recordsSets = monthRecordsFacade.getRecordsSets(date);
+        RecordsSetMV recordsSetMV = recordsSets.stream().findFirst().orElseThrow(ResultNotFoundException::new);
+        if (recordsSetMV == null) {
+            throw new ResultNotFoundException("Record set missed!");
+        }
+        monthRecordsFacade.addNewMonthRecordDto(recordsSetMV);
+        String viewRedirect = monthRecordsFacade.getViewRedirect();
+        return getViewPage("redirect:/" + viewRedirect + "/show/" + lookDate);
+    }
+
+    @GetMapping(path = "delete/{monthRecordId}")
+    public ModelAndView deleteMonthRecord(@PathVariable String monthRecordId) {
+        if (monthRecordId == null) {
+            throw new ResultNotFoundException("Month Record Id missed!");
+        }
+        monthRecordsFacade.deleteMonthRecordById(monthRecordId);
+        String viewRedirect = monthRecordsFacade.getViewRedirect();
+        String lookDate = monthRecordsFacade.getLookDateFromMonthRecordById(monthRecordId);
+        return getViewPage("redirect:/" + viewRedirect + "/show/" + lookDate);
+    }
+
+    @GetMapping(path = "show/{lookDate}")
     public ModelAndView getMonthDateForm(@PathVariable String lookDate) {
         Date date = monthRecordsFacade.getSearchDate(lookDate);
         List<RecordsSetMV> recordsSets = monthRecordsFacade.getRecordsSets(date);

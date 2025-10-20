@@ -3,6 +3,8 @@ package edu.springboot.organizer.web.services;
 import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.data.repositories.DateCellRepository;
 import edu.springboot.organizer.web.dtos.DateCellDto;
+import edu.springboot.organizer.web.dtos.base.BaseDto;
+import edu.springboot.organizer.web.exceptions.QueryException;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import edu.springboot.organizer.web.services.base.BaseService;
@@ -89,12 +91,43 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
         throw new ResultNotFoundException(String.format("DateCells find by MonthRecord %s failed!", id));
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void deleteDateCell(String id) {
+        try {
+            deleteEntity(id);
+        } catch (Exception e) {
+            log.error("DateCell by id [{}] delete failed! | {}", id, e.getMessage());
+        }
+        throw new QueryException("DateCell delete failed! "+ id);
+    }
+
     public List<DateCellDto> createDateCells(List<DateCell> dateCells) {
         return dateCells.stream()
                 .filter(Objects::nonNull)
                 .map(this::createDateCell)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void deleteDateCells(List<String> ids) {
+        try {
+            deleteEntities(ids);
+        } catch (Exception e) {
+            log.error("DateCells by ids delete failed! | {}", e.getMessage(), e);
+        }
+        throw new QueryException("DateCells delete failed! "+ ids);
+    }
+
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void deleteDateCellsByMonthRecordId(String monthRecordId) {
+        if (monthRecordId != null) {
+            List<String> ids = getDateCellsDtosByMonthRecord(monthRecordId)
+                    .stream().map(BaseDto::getCreated).collect(Collectors.toList());
+            deleteDateCells(ids);
+        }
+    }
+
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void purgeDateCells() {

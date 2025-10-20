@@ -4,13 +4,11 @@ import edu.springboot.organizer.web.dtos.base.BaseDto;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-//@Setter
 @Getter
 @EqualsAndHashCode(callSuper = true, of = {})
 public class MonthRecordDto extends BaseDto {

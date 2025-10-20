@@ -55,6 +55,11 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
         return getJdbcTemplate().queryForObject(query, getBaseRowMapper(), id);
     }
 
+    protected int jdbcUpdate(String sql, String id) {
+        sanitizeQuery(sql);
+        return jdbcTemplate.update(sql, id);
+    }
+
     protected Long jdbcQueryForObjectQuantity(String query) {
         sanitizeQuery(query);
         return getJdbcTemplate().queryForObject(query, Long.class);

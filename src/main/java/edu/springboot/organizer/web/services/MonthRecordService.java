@@ -8,6 +8,7 @@ import edu.springboot.organizer.utils.ReflectionUtils;
 import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import edu.springboot.organizer.web.dtos.RecordsSetDto;
+import edu.springboot.organizer.web.exceptions.QueryException;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import edu.springboot.organizer.web.services.base.BaseService;
@@ -94,6 +95,17 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
         throw new ResultNotFoundException("MonthRecords search failed!");
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void deleteMonthRecord(String id) {
+        try {
+            deleteEntity(id);
+            dateCellService.deleteDateCellsByMonthRecordId(id);
+        } catch (Exception e) {
+            log.error("MonthRecord by id [{}] failed! | {}", id, e.getMessage(), e);
+        }
+        throw new QueryException("MonthRecord delete failed! " + id);
+    }
+
 
     @Override
     public void initTable() {
@@ -126,6 +138,7 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
             ReflectionUtils.setFieldValue(monthRecordDto, "dateCells", dateCellDtos, true);
         }
     }
+
 
 }
 

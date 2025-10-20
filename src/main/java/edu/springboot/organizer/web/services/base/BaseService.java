@@ -104,6 +104,22 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
         return dto;
     }
 
+    protected void deleteEntity(String id) {
+        try {
+            getRepository().deleteById(id);
+        } catch (Exception e) {
+            log.error("Delete failed [{}|{}]", id, getRepository().getTableName());
+        }
+    }
+
+    protected void deleteEntities(List<String> ids) {
+        try {
+            getRepository().deleteAllById(ids);
+        } catch (Exception e) {
+            log.error("Delete failed [{}|{}]", ids, getRepository().getTableName());
+        }
+    }
+
 
     protected abstract BaseRepository<S, T> getRepository();
 

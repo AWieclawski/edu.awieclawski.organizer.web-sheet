@@ -21,10 +21,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -86,12 +88,12 @@ public class RecordsSetFacade {
         checkDate(date);
         Calendar calendar = DateUtils.getCalendarFromDate(date);
         int monthNo = calendar.get(Calendar.MONTH) + 1;
-        java.time.Month month = java.time.Month.of(monthNo);
+        Month month = Month.of(monthNo);
         return monthRecordService.getDateMonthGenerator().getMonthName(month);
     }
 
     public String getMonthName(int monthNo) {
-        java.time.Month month = java.time.Month.of(monthNo);
+        Month month = Month.of(monthNo);
         return monthRecordService.getDateMonthGenerator().getMonthName(month);
     }
 
@@ -100,11 +102,9 @@ public class RecordsSetFacade {
         return recordsSetService.getMonthRecordByMonthYearUser(month, year, userId);
     }
 
-
     public RecordsSetDto findRecordsSets(String id) {
         return recordsSetService.getRecordsSetById(id);
     }
-
 
     public String getFormRedirect() {
         if (formRedirect != null) {
@@ -138,6 +138,31 @@ public class RecordsSetFacade {
         throw new ControllerException("Path variable not found!");
     }
 
+    public void addNewMonthRecordDto(RecordsSetMV setDto) {
+        createMonthRecords(RecordsSetMVMapper.toDto(setDto));
+    }
+
+    public void deleteMonthRecordById(String monthRecordId) {
+        monthRecordService.deleteMonthRecord(monthRecordId);
+    }
+
+    public String getLookDateFromMonthRecordById(String monthRecordId) {
+        MonthRecordDto monthRecordDto = monthRecordService.getMonthRecordById(monthRecordId);
+        String[] result = new String[1];
+        monthRecordDto.getDateCells().stream()
+                .filter(Objects::nonNull)
+                .findFirst().ifPresent(it ->
+                        {
+                            String input = it.getDate();
+                            int firstIndex = input.indexOf("-");
+                            int secondIndex = input.indexOf("-", firstIndex + 1);
+                            result[0] = (input.substring(0, secondIndex));
+                        }
+                );
+
+        return result[0];
+    }
+
 
     private Date checkDate(Date date) {
         if (date == null && log.isDebugEnabled()) {
@@ -158,8 +183,7 @@ public class RecordsSetFacade {
         String userId = getCtxUser() != null ? getCtxUser().getCreated() : "";
         RecordsSetDto recordsSetDto = recordsSetService
                 .createRecordsSet(RecordsSet.builder().month(month).year(year).userId(userId).build());
-        List<MonthRecordDto> monthRecordDtos = createMonthRecords(recordsSetDto);
-        recordsSetDto.addMonthRecords(monthRecordDtos);
+        createMonthRecords(recordsSetDto);
         List<RecordsSetDto> recordsSetDtos = new ArrayList<>();
         recordsSetDtos.add(recordsSetDto);
         return recordsSetDtos;
@@ -173,7 +197,7 @@ public class RecordsSetFacade {
         return recordsSetDto;
     }
 
-    private List<MonthRecordDto> createMonthRecords(RecordsSetDto setDto) {
+    private void createMonthRecords(RecordsSetDto setDto) {
         MonthRecordDto monthRecordDto = monthRecordService
                 .createMonthRecord(MonthRecord.builder()
                         .setId(setDto.getCreated())
@@ -182,7 +206,7 @@ public class RecordsSetFacade {
                         .build(), setDto);
         List<MonthRecordDto> monthRecordDtos = new ArrayList<>();
         monthRecordDtos.add(monthRecordDto);
-        return monthRecordDtos;
+        setDto.addMonthRecords(monthRecordDtos);
     }
 
     private UserDto getCtxUser() {
