@@ -34,15 +34,9 @@ public class MonthRecordsViewController {
         if (datePickerForm == null) {
             throw new ResultNotFoundException("Date form missed!");
         }
-        List<RecordsSetMV> recordsSetDtoList = monthRecordsFacade.getRecordsSets(datePickerForm.getLookDate());
-        RecordsSetMV recordsSetDto = recordsSetDtoList.stream().findFirst().orElseThrow(ResultNotFoundException::new);
-        ModelAndView mv = getViewPage("display-month-days");
-        mv.addObject("lookDate", monthRecordsFacade.getFromSearchDate(datePickerForm.getLookDate()));
-        mv.addObject("monthName", monthRecordsFacade.getMonthName(datePickerForm.getLookDate()));
-        mv.addObject("recordsSet", recordsSetDto);
-        mv.addObject("formRedirect", monthRecordsFacade.getFormRedirect());
-        mv.addObject("viewRedirect", monthRecordsFacade.getViewRedirect());
-        return mv;
+        monthRecordsFacade.getRecordsSets(datePickerForm.getLookDate());
+        String lookDate = monthRecordsFacade.getFromSearchDate(datePickerForm.getLookDate());
+        return getRedirectViewPage(lookDate);
     }
 
     @PostMapping(value = "show/{lookDate}")
@@ -52,14 +46,8 @@ public class MonthRecordsViewController {
         if (recordsSet == null) {
             throw new ResultNotFoundException("Record set missed!");
         }
-        RecordsSetMV updatedRecordsSet = monthRecordsFacade.updateRecordsSet(date, recordsSet);
-        ModelAndView mv = getViewPage("display-month-days");
-        mv.addObject("lookDate", lookDate);
-        mv.addObject("monthName", monthRecordsFacade.getMonthName(updatedRecordsSet.getMonth()));
-        mv.addObject("recordsSet", updatedRecordsSet);
-        mv.addObject("formRedirect", monthRecordsFacade.getFormRedirect());
-        mv.addObject("viewRedirect", monthRecordsFacade.getViewRedirect());
-        return mv;
+        RecordsSetMV recordsSetMV = monthRecordsFacade.updateRecordsSet(date, recordsSet);
+        return getViewModelPopulatedObjects("display-month-days", lookDate, recordsSetMV);
     }
 
     @GetMapping(path = "add/{lookDate}")
@@ -71,8 +59,7 @@ public class MonthRecordsViewController {
             throw new ResultNotFoundException("Record set missed!");
         }
         monthRecordsFacade.addNewMonthRecordDto(recordsSetMV);
-        String viewRedirect = monthRecordsFacade.getViewRedirect();
-        return getViewPage("redirect:/" + viewRedirect + "/show/" + lookDate);
+        return getRedirectViewPage(lookDate);
     }
 
     @GetMapping(path = "delete/{monthRecordId}")
@@ -80,30 +67,39 @@ public class MonthRecordsViewController {
         if (monthRecordId == null) {
             throw new ResultNotFoundException("Month Record Id missed!");
         }
-        monthRecordsFacade.deleteMonthRecordById(monthRecordId);
-        String viewRedirect = monthRecordsFacade.getViewRedirect();
         String lookDate = monthRecordsFacade.getLookDateFromMonthRecordById(monthRecordId);
-        return getViewPage("redirect:/" + viewRedirect + "/show/" + lookDate);
+        monthRecordsFacade.deleteMonthRecordById(monthRecordId);
+        return getRedirectViewPage(lookDate);
     }
 
     @GetMapping(path = "show/{lookDate}")
     public ModelAndView getMonthDateForm(@PathVariable String lookDate) {
         Date date = monthRecordsFacade.getSearchDate(lookDate);
         List<RecordsSetMV> recordsSets = monthRecordsFacade.getRecordsSets(date);
-        RecordsSetMV recordsSetDto = recordsSets.stream().findFirst().orElseThrow(ResultNotFoundException::new);
-        if (recordsSetDto == null) {
+        RecordsSetMV recordsSetMV = recordsSets.stream().findFirst().orElseThrow(ResultNotFoundException::new);
+        if (recordsSetMV == null) {
             throw new ResultNotFoundException("Record set missed!");
         }
-        ModelAndView mv = getViewPage("display-month-days");
-        mv.addObject("lookDate", lookDate);
-        mv.addObject("monthName", monthRecordsFacade.getMonthName(recordsSetDto.getMonth()));
-        mv.addObject("recordsSet", recordsSetDto);
-        mv.addObject("formRedirect", monthRecordsFacade.getFormRedirect());
-        return mv;
+        return getViewModelPopulatedObjects("display-month-days", lookDate, recordsSetMV);
     }
 
     private ModelAndView getViewPage(String viewPage) {
         return new ModelAndView(viewPage);
+    }
+
+    private ModelAndView getRedirectViewPage(String lookDate) {
+        String viewRedirect = monthRecordsFacade.getViewRedirect();
+        return getViewPage("redirect:/" + viewRedirect + "/show/" + lookDate);
+    }
+
+    private ModelAndView getViewModelPopulatedObjects(String viewPage, String lookDate, RecordsSetMV recordsSetMV) {
+        ModelAndView mv = getViewPage(viewPage);
+        mv.addObject("lookDate", lookDate);
+        mv.addObject("monthName", monthRecordsFacade.getMonthName(recordsSetMV.getMonth()));
+        mv.addObject("recordsSet", recordsSetMV);
+        mv.addObject("formRedirect", monthRecordsFacade.getFormRedirect());
+        mv.addObject("viewRedirect", monthRecordsFacade.getViewRedirect());
+        return mv;
     }
 
 }

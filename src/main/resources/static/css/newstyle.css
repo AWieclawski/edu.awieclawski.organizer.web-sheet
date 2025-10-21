@@ -186,6 +186,14 @@ td.holiday {
     background-color: red;
 }
 
+.delBtn {
+    background-color: lightcoral;
+}
+
+.addBtn {
+    background-color: lightseagreen;
+}
+
 @media screen and (max-width: 1200px) {
 
 }

@@ -96,14 +96,14 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void deleteMonthRecord(String id) {
+    public Integer deleteMonthRecord(String id) {
         try {
-            deleteEntity(id);
             dateCellService.deleteDateCellsByMonthRecordId(id);
+            return deleteEntity(id);
         } catch (Exception e) {
-            log.error("MonthRecord by id [{}] failed! | {}", id, e.getMessage(), e);
+            log.error("MonthRecord delete by id [{}] failed! ", id, e);
         }
-        throw new QueryException("MonthRecord delete failed! " + id);
+        throw new QueryException("MonthRecord delete failed! ");
     }
 
 
@@ -138,7 +138,6 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
             ReflectionUtils.setFieldValue(monthRecordDto, "dateCells", dateCellDtos, true);
         }
     }
-
 
 }
 

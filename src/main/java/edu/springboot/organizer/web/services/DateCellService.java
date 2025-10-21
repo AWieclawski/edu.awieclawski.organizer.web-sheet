@@ -92,13 +92,13 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void deleteDateCell(String id) {
+    public Integer deleteDateCell(String id) {
         try {
-            deleteEntity(id);
+            return deleteEntity(id);
         } catch (Exception e) {
-            log.error("DateCell by id [{}] delete failed! | {}", id, e.getMessage());
+            log.error("DateCell delete by id [{}] failed! | {}", id, e.getMessage());
         }
-        throw new QueryException("DateCell delete failed! "+ id);
+        throw new QueryException("DateCell delete failed! " + id);
     }
 
     public List<DateCellDto> createDateCells(List<DateCell> dateCells) {
@@ -113,9 +113,9 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
         try {
             deleteEntities(ids);
         } catch (Exception e) {
-            log.error("DateCells by ids delete failed! | {}", e.getMessage(), e);
+            log.error("DateCells delete by ids failed!", e);
+            throw new QueryException("DateCells delete failed! ");
         }
-        throw new QueryException("DateCells delete failed! "+ ids);
     }
 
 

@@ -11,13 +11,19 @@
 <h1>View</h1>
 <p>The chosen year-month is:
     <b><span th:text="${lookDate}"></span></b>
-    (<span th:text="${monthName}"></span>) viewRedirect: <span th:text="${viewRedirect}"></span>
+    (<span th:text="${monthName}"></span>)
 </p>
 
 <a th:with="actionPath=${viewRedirect} + '/add/' + ${lookDate}"
    th:href="@{/{targetPath} (targetPath=${actionPath})}">
-    <button type="button">Click to add month record</button>
+    <button type="button" class="addBtn">Click to add month record</button>
 </a>
+
+<a th:with="actionPath=${formRedirect} + '/' + ${lookDate}"
+   th:href="@{/{targetPath} (targetPath=${actionPath})}">
+    <button type="button" class="edtBtn">Click to edit all rows</button>
+</a>
+
 
 <div th:each="monthRecord, iterStat : ${recordsSet?.monthRecords}">
 
@@ -27,7 +33,7 @@
 
         <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
            th:href="@{/{targetPath} (targetPath=${actionPath})}">
-            <button type="button">Click to delete month record</button>
+            <button type="button" class="delBtn">Click to delete month record</button>
         </a>
 
         <div th:if="${monthRecord?.dateCellsSize>0}">
@@ -39,11 +45,6 @@
     </div>
 
 </div>
-
-<a th:with="actionPath=${formRedirect} + '/' + ${lookDate}"
-   th:href="@{/{targetPath} (targetPath=${actionPath})}">
-    <button type="button">Click to edit all rows</button>
-</a>
 
 </body>
 </html>

@@ -3,6 +3,7 @@ package edu.springboot.organizer.web.services;
 import edu.springboot.organizer.data.models.Visitor;
 import edu.springboot.organizer.data.repositories.VisitorRepository;
 import edu.springboot.organizer.web.dtos.VisitorDto;
+import edu.springboot.organizer.web.exceptions.QueryException;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import edu.springboot.organizer.web.services.base.BaseService;
@@ -44,6 +45,7 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
         return getAllEntities();
     }
 
+    @Transactional(readOnly = true)
     public List<VisitorDto> getVisitorsBetweenDates(String startDate, String endDate) {
         try {
             List<Visitor> entities = visitorRepository.findVisitorsByTimestampIsBetween(startDate, endDate);
@@ -53,6 +55,27 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
         }
         throw new ResultNotFoundException(String.format("Visitors search between %s %s failed!", startDate, endDate));
     }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void deleteVisitor(String id) {
+        try {
+            deleteEntity(id);
+        } catch (Exception e) {
+            log.error("Visitor delete by id [{}] failed! | {}", id, e.getMessage(), e);
+            throw new QueryException("Visitor delete  failed! " + id);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void deleteVisitors(List<String> ids) {
+        try {
+            deleteEntities(ids);
+        } catch (Exception e) {
+            log.error("Visitors delete by ids failed! ", e);
+            throw new QueryException("Visitors delete failed! ");
+        }
+    }
+
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void purgeVisitors() {

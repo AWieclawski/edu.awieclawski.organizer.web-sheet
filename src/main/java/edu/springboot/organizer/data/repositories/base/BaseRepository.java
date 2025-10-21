@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Slf4j
 public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> extends BaseDao<S, T> {
@@ -100,12 +100,12 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> ex
         jdbcExecuteSafe(query);
     }
 
-    public void deleteById(String id) {
+    public Integer deleteById(String id) {
         String query = String.format("DELETE FROM %s WHERE %s = ?;", getTableName(), BaseEntity.BaseConst.ID.getColumn());
-        jdbcUpdate(query, id);
+        return jdbcUpdate(query, id);
     }
 
-    public void deleteAllById(List<String> ids) {
+    public void deleteAllById(Set<String> ids) {
         String expression = String.join("', '", ids);
         String query = String.format("DELETE FROM %s WHERE %s IN ('%s');", getTableName(), BaseEntity.BaseConst.ID.getColumn(), expression);
         jdbcExecuteSafe(query);

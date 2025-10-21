@@ -9,6 +9,7 @@ import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
             return getRepository().persistEntity(entity);
         } catch (Exception e) {
             log.error("Persist Entity [{}] failed!", entity, e);
-            throw new PersistEntityException("Error! " + (e.getMessage() != null ? e.getMessage() : e.getCause().getMessage()));
+            throw new PersistEntityException("Persist error! " + (e.getMessage() != null ? e.getMessage() : e.getCause().getMessage()));
         }
     }
 
@@ -44,7 +45,7 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
             List<S> entities = getRepository().findAll();
             return entities.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
         } catch (Exception e) {
-            log.error("All {} entities not found! | {}", dtoClass.getSimpleName(), e.getMessage());
+            log.error("All {} entities not found! ", getRepository().getTableName(), e);
         }
         throw new ResultNotFoundException("All entities found failed!");
     }
@@ -54,9 +55,9 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
             S entity = getRepository().findById(id);
             return getRowMapper().toDto(entity);
         } catch (Exception e) {
-            log.error("{} entity [{}] not found! {}", dtoClass, id, e.getMessage());
+            log.error("{} entity [{}] not found! ", getRepository().getTableName(), id, e);
         }
-        throw new ResultNotFoundException("Credential search by id failed!");
+        throw new ResultNotFoundException("Entity search by id failed!");
     }
 
     protected void purgeEntities() {
@@ -65,7 +66,7 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
         try {
             getRepository().deleteAll();
         } catch (Exception e) {
-            log.error("Purge failed! {}", e.getMessage());
+            log.error("Purge failed! {}", getRepository().getTableName(), e);
         }
     }
 
@@ -74,7 +75,7 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
         try {
             getRepository().modifyDataBase(sql);
         } catch (Exception e) {
-            log.error("Modify failed! {}", e.getMessage());
+            log.error("Modify failed! {}", getRepository().getTableName(), e);
         }
     }
 
@@ -86,7 +87,7 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
                 log.debug("Updated [{}|{}]", updated, updated.getClass().getSimpleName());
             }
         } catch (Exception e) {
-            log.error("Update failed! {}", e.getMessage(), e);
+            log.error("Update failed! {}", getRepository().getTableName(), e);
         }
         return getRowMapper().toDto(entity);
     }
@@ -99,22 +100,23 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
                 log.debug("Updated [{}|{}]", updated, updated.getClass().getSimpleName());
             }
         } catch (Exception e) {
-            log.error("Update failed! {}", e.getMessage(), e);
+            log.error("Update failed! {}", getRepository().getTableName(), e);
         }
         return dto;
     }
 
-    protected void deleteEntity(String id) {
+    protected Integer deleteEntity(String id) {
         try {
-            getRepository().deleteById(id);
+            return getRepository().deleteById(id);
         } catch (Exception e) {
-            log.error("Delete failed [{}|{}]", id, getRepository().getTableName());
+            log.error("Delete failed [{}|{}]", id, getRepository().getTableName(), e);
         }
+        return 0;
     }
 
     protected void deleteEntities(List<String> ids) {
         try {
-            getRepository().deleteAllById(ids);
+            getRepository().deleteAllById(new HashSet<>(ids));
         } catch (Exception e) {
             log.error("Delete failed [{}|{}]", ids, getRepository().getTableName());
         }

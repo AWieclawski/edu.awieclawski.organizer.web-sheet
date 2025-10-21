@@ -36,6 +36,9 @@ public class DataStarter {
     public void displaySystemInfo() {
         try {
             initDataDefinition();
+            if (Boolean.parseBoolean(populateData)) {
+                populateData();
+            }
         } catch (Exception ex) {
             log.error("Init data failed! {} | {}", ex.getCause(), ex.getMessage());
         }
@@ -49,6 +52,10 @@ public class DataStarter {
         dateCellService.initTable();
         monthRecordService.initTable();
         recordsSetService.initTable();
+    }
+
+    private void populateData() {
+
     }
 
 }
