@@ -57,7 +57,18 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
 
     protected int jdbcUpdate(String sql, String id) {
         sanitizeQuery(sql);
-        return jdbcTemplate.update(sql, id);
+        return getJdbcTemplate().update(sql, id);
+    }
+
+    /**
+     * https://gist.github.com/chrisblakely01/504cb234e49a57d6c97932efffcd93b2
+     * @param sql
+     * @param params
+     * @return
+     */
+    protected int jdbcNamedParamsUpdate(String sql, Map<String, ?> params) {
+        sanitizeQuery(sql);
+        return getNamedParameterJdbcTemplate().update(sql, params);
     }
 
     protected Long jdbcQueryForObjectQuantity(String query) {

@@ -159,7 +159,6 @@ public class RecordsSetFacade {
                             result[0] = (input.substring(0, secondIndex));
                         }
                 );
-
         return result[0];
     }
 
@@ -180,6 +179,9 @@ public class RecordsSetFacade {
     }
 
     private List<RecordsSetDto> createRecordsSets(int month, int year) {
+        if (log.isDebugEnabled()) {
+            log.debug("Start generating Record Set");
+        }
         String userId = getCtxUser() != null ? getCtxUser().getCreated() : "";
         RecordsSetDto recordsSetDto = recordsSetService
                 .createRecordsSet(RecordsSet.builder().month(month).year(year).userId(userId).build());

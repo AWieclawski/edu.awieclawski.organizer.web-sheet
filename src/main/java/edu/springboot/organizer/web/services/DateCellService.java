@@ -111,7 +111,10 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void deleteDateCells(List<String> ids) {
         try {
-            deleteEntities(ids);
+            int result = deleteEntities(ids);
+            if (log.isDebugEnabled()) {
+                log.debug("Deleted {} rows", result);
+            }
         } catch (Exception e) {
             log.error("DateCells delete by ids failed!", e);
             throw new QueryException("DateCells delete failed! ");

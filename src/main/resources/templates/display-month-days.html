@@ -33,7 +33,7 @@
 
         <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
            th:href="@{/{targetPath} (targetPath=${actionPath})}">
-            <button type="button" class="delBtn">Click to delete month record</button>
+            <button type="button" class="delBtn">Click to delete month record below</button>
         </a>
 
         <div th:if="${monthRecord?.dateCellsSize>0}">

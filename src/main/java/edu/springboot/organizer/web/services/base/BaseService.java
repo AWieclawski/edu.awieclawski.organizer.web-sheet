@@ -114,12 +114,13 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
         return 0;
     }
 
-    protected void deleteEntities(List<String> ids) {
+    protected Integer deleteEntities(List<String> ids) {
         try {
-            getRepository().deleteAllById(new HashSet<>(ids));
+            return getRepository().deleteByIdSet(new HashSet<>(ids));
         } catch (Exception e) {
             log.error("Delete failed [{}|{}]", ids, getRepository().getTableName());
         }
+        return 0;
     }
 
 

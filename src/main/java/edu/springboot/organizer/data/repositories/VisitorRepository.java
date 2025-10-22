@@ -38,6 +38,14 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
         return jdbcNamedParametersQuery(query, namedParameters);
     }
 
+    public List<Visitor> findVisitorsByIP(String ip) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("ip", ip);
+        String query = String.format("SELECT * FROM %s WHERE %s = :ip ",
+                getTableName(), Visitor.Const.IP.getColumn());
+        return jdbcNamedParametersQuery(query, namedParameters);
+    }
+
     @Override
     public Visitor findById(String id) {
         return super.findById(id);

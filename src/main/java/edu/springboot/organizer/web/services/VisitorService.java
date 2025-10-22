@@ -51,15 +51,26 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
             List<Visitor> entities = visitorRepository.findVisitorsByTimestampIsBetween(startDate, endDate);
             return entities.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
         } catch (Exception e) {
-            log.error("Get between failed! {}", e.getMessage());
+            log.error("Get between failed! ", e);
         }
         throw new ResultNotFoundException(String.format("Visitors search between %s %s failed!", startDate, endDate));
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void deleteVisitor(String id) {
+    @Transactional(readOnly = true)
+    public List<VisitorDto> getVisitorsByIP(String ip) {
         try {
-            deleteEntity(id);
+            List<Visitor> entities = visitorRepository.findVisitorsByIP(ip);
+            return entities.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("Get by ip failed! ", e);
+        }
+        throw new ResultNotFoundException(String.format("Visitors search by ip %s failed!", ip));
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public Integer deleteVisitor(String id) {
+        try {
+            return deleteEntity(id);
         } catch (Exception e) {
             log.error("Visitor delete by id [{}] failed! | {}", id, e.getMessage(), e);
             throw new QueryException("Visitor delete  failed! " + id);
@@ -69,7 +80,10 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void deleteVisitors(List<String> ids) {
         try {
-            deleteEntities(ids);
+            int result = deleteEntities(ids);
+            if (log.isDebugEnabled()) {
+                log.debug("Deleted {} rows", result);
+            }
         } catch (Exception e) {
             log.error("Visitors delete by ids failed! ", e);
             throw new QueryException("Visitors delete failed! ");

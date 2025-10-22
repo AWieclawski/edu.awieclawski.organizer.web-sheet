@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -105,10 +106,10 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> ex
         return jdbcUpdate(query, id);
     }
 
-    public void deleteAllById(Set<String> ids) {
-        String expression = String.join("', '", ids);
-        String query = String.format("DELETE FROM %s WHERE %s IN ('%s');", getTableName(), BaseEntity.BaseConst.ID.getColumn(), expression);
-        jdbcExecuteSafe(query);
+    public int deleteByIdSet(Set<String> ids) {
+        String query = String.format("DELETE FROM %s WHERE %s IN (:ids);", getTableName(), BaseEntity.BaseConst.ID.getColumn());
+        Map<String, ?> namedParameters = Collections.singletonMap("ids", ids);
+        return jdbcNamedParamsUpdate(query, namedParameters);
     }
 
     protected Long howMany() {
