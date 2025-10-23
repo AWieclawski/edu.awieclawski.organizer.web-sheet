@@ -8,45 +8,32 @@
 
 </head>
 <body>
-<h1>Form</h1>
-<p>The chosen year-month is:
-    <b><span th:text="${recordsSet.getYear()}+'-'+${recordsSet.monthDisplay}"></span></b>
-    (<span th:text="${monthName}"></span>)
-</p>
+<h1>Form month days</h1>
 
-<form th:with="actionPath=${viewRedirect} + '/show/' + ${lookDate}"
-      th:action="@{/{path} (path=${actionPath})}" method="post" th:object="${recordsSet}">
+<form th:with="actionPath=${viewRedirect} + '/record/' + ${lookDate}"
+      th:action="@{/{path} (path=${actionPath})}" method="post" th:object="${monthRecord}">
 
-    <input type="hidden" th:field="*{created}"/>
-    <input type="hidden" th:field="*{year}"/>
-    <input type="hidden" th:field="*{month}"/>
-    <input type="hidden" th:field="*{userId}"/>
-
-    <div th:each="monthRecord, monthRecordStat : *{monthRecords}">
-
-        <input type="hidden" th:field="*{monthRecords[__${monthRecordStat.index}__].created}"/>
-        <input type="hidden" th:field="*{monthRecords[__${monthRecordStat.index}__].setId}"/>
+        <input type="hidden" th:field="*{created}"/>
+        <input type="hidden" th:field="*{setId}"/>
 
         <div class="tableDiv">
             <p>Employee time sheet for:
-                <input type="text" th:field="*{monthRecords[__${monthRecordStat.index}__].employee}"
+                <input type="text" th:field="*{employee}"
                        placeholder="Enter employee name"/>
                 | standard hours:
-                <input type="number" th:field="*{monthRecords[__${monthRecordStat.index}__].standardHours}"
+                <input type="number" th:field="*{standardHours}"
                        placeholder="Enter standard hours"/>
             </p>
-            <div th:if="*{monthRecords[__${monthRecordStat.index}__].dateCells?.size()>0}">
-                <span th:replace="~{fragments/date-cells-inputs :: date-cells-form}"></span>
+            <div th:if="*{dateCells?.size()>0}">
+                <span th:replace="~{fragments/month-date-cells-inputs :: month-date-cells-form}"></span>
             </div>
-            <div th:unless="*{monthRecords[__${monthRecordStat.index}__].dateCells?.size()>0}">
+            <div th:unless="*{dateCells?.size()>0}">
                 <span>No day date cells</span>
             </div>
         </div>
 
-    </div>
-
     <div>
-        <button type="submit" th:value="${recordsSet}" class="button">Submit DateSet</button>
+        <button type="submit" th:value="${monthRecord}" class="subBtn">Submit MonthRecord</button>
     </div>
 </form>
 

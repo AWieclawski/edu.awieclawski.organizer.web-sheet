@@ -3,6 +3,7 @@ package edu.springboot.organizer.web.controllers.views;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.facades.RecordsSetFacade;
 import edu.springboot.organizer.web.wrappers.DatePickerForm;
+import edu.springboot.organizer.web.wrappers.MonthRecordMV;
 import edu.springboot.organizer.web.wrappers.RecordsSetMV;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,16 @@ public class MonthRecordsViewController {
             throw new ResultNotFoundException("Record set missed!");
         }
         RecordsSetMV recordsSetMV = monthRecordsFacade.updateRecordsSet(date, recordsSet);
+        return getViewModelPopulatedObjects("display-month-days", lookDate, recordsSetMV);
+    }
+
+    @PostMapping(value = "record/{lookDate}")
+    public ModelAndView monthDateProcess(@PathVariable String lookDate,
+                                         @ModelAttribute("monthRecord") MonthRecordMV monthRecordMV) {
+        if (monthRecordMV == null) {
+            throw new ResultNotFoundException("Month Record missed!");
+        }
+        RecordsSetMV recordsSetMV = monthRecordsFacade.updateMonthRecord(monthRecordMV);
         return getViewModelPopulatedObjects("display-month-days", lookDate, recordsSetMV);
     }
 

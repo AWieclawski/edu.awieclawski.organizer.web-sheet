@@ -19,7 +19,7 @@
     <button type="button" class="addBtn">Click to add month record</button>
 </a>
 
-<a th:with="actionPath=${formRedirect} + '/' + ${lookDate}"
+<a th:with="actionPath=${formRedirect} + '/edit-all/' + ${lookDate}"
    th:href="@{/{targetPath} (targetPath=${actionPath})}">
     <button type="button" class="edtBtn">Click to edit all rows</button>
 </a>
@@ -34,6 +34,11 @@
         <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
            th:href="@{/{targetPath} (targetPath=${actionPath})}">
             <button type="button" class="delBtn">Click to delete month record below</button>
+        </a>
+
+        <a th:with="actionPath=${formRedirect} + '/edit-one/' + ${monthRecord?.created}"
+           th:href="@{/{targetPath} (targetPath=${actionPath})}">
+            <button type="button" class="edtBtn">Click to edith month record below</button>
         </a>
 
         <div th:if="${monthRecord?.dateCellsSize>0}">

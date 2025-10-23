@@ -10,10 +10,12 @@ import edu.springboot.organizer.web.dtos.RecordsSetDto;
 import edu.springboot.organizer.web.dtos.UserDto;
 import edu.springboot.organizer.web.exceptions.ControllerException;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
+import edu.springboot.organizer.web.mappers.mv.MonthRecordMVMapper;
 import edu.springboot.organizer.web.mappers.mv.RecordsSetMVMapper;
 import edu.springboot.organizer.web.services.MonthRecordService;
 import edu.springboot.organizer.web.services.RecordsSetService;
 import edu.springboot.organizer.web.services.UserService;
+import edu.springboot.organizer.web.wrappers.MonthRecordMV;
 import edu.springboot.organizer.web.wrappers.RecordsSetMV;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,6 +86,19 @@ public class RecordsSetFacade {
         return RecordsSetMVMapper.toMV(updateRecordsSet(recordsSetDto));
     }
 
+    public RecordsSetMV updateMonthRecord(MonthRecordMV monthRecordMV) {
+        if (monthRecordMV == null) {
+            throw new ResultNotFoundException("Month Record not found!");
+        }
+        MonthRecordDto monthRecordDto = MonthRecordMVMapper.toDto(monthRecordMV);
+        monthRecordService.updateMonthRecordDto(monthRecordDto);
+        RecordsSetDto recordsSetDto = recordsSetService.getRecordsSetById(monthRecordDto.getSetId());
+        if (recordsSetDto == null) {
+            throw new ResultNotFoundException("RecordsSet  not found! " + monthRecordDto.getSetId());
+        }
+        return RecordsSetMVMapper.toMV(recordsSetDto);
+    }
+
     public String getMonthName(Date date) {
         checkDate(date);
         Calendar calendar = DateUtils.getCalendarFromDate(date);
@@ -104,6 +119,14 @@ public class RecordsSetFacade {
 
     public RecordsSetDto findRecordsSets(String id) {
         return recordsSetService.getRecordsSetById(id);
+    }
+
+    public MonthRecordMV findMonthRecordById(String id) {
+        MonthRecordDto monthRecordDto = monthRecordService.getMonthRecordById(id);
+        if (monthRecordDto != null) {
+            return MonthRecordMVMapper.toMV(monthRecordDto);
+        }
+        return null;
     }
 
     public String getFormRedirect() {

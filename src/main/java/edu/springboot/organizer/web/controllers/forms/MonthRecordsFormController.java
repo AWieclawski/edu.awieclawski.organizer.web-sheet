@@ -2,6 +2,7 @@ package edu.springboot.organizer.web.controllers.forms;
 
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.facades.RecordsSetFacade;
+import edu.springboot.organizer.web.wrappers.MonthRecordMV;
 import edu.springboot.organizer.web.wrappers.RecordsSetMV;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,18 +32,32 @@ public class MonthRecordsFormController {
 
     private final RecordsSetFacade monthRecordsFacade;
 
-    @GetMapping(path = "{lookDate}")
-    public ModelAndView getMonthDateForm(@PathVariable String lookDate) {
+    @GetMapping(path = "edit-all/{lookDate}")
+    public ModelAndView getRecordsSetsForm(@PathVariable String lookDate) {
         Date date = monthRecordsFacade.getSearchDate(lookDate);
         List<RecordsSetMV> recordsSets = monthRecordsFacade.getRecordsSets(date);
-        RecordsSetMV recordsSetDto = recordsSets.stream().findFirst().orElseThrow(ResultNotFoundException::new);
-        if (recordsSetDto == null) {
+        RecordsSetMV recordsSetMV = recordsSets.stream().findFirst().orElseThrow(ResultNotFoundException::new);
+        if (recordsSetMV == null) {
             throw new ResultNotFoundException();
         }
+        ModelAndView mv = getViewPage("records-set-form");
+        mv.addObject("lookDate", lookDate);
+        mv.addObject("monthName", monthRecordsFacade.getMonthName(recordsSetMV.getMonth()));
+        mv.addObject("recordsSet", recordsSetMV);
+        mv.addObject("viewRedirect", monthRecordsFacade.getViewRedirect());
+        return mv;
+    }
+
+    @GetMapping(path = "edit-one/{monthRecordId}")
+    public ModelAndView getMonthDateForm(@PathVariable String monthRecordId) {
+        MonthRecordMV monthRecordMV = monthRecordsFacade.findMonthRecordById(monthRecordId);
+        if (monthRecordMV == null) {
+            throw new ResultNotFoundException();
+        }
+        String lookDate = monthRecordsFacade.getLookDateFromMonthRecordById(monthRecordId);
         ModelAndView mv = getViewPage("month-days-form");
         mv.addObject("lookDate", lookDate);
-        mv.addObject("monthName", monthRecordsFacade.getMonthName(recordsSetDto.getMonth()));
-        mv.addObject("recordsSet", recordsSetDto);
+        mv.addObject("monthRecord", monthRecordMV);
         mv.addObject("viewRedirect", monthRecordsFacade.getViewRedirect());
         return mv;
     }

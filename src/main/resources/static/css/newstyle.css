@@ -187,11 +187,22 @@ td.holiday {
 }
 
 .delBtn {
+    margin-top: 2px;
     background-color: lightcoral;
 }
 
 .addBtn {
-    background-color: lightseagreen;
+    margin-top: 2px;
+    background-color: lightgreen;
+}
+
+.edtBtn {
+    margin-top: 2px;
+    background-color: lightskyblue;
+}
+
+.subBtn {
+    margin-top: 2px;
 }
 
 @media screen and (max-width: 1200px) {
