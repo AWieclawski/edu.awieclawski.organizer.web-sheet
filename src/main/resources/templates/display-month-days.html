@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en-En">
+<head>
+    <title>Submitted date</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+</head>
+<body>
+<h1><a href="/home">Back Home</a></h1>
+<p>The chosen year-month is:
+    <b><span th:text="${lookDate}"></span></b>
+    (<span th:text="${monthName}"></span>)
+</p>
+
+<a th:with="actionPath=${viewRedirect} + '/add/' + ${lookDate}"
+   th:href="@{/{targetPath} (targetPath=${actionPath})}">
+    <button id="addBtnID" onclick="disableButton(this)"
+            type="button" class="addBtn">Click to add month record
+    </button>
+</a>
+
+<a th:with="actionPath=${formRedirect} + '/edit-all/' + ${lookDate}"
+   th:href="@{/{targetPath} (targetPath=${actionPath})}">
+    <button id="edtBtnAllID" onclick="disableButton(this)"
+            type="button" class="edtBtn">Click to edit all rows
+    </button>
+</a>
+
+<div th:each="monthRecord, iterStat : ${recordsSet?.monthRecords}">
+
+    <div class="tableDiv">
+        <p>Employee time sheet for: <b><span th:text="${monthRecord?.employee}"></span></b> | standard hours: <span
+                th:text="${monthRecord?.standardHours}"></span></p>
+
+        <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
+           th:href="@{/{targetPath} (targetPath=${actionPath})}">
+            <button id="delBtnID" onclick="disableButton(this)"
+                    type="button" class="delBtn">Click to delete month record below
+            </button>
+        </a>
+
+        <a th:with="actionPath=${formRedirect} + '/edit-one/' + ${monthRecord?.created}"
+           th:href="@{/{targetPath} (targetPath=${actionPath})}">
+            <button id="edtBtnID" onclick="disableButton(this)"
+                    type="button" class="edtBtn">Click to edith month record below
+            </button>
+        </a>
+
+        <div th:if="${monthRecord?.dateCellsSize>0}">
+            <span th:replace="~{fragments/date-cells-rows :: date-cells-table}"></span>
+        </div>
+        <div th:unless="${monthRecord.dateCellsSize>0}">
+            <span>No day date cells</span>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
