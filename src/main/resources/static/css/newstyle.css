@@ -154,13 +154,20 @@ td.hrNa {
     border-right: 1px dotted #aaaaaa;
     color: cornflowerblue;
     padding: 4px;
-    min-width: 35px;
 }
 
 td.hrsCell {
     border-right: 1px dotted #aaaaaa;
     padding-right: 4px;
     color: chartreuse;
+    min-width: 40px;
+}
+
+td.hrsCellEdited {
+    border-right: 1px dotted #aaaaaa;
+    padding-right: 4px;
+    color: chartreuse;
+    min-width: 90px;
 }
 
 td.leftLabel {

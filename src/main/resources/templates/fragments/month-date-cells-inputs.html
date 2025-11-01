@@ -62,7 +62,7 @@
         <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
             <td th:if="${cellNo == 0}" class="leftLabel hrsCell"><span>Working hours</span></td>
             <td colspan="3" th:if="${cellNo < dateMonthSize}"
-                th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="hrsCell"
+                th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="hrsCellEdited"
                 th:title="${dateCell?.weekDay} + '(' + ${dateCell?.date} +')'"
                 th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
                 <span th:text="${dateCell?.hours}"></span>
@@ -80,8 +80,11 @@
                 th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="ovrHrsCell"
                 th:title="${dateCell?.weekDay} + '(' + ${dateCell?.date} + ')'"
                 th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:if="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
                 <input type="number"
                        th:field="*{dateCells[__${cellNo}__].overtime}"/>
+                </span>
+                <span th:unless="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">n/a</span>
             </td>
             <td th:if="${cellNo == dateMonthSize}" class="rightLabel ovrHrsCell">
                 <span th:text="${monthRecord?.calculateOvertime}"></span>
