@@ -8,19 +8,22 @@ class DateCellDtoTest {
 
     @Test
     void buildDateCell_withNegativeHours_hasError() {
-        DateCellDto dateCellDto = (DateCellDto) DateCellDto.builder().hours(-1).build().validate();
+        DateCellDto dateCellDto = DateCellDto.builder().hours(-1).build();
+        dateCellDto.validate();
         Assertions.assertNotNull(dateCellDto.getErrorMessage());
     }
 
     @Test
     void buildDateCell_withNegativeEndHour_hasError() {
-        DateCellDto dateCellDto = (DateCellDto) DateCellDto.builder().endHour(-1).build().validate();
+        DateCellDto dateCellDto = DateCellDto.builder().endHour(-1).build();
+        dateCellDto.validate();
         Assertions.assertNotNull(dateCellDto.getErrorMessage());
     }
 
     @Test
     void buildDateCell_withNegativeBeginHour_hasError() {
-        DateCellDto dateCellDto = (DateCellDto) DateCellDto.builder().beginHour(-1).build().validate();
+        DateCellDto dateCellDto = DateCellDto.builder().beginHour(-1).build();
+        dateCellDto.validate();
         Assertions.assertNotNull(dateCellDto.getErrorMessage());
     }
 

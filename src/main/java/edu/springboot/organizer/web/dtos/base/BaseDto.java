@@ -37,14 +37,25 @@ public abstract class BaseDto {
         hashCode();
     }
 
-    protected void handleErrorMessage(String message) {
-        this.errorMessage = errorMessage == null ? message : errorMessage + " | " + message;
+    public boolean hasError() {
+        return this.errorMessage != null;
     }
 
     /**
-     * Method to populate generated fields values and validate after that.
+     * Method to validate after.
      *
      * @return
      */
-    public abstract BaseDto validate();
+    public abstract void validate();
+
+    /**
+     * Method to populate generated fields values
+     *
+     * @return
+     */
+    public abstract void autoUpdate();
+
+    protected void handleErrorMessage(String message) {
+        this.errorMessage = this.errorMessage == null ? message : this.errorMessage + " | " + message;
+    }
 }

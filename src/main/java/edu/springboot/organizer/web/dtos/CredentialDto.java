@@ -1,7 +1,6 @@
 package edu.springboot.organizer.web.dtos;
 
 import edu.springboot.organizer.web.dtos.base.BaseDto;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +16,10 @@ public class CredentialDto extends BaseDto {
     private String email;
 
     @Override
-    public BaseDto validate() {
-        return this;
+    public void validate() {
+    }
+
+    @Override
+    public void autoUpdate() {
     }
 }

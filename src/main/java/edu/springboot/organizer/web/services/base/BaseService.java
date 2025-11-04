@@ -31,6 +31,11 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
         return getRowMapper().toDto(entity);
     }
 
+    protected T createEntity(T dto) {
+        S entity = getRowMapper().toEntity(dto);
+        return createEntity(entity);
+    }
+
     private S insertEntity(S entity) {
         try {
             return getRepository().persistEntity(entity);

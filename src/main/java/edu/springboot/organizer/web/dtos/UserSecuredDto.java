@@ -2,7 +2,6 @@ package edu.springboot.organizer.web.dtos;
 
 import edu.springboot.organizer.web.dtos.base.BaseDto;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +20,10 @@ public class UserSecuredDto extends BaseDto {
     private String credentialId;
 
     @Override
-    public BaseDto validate() {
-        return this;
+    public void validate() {
+    }
+
+    @Override
+    public void autoUpdate() {
     }
 }

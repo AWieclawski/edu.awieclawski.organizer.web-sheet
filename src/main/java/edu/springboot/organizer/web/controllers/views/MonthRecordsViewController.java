@@ -66,7 +66,7 @@ public class MonthRecordsViewController {
         if (monthRecordDto == null) {
             throw new ResultNotFoundException("Month Record missed!");
         }
-        ResultsDto resultsDto = monthRecordsFacade.getValidatedDto(monthRecordDto);
+        ResultsDto resultsDto = monthRecordsFacade.getValidatedResults(monthRecordDto);
         if (resultsDto.getIsError()) {
             redirectAttributes.addFlashAttribute("flashAttribute", resultsDto.getMonthRecordDto());
             String formRedirect = monthRecordsFacade.getFormRedirect();

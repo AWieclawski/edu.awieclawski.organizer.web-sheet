@@ -21,7 +21,10 @@ public class VisitorDto extends BaseDto {
     private String ip;
 
     @Override
-    public BaseDto validate() {
-        return this;
+    public void validate() {
+    }
+
+    @Override
+    public void autoUpdate() {
     }
 }

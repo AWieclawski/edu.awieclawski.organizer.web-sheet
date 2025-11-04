@@ -1,6 +1,5 @@
 package edu.springboot.organizer.web.services;
 
-import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.data.models.MonthRecord;
 import edu.springboot.organizer.data.repositories.MonthRecordRepository;
 import edu.springboot.organizer.generator.services.DateMonthGenerator;
@@ -46,15 +45,14 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public MonthRecordDto createMonthRecord(MonthRecord monthRecord, RecordsSetDto setDto) {
-        MonthRecordDto monthRecordDto = createEntity(monthRecord);
-        monthRecordDto.validate();
-        List<DateCell> dateCells = dateMonthGenerator.dateCellsGenerate(monthRecordDto, setDto.getMonth(), setDto.getYear());
-        List<DateCellDto> dateCellDtos = dateCellService.createDateCells(dateCells);
+    public MonthRecordDto createMonthRecord(MonthRecordDto monthRecordDto, RecordsSetDto setDto) {
+        MonthRecordDto monthRecordDtoSaved = createEntity(monthRecordDto);
+        monthRecordDtoSaved.validate();
+        List<DateCellDto> dateCellDtos = dateMonthGenerator.getGeneratedDateCellDtos(monthRecordDtoSaved, setDto.getMonth(), setDto.getYear());
         dateCellDtos.forEach(DateCellDto::validate);
-        List<DateCellDto> updatedCells = dateCellService.updateDateCells(dateCellDtos);
-        monthRecordDto.addDateCells(updatedCells);
-        return monthRecordDto;
+        List<DateCellDto> savedDateCellDtos = dateCellService.createDateCells(dateCellDtos);
+        monthRecordDtoSaved.addDateCells(savedDateCellDtos);
+        return monthRecordDtoSaved;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -65,6 +63,7 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
     }
 
     private DateCellDto dateCellDtoUpdate(DateCellDto dto) {
+        dto.autoUpdate();
         return dateCellService.updateDateCell(dto);
     }
 

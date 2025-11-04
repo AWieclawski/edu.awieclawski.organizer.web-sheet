@@ -3,7 +3,6 @@ package edu.springboot.organizer.web.dtos;
 import edu.springboot.organizer.generator.contracts.DateMonthHolder;
 import edu.springboot.organizer.web.dtos.base.BaseDto;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,16 +47,18 @@ public class RecordsSetDto extends BaseDto implements DateMonthHolder {
         return Month.of(month).getDisplayName(TextStyle.FULL_STANDALONE, locale);
     }
 
-    private Integer handleMonth(Integer month) {
-        if (month != null && (month > 12 || month < 1)) {
-            handleErrorMessage((month + " <- Month value not valid!"));
-        }
-        return month;
+    @Override
+    public void validate() {
+        validateMonth();
     }
 
     @Override
-    public BaseDto validate() {
-        this.month = handleMonth(month);
-        return this;
+    public void autoUpdate() {
+    }
+
+    private void validateMonth() {
+        if (this.month != null && (this.month > 12 || this.month < 1)) {
+            handleErrorMessage((month + " <- Month value not valid!"));
+        }
     }
 }

@@ -1,17 +1,14 @@
 package edu.springboot.organizer.generator.services;
 
-import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.generator.services.bases.BaseDayMonthGenerator;
 import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
-import edu.springboot.organizer.web.mappers.DateCellRowMapper;
 import org.springframework.stereotype.Component;
 
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component(value = DateMonthGenerator.BEAN_NAME)
 public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
@@ -35,11 +32,10 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
         return dateCellDtos;
     }
 
-    public List<DateCell> dateCellsGenerate(MonthRecordDto monthRecordDto, int monthNo, int year) {
-        List<DateCellDto> list = dumbListGenerate(monthNo, year, monthRecordDto.getCreated());
-        return list.stream()
-                .map(it -> getDateCellRowMapper().toEntity(it))
-                .collect(Collectors.toList());
+    public List<DateCellDto> getGeneratedDateCellDtos(MonthRecordDto monthRecordDto, int monthNo, int year) {
+        List<DateCellDto> dateCellDtoList = dumbListGenerate(monthNo, year, monthRecordDto.getCreated());
+        dateCellDtoList.forEach(DateCellDto::autoUpdate);
+        return dateCellDtoList;
     }
 
     public String getMonthName(Month month) {
@@ -50,7 +46,4 @@ public class DateMonthGenerator extends BaseDayMonthGenerator<DateCellDto> {
         return year + "-" + String.format("%02d", monthNo) + "-" + String.format("%02d", day);
     }
 
-    private DateCellRowMapper getDateCellRowMapper() {
-        return new DateCellRowMapper();
-    }
 }

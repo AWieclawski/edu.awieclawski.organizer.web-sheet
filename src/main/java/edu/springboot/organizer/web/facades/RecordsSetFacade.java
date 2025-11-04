@@ -1,6 +1,5 @@
 package edu.springboot.organizer.web.facades;
 
-import edu.springboot.organizer.data.models.MonthRecord;
 import edu.springboot.organizer.data.models.RecordsSet;
 import edu.springboot.organizer.utils.CollectionUtils;
 import edu.springboot.organizer.utils.DateUtils;
@@ -8,13 +7,14 @@ import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.EmployeeDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import edu.springboot.organizer.web.dtos.RecordsSetDto;
-import edu.springboot.organizer.web.wrappers.ResultsDto;
 import edu.springboot.organizer.web.dtos.UserDto;
+import edu.springboot.organizer.web.dtos.base.BaseDto;
 import edu.springboot.organizer.web.exceptions.ControllerException;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.services.MonthRecordService;
 import edu.springboot.organizer.web.services.RecordsSetService;
 import edu.springboot.organizer.web.services.UserService;
+import edu.springboot.organizer.web.wrappers.ResultsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -159,7 +159,7 @@ public class RecordsSetFacade {
     }
 
     public void addNewMonthRecordDto(RecordsSetDto setDto) {
-        createMonthRecords(setDto);
+        createMonthRecordsForRecordSet(setDto);
     }
 
     public void deleteMonthRecordById(String monthRecordId) {
@@ -182,12 +182,12 @@ public class RecordsSetFacade {
         return result[0];
     }
 
-    public ResultsDto getValidatedDto(MonthRecordDto monthRecordDto) {
-        boolean anyMatch = monthRecordDto.getDateCells().stream()
-                .filter(Objects::nonNull)
-                .map(DateCellDto::validate)
-                .anyMatch(it -> it.getErrorMessage() != null);
-        return ResultsDto.builder().isError(anyMatch).monthRecordDto(monthRecordDto).build();
+    public ResultsDto getValidatedResults(MonthRecordDto monthRecordDto) {
+        boolean isError;
+        monthRecordDto.validate();
+        monthRecordDto.getDateCells().forEach(DateCellDto::validate);
+        isError = monthRecordDto.hasError() || monthRecordDto.getDateCells().stream().anyMatch(BaseDto::hasError);
+        return ResultsDto.builder().isError(isError).monthRecordDto(monthRecordDto).build();
     }
 
 
@@ -213,9 +213,10 @@ public class RecordsSetFacade {
             log.debug("Start generating Record Set");
         }
         String userId = getCtxUser() != null ? getCtxUser().getCreated() : "";
-        RecordsSetDto recordsSetDto = (RecordsSetDto) recordsSetService
-                .createRecordsSet(RecordsSet.builder().month(month).year(year).userId(userId).build()).validate();
-        createMonthRecords(recordsSetDto);
+        RecordsSetDto recordsSetDto = recordsSetService
+                .createRecordsSet(RecordsSet.builder().month(month).year(year).userId(userId).build());
+        recordsSetDto.autoUpdate();
+        createMonthRecordsForRecordSet(recordsSetDto);
         List<RecordsSetDto> recordsSetDtos = new ArrayList<>();
         recordsSetDtos.add(recordsSetDto);
         return recordsSetDtos;
@@ -229,14 +230,15 @@ public class RecordsSetFacade {
         return recordsSetDto;
     }
 
-    private void createMonthRecords(RecordsSetDto setDto) {
-        MonthRecordDto monthRecordDto = monthRecordService
-                .createMonthRecord(MonthRecord.builder()
-                        .setId(setDto.getCreated())
-                        .employee(EmployeeDto.getDefaultName())
-                        .standardHours(getStandardHoursValue())
-                        .build(), setDto);
-        monthRecordDto = (MonthRecordDto) monthRecordDto.validate();
+    private void createMonthRecordsForRecordSet(RecordsSetDto setDto) {
+        MonthRecordDto monthRecordDto = MonthRecordDto.builder()
+                .setId(setDto.getCreated())
+                .employee(EmployeeDto.getDefaultName())
+                .standardHours(getStandardHoursValue())
+                .build();
+        monthRecordDto.autoUpdate();
+        monthRecordService.createMonthRecord(monthRecordDto, setDto);
+        monthRecordDto.validate();
         List<MonthRecordDto> monthRecordDtos = new ArrayList<>();
         monthRecordDtos.add(monthRecordDto);
         setDto.addMonthRecords(monthRecordDtos);

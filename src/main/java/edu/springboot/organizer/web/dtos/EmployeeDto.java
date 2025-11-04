@@ -31,7 +31,10 @@ public class EmployeeDto extends BaseDto {
     }
 
     @Override
-    public BaseDto validate() {
-        return this;
+    public void validate() {
+    }
+
+    @Override
+    public void autoUpdate() {
     }
 }

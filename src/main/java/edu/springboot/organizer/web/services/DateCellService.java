@@ -33,9 +33,10 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public DateCellDto createDateCell(DateCell dateCell) {
-        return createEntity(dateCell);
+    public DateCellDto createDateCell(DateCellDto dateCellDto) {
+        return createEntity(dateCellDto);
     }
+
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public DateCellDto updateDateCell(DateCellDto dateCell) {
@@ -101,15 +102,15 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
         throw new QueryException("DateCell delete failed! " + id);
     }
 
-    public List<DateCellDto> createDateCells(List<DateCell> dateCells) {
-        return dateCells.stream()
+    public List<DateCellDto> createDateCells(List<DateCellDto> dateCellDtos) {
+        return dateCellDtos.stream()
                 .filter(Objects::nonNull)
                 .map(this::createDateCell)
                 .collect(Collectors.toList());
     }
 
-    public List<DateCellDto> updateDateCells(List<DateCellDto> dateCells) {
-        return dateCells.stream()
+    public List<DateCellDto> updateDateCells(List<DateCellDto> dateCellDtos) {
+        return dateCellDtos.stream()
                 .filter(Objects::nonNull)
                 .map(this::updateDateCell)
                 .collect(Collectors.toList());

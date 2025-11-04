@@ -54,7 +54,10 @@ public class MonthRecordDto extends BaseDto {
     }
 
     @Override
-    public BaseDto validate() {
-        return this;
+    public void validate() {
+    }
+
+    @Override
+    public void autoUpdate() {
     }
 }

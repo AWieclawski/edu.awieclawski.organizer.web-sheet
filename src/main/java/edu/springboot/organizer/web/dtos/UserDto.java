@@ -19,7 +19,10 @@ public class UserDto extends BaseDto {
     private String surName;
 
     @Override
-    public BaseDto validate() {
-        return this;
+    public void validate() {
+    }
+
+    @Override
+    public void autoUpdate() {
     }
 }

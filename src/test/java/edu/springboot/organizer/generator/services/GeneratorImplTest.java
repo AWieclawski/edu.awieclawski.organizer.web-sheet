@@ -1,9 +1,9 @@
 package edu.springboot.organizer.generator.services;
 
-import edu.springboot.organizer.data.models.DateCell;
 import edu.springboot.organizer.generator.exceptions.ValidateMonthException;
 import edu.springboot.organizer.generator.exceptions.ValidateYearException;
 import edu.springboot.organizer.utils.ReflectionUtils;
+import edu.springboot.organizer.web.dtos.DateCellDto;
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import edu.springboot.organizer.web.dtos.RecordsSetDto;
 import org.junit.jupiter.api.Assertions;
@@ -27,9 +27,9 @@ class GeneratorImplTest {
     void dateCellsGenerate_withValidArgs_returnsOK() {
         DateMonthGenerator inst = new DateMonthGenerator();
         recordsSetDto = RecordsSetDto.builder().month(2).year(2025).created("MONTH_ID").build();
-        List<DateCell> list = inst.dateCellsGenerate(monthRecordDto, recordsSetDto.getMonth(), recordsSetDto.getYear());
+        List<DateCellDto> list = inst.getGeneratedDateCellDtos(monthRecordDto, recordsSetDto.getMonth(), recordsSetDto.getYear());
         Assertions.assertNotNull(list);
-        Assertions.assertEquals("01-02-2025", recordsSetDto.getLocalDate(list.get(0).getLocalDate().getDayOfMonth()));
+        Assertions.assertEquals("2025-02-01", list.get(0).getDate());
     }
 
     @Test
@@ -38,7 +38,7 @@ class GeneratorImplTest {
         int month = 13;
         ReflectionUtils.setFieldValue(recordsSetDto, "month", month, true);
         Assertions.assertTrue(month > 12 || month < 1);
-        Assertions.assertThrows(ValidateMonthException.class, () -> inst.dateCellsGenerate(monthRecordDto, recordsSetDto.getMonth(), recordsSetDto.getYear()));
+        Assertions.assertThrows(ValidateMonthException.class, () -> inst.getGeneratedDateCellDtos(monthRecordDto, recordsSetDto.getMonth(), recordsSetDto.getYear()));
     }
 
     @Test
@@ -47,7 +47,7 @@ class GeneratorImplTest {
         int year = 1999;
         ReflectionUtils.setFieldValue(recordsSetDto, "year", year, true);
         Assertions.assertTrue(year > 2100 || year < 2000);
-        Assertions.assertThrows(ValidateYearException.class, () -> inst.dateCellsGenerate(monthRecordDto, recordsSetDto.getMonth(), recordsSetDto.getYear()));
+        Assertions.assertThrows(ValidateYearException.class, () -> inst.getGeneratedDateCellDtos(monthRecordDto, recordsSetDto.getMonth(), recordsSetDto.getYear()));
     }
 
 }

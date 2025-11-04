@@ -63,7 +63,7 @@ public class MonthRecordsFormController {
         ModelAndView mv = getViewPage("month-days-form");
         if (dtoAttribute == null || dtoAttribute.getCreated() == null) {
             monthRecordDto = monthRecordsFacade.findMonthRecordDtoById(monthRecordId);
-            resultsDto = monthRecordsFacade.getValidatedDto(monthRecordDto);
+            resultsDto = monthRecordsFacade.getValidatedResults(monthRecordDto);
             mv.addObject("hasError", resultsDto.getIsError());
             monthRecordDto = resultsDto.getMonthRecordDto();
         } else {

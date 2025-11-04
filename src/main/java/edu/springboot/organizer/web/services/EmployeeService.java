@@ -28,8 +28,8 @@ public class EmployeeService extends BaseService<Employee, EmployeeDto> {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public EmployeeDto createEmployee(Employee employee) {
-        return createEntity(employee);
+    public EmployeeDto createEmployee(EmployeeDto employeeDto) {
+        return createEntity(employeeDto);
     }
 
     @Transactional(readOnly = true)
