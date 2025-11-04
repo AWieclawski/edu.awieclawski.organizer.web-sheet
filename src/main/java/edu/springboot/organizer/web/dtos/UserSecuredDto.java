@@ -1,0 +1,27 @@
+package edu.springboot.organizer.web.dtos;
+
+import edu.springboot.organizer.web.dtos.base.BaseDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+@Setter
+@Getter
+@EqualsAndHashCode(callSuper = true, of = {})
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
+public class UserSecuredDto extends BaseDto {
+    private String name;
+    private String surName;
+    private String credentialId;
+
+    @Override
+    public BaseDto validate() {
+        return this;
+    }
+}
