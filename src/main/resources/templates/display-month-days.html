@@ -10,7 +10,8 @@
 <body th:with="editAll=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormController).EDIT_ALL},
 editOne=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormController).EDIT_ONE}">
 
-<h1><a href="/home">Back Home</a></h1>
+<h1><a href="/pick-date">Back to pick date</a></h1>
+
 <p>The chosen year-month is:
     <b><span th:text="${lookDate}"></span></b>
     (<span th:text="${monthName}"></span>)

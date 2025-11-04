@@ -19,6 +19,11 @@ public class MainController {
 
     @GetMapping(path = {"", "/home"})
     public ModelAndView veryStart() {
+        return new ModelAndView("welcome");
+    }
+
+    @GetMapping("/pick-date")
+    public ModelAndView pickDate() {
         return getRedirectViewPage();
     }
 
