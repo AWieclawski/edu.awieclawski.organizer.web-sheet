@@ -96,13 +96,13 @@ table {
 
 .tBody input[type="number"] {
     margin: 0 auto;
-    max-width: 30px;
+    max-width: 35px;
 }
 
 .tBody input[type="number"]:focus {
     border: 2px solid #007BFF;
     outline: none;
-    max-width: 30px;
+    max-width: 35px;
 }
 
 th {
