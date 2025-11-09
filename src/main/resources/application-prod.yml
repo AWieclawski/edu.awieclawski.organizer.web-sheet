@@ -6,7 +6,7 @@ server:
       enabled: false
 spring:
   application:
-    name: web-sheet
+    name: web-sheet-prod
   main:
     banner-mode: off
   datasource:
@@ -25,10 +25,10 @@ endpoint:
 # logging
 logging:
   level:
-    root: ERROR
-    org.springframework.web: WARN
-    edu.springboot.organizer: ${LOG_LEVEL:WARN}
-    edu.springboot.organizer.data: ${LOG_LEVEL_CON:WARN}
+    root: ${LOG_LEVEL_ROOT:ERROR}
+    org.springframework.web: ${LOG_LEVEL_SPRING:WARN}
+    edu.springboot.organizer: ${LOG_LEVEL:INFO}
+    edu.springboot.organizer.data: ${LOG_LEVEL_CON:INFO}
 # general variables
 populate.initial.data: ${POPULATE_DATA:false}
 locale.language.tag: ${LANG_TAG:pl-PL}
