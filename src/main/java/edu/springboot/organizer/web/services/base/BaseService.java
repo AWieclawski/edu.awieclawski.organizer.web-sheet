@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
 
     protected Class<T> dtoClass;
+    protected Class<S> entityClass;
 
     public BaseService() {
         setEntityClass();
@@ -76,7 +77,7 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
     }
 
     protected void initTable(String sql, String table) {
-        log.warn("Crating table [{}]", table);
+        log.warn("Creating table [{}]", table);
         try {
             getRepository().modifyDataBase(sql);
         } catch (Exception e) {

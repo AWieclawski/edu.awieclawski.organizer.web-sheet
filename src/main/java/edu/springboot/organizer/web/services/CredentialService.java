@@ -54,7 +54,7 @@ public class CredentialService extends BaseService<Credential, CredentialDto> {
 
     @Override
     protected void setEntityClass() {
-        this.dtoClass = CredentialDto.class;
+        this.entityClass = Credential.class;
     }
 
     @Override

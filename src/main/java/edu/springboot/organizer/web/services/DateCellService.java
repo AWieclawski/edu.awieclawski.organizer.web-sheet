@@ -152,7 +152,7 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
 
     @Override
     protected void setEntityClass() {
-        this.dtoClass = DateCellDto.class;
+        this.entityClass = DateCell.class;
     }
 
     @Override

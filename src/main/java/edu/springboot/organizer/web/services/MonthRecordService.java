@@ -116,7 +116,7 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
 
     @Override
     protected void setEntityClass() {
-        this.dtoClass = MonthRecordDto.class;
+        this.entityClass = MonthRecord.class;
     }
 
     @Override

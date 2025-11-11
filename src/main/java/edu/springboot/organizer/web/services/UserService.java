@@ -76,7 +76,7 @@ public class UserService extends BaseService<User, UserDto> {
 
     @Override
     protected void setEntityClass() {
-        this.dtoClass = UserDto.class;
+        this.entityClass = User.class;
     }
 
     @Override

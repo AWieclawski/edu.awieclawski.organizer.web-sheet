@@ -28,7 +28,8 @@
                 th:with="dateCell=${monthRecord.dateCells?.get(cellNo)}" class="workType"
                 th:title="${dateCell?.workType?.description}"
                 th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
-                <select th:field="*{dateCells[__${cellNo}__]?.workType}">
+                <select class="options" th:id="'dateCell_workType_' + ${dateCell?.hashId}"
+                        th:field="*{dateCells[__${cellNo}__]?.workType}">
                     <option th:each="workTypeOpt : ${T(edu.springboot.organizer.web.enums.WorkType).values()}"
                             th:title="${workTypeOpt?.description}"
                             th:value="${workTypeOpt}" th:text="${workTypeOpt?.name}"></option>
@@ -44,13 +45,13 @@
             <span th:if="${dateCellHr?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
             <td colspan="1" class="hrCell hrBegin" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
                 th:title="'begin hour (' + ${dateCellHr?.date} + ')'">
-                <input type="number"
+                <input type="number" th:id="'dateCellHr_beginHour_'  + ${dateCellHr?.hashId}"
                        th:field="*{dateCells[__${dateCellHrStat.index}__].beginHour}"/>
             </td>
             <td colspan="1" class="hrPause" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}">-</td>
             <td colspan="1" class="hrCell hrEnd" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
                 th:title="'end hour (' + ${dateCellHr?.date} + ')'">
-                <input type="number"
+                <input type="number" th:id="'dateCellHr_endHour_'  + ${dateCellHr?.hashId}"
                        th:field="*{dateCells[__${dateCellHrStat.index}__].endHour}"/>
             </span>
             <span th:unless="${dateCellHr?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
@@ -81,7 +82,7 @@
                 th:title="'overtime (' + ${dateCell?.date} + ')'"
                 th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
                 <span th:if="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
-                <input type="number"
+                <input type="number" th:id="'dateCell_overtime_'  + ${dateCell?.hashId}"
                        th:field="*{dateCells[__${cellNo}__].overtime}"/>
                 </span>
                 <span th:unless="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">n/a</span>

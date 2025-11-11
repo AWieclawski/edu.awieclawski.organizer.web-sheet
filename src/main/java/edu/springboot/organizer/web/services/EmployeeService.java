@@ -54,7 +54,7 @@ public class EmployeeService extends BaseService<Employee, EmployeeDto> {
 
     @Override
     protected void setEntityClass() {
-        this.dtoClass = EmployeeDto.class;
+        this.entityClass = Employee.class;
     }
 
     @Override

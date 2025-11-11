@@ -103,7 +103,7 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
 
     @Override
     protected void setEntityClass() {
-        this.dtoClass = VisitorDto.class;
+        this.entityClass = Visitor.class;
     }
 
     @Override

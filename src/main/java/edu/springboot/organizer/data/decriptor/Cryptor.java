@@ -15,9 +15,10 @@ public class Cryptor {
             return 0;
         }
         int result = 0;
-        for (int i = 0; i < word.length(); ++i) {
+        int length = word.length();
+        for (int i = 0; i < length; ++i) {
             char c = word.charAt(i);
-            int tmp = (int) (Math.pow(Double.parseDouble(String.valueOf(c + i)), 3) * PRIME_FACTOR);
+            int tmp = (int) (Math.pow(Double.parseDouble(String.valueOf(c)), (length - i + 1)) * PRIME_FACTOR);
             result = result + tmp;
         }
         return result;

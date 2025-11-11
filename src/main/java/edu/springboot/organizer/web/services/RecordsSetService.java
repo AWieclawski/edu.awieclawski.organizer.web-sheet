@@ -101,7 +101,7 @@ public class RecordsSetService extends BaseService<RecordsSet, RecordsSetDto> {
 
     @Override
     protected void setEntityClass() {
-        this.dtoClass = RecordsSetDto.class;
+        this.entityClass = RecordsSet.class;
     }
 
     @Override
