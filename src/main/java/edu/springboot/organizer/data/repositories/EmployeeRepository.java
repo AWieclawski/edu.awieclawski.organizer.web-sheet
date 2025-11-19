@@ -42,6 +42,16 @@ public class EmployeeRepository extends BaseRepository<Employee, EmployeeDto> {
     }
 
     @Override
+    protected Class<EmployeeDto> getClassDto() {
+        return EmployeeDto.class;
+    }
+
+    @Override
+    protected Class<Employee> getClassEntity() {
+        return Employee.class;
+    }
+
+    @Override
     public String getTableName() {
         return Employee.TABLE_NAME;
     }

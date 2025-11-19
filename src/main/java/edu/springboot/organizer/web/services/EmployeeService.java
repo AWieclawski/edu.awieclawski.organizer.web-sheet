@@ -34,7 +34,7 @@ public class EmployeeService extends BaseService<Employee, EmployeeDto> {
 
     @Transactional(readOnly = true)
     public List<EmployeeDto> getAllEmployees() {
-        return getAllEntities();
+        return getAllDtos();
     }
 
     @Transactional(readOnly = true)

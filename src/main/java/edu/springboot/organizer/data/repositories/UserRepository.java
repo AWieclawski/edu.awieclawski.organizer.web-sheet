@@ -48,6 +48,16 @@ public class UserRepository extends BaseRepository<User, UserDto> {
     }
 
     @Override
+    protected Class<UserDto> getClassDto() {
+        return UserDto.class;
+    }
+
+    @Override
+    protected Class<User> getClassEntity() {
+        return User.class;
+    }
+
+    @Override
     public String getTableName() {
         return User.TABLE_NAME;
     }

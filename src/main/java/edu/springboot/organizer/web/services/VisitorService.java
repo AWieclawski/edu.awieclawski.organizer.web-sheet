@@ -42,7 +42,12 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
 
     @Transactional(readOnly = true)
     public List<VisitorDto> getAllVisitors() {
-        return getAllEntities();
+        return getAllDtos();
+    }
+
+    @Transactional(readOnly = true)
+    public List<VisitorDto> getVisitorsByIds(List<String> ids) {
+        return getDtosByIds(ids);
     }
 
     @Transactional(readOnly = true)

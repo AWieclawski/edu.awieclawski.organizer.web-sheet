@@ -40,6 +40,10 @@ public class DateCellRepository extends BaseRepository<DateCell, DateCellDto> {
         return super.findAll();
     }
 
+    public List<DateCell> findDateCellsByIds(List<String> ids) {
+        return findEntitiesByIds(ids);
+    }
+
     @Override
     public Long howMany() {
         return super.howMany();
@@ -48,6 +52,16 @@ public class DateCellRepository extends BaseRepository<DateCell, DateCellDto> {
     @Override
     public BaseRowMapper<DateCell, DateCellDto> getBaseRowMapper() {
         return new DateCellRowMapper();
+    }
+
+    @Override
+    protected Class<DateCellDto> getClassDto() {
+        return DateCellDto.class;
+    }
+
+    @Override
+    protected Class<DateCell> getClassEntity() {
+        return DateCell.class;
     }
 
     @Override

@@ -48,6 +48,17 @@ public class CredentialRepository extends BaseRepository<Credential, CredentialD
     }
 
     @Override
+    protected Class<CredentialDto> getClassDto() {
+        return CredentialDto.class;
+    }
+
+    @Override
+    protected Class<Credential> getClassEntity() {
+        return Credential.class;
+    }
+
+
+    @Override
     public String getTableName() {
         return Credential.TABLE_NAME;
     }

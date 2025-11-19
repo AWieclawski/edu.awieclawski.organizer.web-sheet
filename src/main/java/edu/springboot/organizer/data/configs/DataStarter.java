@@ -1,6 +1,7 @@
 package edu.springboot.organizer.data.configs;
 
 import edu.springboot.organizer.data.models.Visitor;
+import edu.springboot.organizer.web.dtos.VisitorDto;
 import edu.springboot.organizer.web.dtos.base.BaseDto;
 import edu.springboot.organizer.web.services.CredentialService;
 import edu.springboot.organizer.web.services.DateCellService;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -59,8 +61,14 @@ public class DataStarter {
     }
 
     private void populateDataTest() {
-        IntStream.range(0, 50).forEach(it -> visitorService.createVisitor(Visitor.builder().name("TEST_I_" + it).ip("DEMO").build()));
-        visitorService.deleteVisitors(visitorService.getVisitorsByIP("DEMO").stream().map(BaseDto::getCreated).collect(Collectors.toList()));
+        IntStream.range(0, 10)
+                .forEach(it -> visitorService.createVisitor(Visitor.builder().name("TEST_I_" + it).ip("DEMO").build()));
+        List<VisitorDto> visitorsByIP = visitorService.getVisitorsByIP("DEMO");
+        log.info("VisitorService demo after create {}", visitorsByIP.size());
+        List<VisitorDto> visitorsByIds = visitorService.getVisitorsByIds(visitorsByIP.stream().map(VisitorDto::getCreated).collect(Collectors.toList()));
+        log.info("VisitorService demo by ids {}", visitorsByIds.size());
+        visitorService.deleteVisitors(visitorsByIP.stream().map(BaseDto::getCreated).collect(Collectors.toList()));
+        log.info("VisitorService demo after delete {}", visitorService.getVisitorsByIP("DEMO").size());
     }
 
 }

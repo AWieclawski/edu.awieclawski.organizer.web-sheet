@@ -62,6 +62,7 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
 
     /**
      * https://gist.github.com/chrisblakely01/504cb234e49a57d6c97932efffcd93b2
+     *
      * @param sql
      * @param params
      * @return
@@ -158,4 +159,8 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
     public abstract String getTableName();
 
     protected abstract BaseRowMapper<S, T> getBaseRowMapper();
+
+    protected abstract Class<T> getClassDto();
+
+    protected abstract Class<S> getClassEntity();
 }

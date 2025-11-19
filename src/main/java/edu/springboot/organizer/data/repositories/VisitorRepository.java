@@ -1,6 +1,7 @@
 package edu.springboot.organizer.data.repositories;
 
 import edu.springboot.organizer.data.models.Visitor;
+import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.data.repositories.base.BaseRepository;
 import edu.springboot.organizer.data.repositories.base.BaseSequenceService;
 import edu.springboot.organizer.web.dtos.VisitorDto;
@@ -46,6 +47,10 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
         return jdbcNamedParametersQuery(query, namedParameters);
     }
 
+    public List<Visitor> findVisitorsByIds(List<String> ids) {
+        return findEntitiesByIds(ids);
+    }
+
     @Override
     public Visitor findById(String id) {
         return super.findById(id);
@@ -64,6 +69,16 @@ public class VisitorRepository extends BaseRepository<Visitor, VisitorDto> {
     @Override
     public BaseRowMapper<Visitor, VisitorDto> getBaseRowMapper() {
         return new VisitorRowMapper();
+    }
+
+    @Override
+    protected Class<VisitorDto> getClassDto() {
+        return VisitorDto.class;
+    }
+
+    @Override
+    protected Class<Visitor> getClassEntity() {
+        return Visitor.class;
     }
 
     @Override

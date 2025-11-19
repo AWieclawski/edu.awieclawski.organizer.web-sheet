@@ -34,7 +34,7 @@ public class CredentialService extends BaseService<Credential, CredentialDto> {
 
     @Transactional(readOnly = true)
     public List<CredentialDto> getAllCredentials() {
-        return getAllEntities();
+        return getAllDtos();
     }
 
     @Transactional(readOnly = true)

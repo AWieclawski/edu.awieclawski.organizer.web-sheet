@@ -56,7 +56,7 @@ public class UserService extends BaseService<User, UserDto> {
 
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
-        return getAllEntities();
+        return getAllDtos();
     }
 
     @Transactional(readOnly = true)

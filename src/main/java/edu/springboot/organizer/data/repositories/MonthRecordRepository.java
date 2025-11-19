@@ -51,6 +51,16 @@ public class MonthRecordRepository extends BaseRepository<MonthRecord, MonthReco
     }
 
     @Override
+    protected Class<MonthRecordDto> getClassDto() {
+        return MonthRecordDto.class;
+    }
+
+    @Override
+    protected Class<MonthRecord> getClassEntity() {
+        return MonthRecord.class;
+    }
+
+    @Override
     public String getTableName() {
         return MonthRecord.TABLE_NAME;
     }

@@ -33,6 +33,6 @@ logging:
     edu.springboot.organizer: ${LOG_LEVEL:INFO}
     edu.springboot.organizer.data: ${LOG_LEVEL_CON:INFO}
 # general variables
-populate.initial.data: true
+populate.initial.data: false
 locale.language.tag: ${LANG_TAG:pl-PL}
 standard.hours.value: ${STD_HRS:144}

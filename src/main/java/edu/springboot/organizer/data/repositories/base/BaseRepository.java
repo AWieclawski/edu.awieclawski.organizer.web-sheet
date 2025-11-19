@@ -6,7 +6,9 @@ import edu.springboot.organizer.data.repositories.base.dto.RetryDataDto;
 import edu.springboot.organizer.web.dtos.base.BaseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.util.Collections;
 import java.util.List;
@@ -89,6 +91,14 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> ex
         String query = String.format("SELECT * FROM %s  WHERE %s = ?;",
                 getTableName(), BaseEntity.BaseConst.ID.getColumn());
         return jdbcQueryForObject(query, id);
+    }
+
+    public List<S> findEntitiesByIds(List<String> ids) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("ids", ids);
+        String query = String.format("SELECT * FROM %s WHERE %s IN (:ids) ",
+                getTableName(), BaseEntity.BaseConst.ID.getColumn());
+        return jdbcNamedParametersQuery(query, namedParameters);
     }
 
     public List<S> findAll() {

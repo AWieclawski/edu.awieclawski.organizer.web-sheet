@@ -54,7 +54,7 @@ public class RecordsSetService extends BaseService<RecordsSet, RecordsSetDto> {
 
     @Transactional(readOnly = true)
     public List<RecordsSetDto> getAllRecordsSets() {
-        List<RecordsSetDto> entities = getAllEntities();
+        List<RecordsSetDto> entities = getAllDtos();
         return assignMonthRecordsToEntities(entities);
     }
 

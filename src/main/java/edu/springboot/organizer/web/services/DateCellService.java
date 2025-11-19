@@ -45,7 +45,7 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
 
     @Transactional(readOnly = true)
     public List<DateCellDto> getAllDateCells() {
-        return getAllEntities();
+        return getAllDtos();
     }
 
     @Transactional(readOnly = true)

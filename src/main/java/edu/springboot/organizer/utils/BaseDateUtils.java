@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BaseDateUtils {
 
-    private static final String PATTERN = "yyyyMMddHHmmssns";
+    private static final String PATTERN = "yyyyMMddHHmmssSSS";
 
     public static String getBaseTimestampId() {
         LocalDateTime now = LocalDateTime.now();

@@ -4,14 +4,17 @@ package edu.springboot.organizer.web.services.base;
 import edu.springboot.organizer.data.exceptions.PersistEntityException;
 import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.data.repositories.base.BaseRepository;
+import edu.springboot.organizer.utils.BaseDateUtils;
 import edu.springboot.organizer.web.dtos.base.BaseDto;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -46,12 +49,22 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
         }
     }
 
-    protected List<T> getAllEntities() {
+    protected List<T> getAllDtos() {
         try {
             List<S> entities = getRepository().findAll();
             return entities.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
         } catch (Exception e) {
             log.error("All {} entities not found! ", getRepository().getTableName(), e);
+        }
+        throw new ResultNotFoundException("All entities found failed!");
+    }
+
+    protected List<T> getDtosByIds(List<String> ids) {
+        try {
+            List<S> entities = getRepository().findEntitiesByIds(ids);
+            return entities.stream().map(getRowMapper()::toDto).collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("Find By Ids {} entities not found! ", getRepository().getTableName(), e);
         }
         throw new ResultNotFoundException("All entities found failed!");
     }

@@ -51,6 +51,16 @@ public class RecordsSetRepository extends BaseRepository<RecordsSet, RecordsSetD
     }
 
     @Override
+    protected Class<RecordsSetDto> getClassDto() {
+        return RecordsSetDto.class;
+    }
+
+    @Override
+    protected Class<RecordsSet> getClassEntity() {
+        return RecordsSet.class;
+    }
+
+    @Override
     public String getTableName() {
         return RecordsSet.TABLE_NAME;
     }

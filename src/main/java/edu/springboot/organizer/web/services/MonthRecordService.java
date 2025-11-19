@@ -69,7 +69,7 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
 
     @Transactional(readOnly = true)
     public List<MonthRecordDto> getAllMonthRecords() {
-        List<MonthRecordDto> entities = getAllEntities();
+        List<MonthRecordDto> entities = getAllDtos();
         return assignDateCellsToMonthRecords(entities);
     }
 
