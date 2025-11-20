@@ -4,17 +4,14 @@ package edu.springboot.organizer.web.services.base;
 import edu.springboot.organizer.data.exceptions.PersistEntityException;
 import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.data.repositories.base.BaseRepository;
-import edu.springboot.organizer.utils.BaseDateUtils;
 import edu.springboot.organizer.web.dtos.base.BaseDto;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,6 +44,16 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
             log.error("Persist Entity [{}] failed!", entity, e);
             throw new PersistEntityException("Persist error! " + (e.getMessage() != null ? e.getMessage() : e.getCause().getMessage()));
         }
+    }
+
+    protected List<T> persistDtos(List<T> dtos) {
+        try {
+            return getRepository().insertDtos(dtos);
+        } catch (Exception e) {
+            log.error("Persist {} dtos failed! ", getRepository().getTableName(), e);
+        }
+        throw new ResultNotFoundException("Persist List error!");
+
     }
 
     protected List<T> getAllDtos() {

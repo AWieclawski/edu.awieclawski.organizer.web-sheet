@@ -36,6 +36,11 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
+    public List<VisitorDto> saveVisitors(List<VisitorDto> visitors) {
+        return persistDtos(visitors);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public VisitorDto updateVisitor(Visitor visitor) {
         return entityUpdate(visitor);
     }

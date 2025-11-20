@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +50,10 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> ex
     protected S insertEntity(Map<String, Object> entityParameters, S entity) throws InstantiationException {
         insertEntityExecute(entityParameters);
         return entity;
+    }
+
+    public List<T> insertDtos(List<T> dtos) throws InstantiationException {
+        return executeInsertDtos(dtos);
     }
 
     public S updateEntity(Map<String, Object> entityParameters, S entity) throws InstantiationException {
@@ -95,7 +100,7 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> ex
 
     public List<S> findEntitiesByIds(List<String> ids) {
         SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("ids", ids);
+                .addValue("ids", new HashSet<>(ids));
         String query = String.format("SELECT * FROM %s WHERE %s IN (:ids) ",
                 getTableName(), BaseEntity.BaseConst.ID.getColumn());
         return jdbcNamedParametersQuery(query, namedParameters);

@@ -2,6 +2,7 @@ package edu.springboot.organizer.data.repositories.base;
 
 import edu.springboot.organizer.data.exceptions.SanitizeQueryException;
 import edu.springboot.organizer.data.models.base.BaseEntity;
+import edu.springboot.organizer.data.repositories.handlers.ExtendedJdbcInsert;
 import edu.springboot.organizer.data.repositories.handlers.SimpleJdbcUpdate;
 import edu.springboot.organizer.web.dtos.base.BaseDto;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -21,6 +23,9 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static edu.springboot.organizer.utils.BaseDateUtils.getBaseTimestampId;
+import static edu.springboot.organizer.utils.BaseStringUtils.replaceLastDigitsIncreasedByOne;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -113,6 +118,31 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
         return 0;
     }
 
+    List<T> executeInsertDtos(List<T> dtos) throws InstantiationException {
+        String[] baseTimestampArr = new String[1];
+        baseTimestampArr[0] = getBaseTimestampId();
+        dtos.forEach(it -> {
+            if (it.getCreated() != null) {
+                throw new RuntimeException("Inserted dto must have null ID [" + it.getCreated() + "] " + getTableName());
+            }
+            it.setCreated(baseTimestampArr[0]);
+            baseTimestampArr[0] = replaceLastDigitsIncreasedByOne(baseTimestampArr[0]);
+        });
+
+        @SuppressWarnings("unchecked")
+        ExtendedJdbcInsert<S, T> simpleJdbcUpdate = ((ExtendedJdbcInsert<S, T>) getExtendedJdbcInsert()
+                .withTableName(getTableName()))
+                .withBatchSize(50)
+                .withRawMapper(getBaseRowMapper())
+                .withDtoType(getClassDto());
+
+        int[][] result = simpleJdbcUpdate.executeBatchInsert(dtos);
+        if (result != null && result.length > 0) {
+            return dtos;
+        }
+        return new ArrayList<>();
+    }
+
     private JdbcTemplate getJdbcTemplate() {
         return this.jdbcTemplate;
     }
@@ -137,6 +167,14 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
         DataSource dataSource = getDataSource();
         if (dataSource != null) {
             return new SimpleJdbcUpdate(dataSource);
+        }
+        throw new InstantiationException("No DataSource instantiation!");
+    }
+
+    private ExtendedJdbcInsert<S, T> getExtendedJdbcInsert() throws InstantiationException {
+        DataSource dataSource = getDataSource();
+        if (dataSource != null) {
+            return new ExtendedJdbcInsert<>(dataSource);
         }
         throw new InstantiationException("No DataSource instantiation!");
     }

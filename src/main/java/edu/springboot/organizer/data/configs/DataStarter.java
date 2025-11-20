@@ -67,6 +67,9 @@ public class DataStarter {
         log.info("VisitorService demo after create {}", visitorsByIP.size());
         List<VisitorDto> visitorsByIds = visitorService.getVisitorsByIds(visitorsByIP.stream().map(VisitorDto::getCreated).collect(Collectors.toList()));
         log.info("VisitorService demo by ids {}", visitorsByIds.size());
+        visitorsByIds.forEach(it -> it.setCreated(null));
+        List<VisitorDto> visitorsSaved = visitorService.saveVisitors(visitorsByIds);
+        log.info("VisitorService demo saved {}", visitorsSaved.size());
         visitorService.deleteVisitors(visitorsByIP.stream().map(BaseDto::getCreated).collect(Collectors.toList()));
         log.info("VisitorService demo after delete {}", visitorService.getVisitorsByIP("DEMO").size());
     }

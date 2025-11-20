@@ -27,6 +27,6 @@ logging:
     org.springframework.web: INFO
     edu.springboot.organizer: DEBUG
 # general variables
-populate.initial.data: false
+populate.initial.data: true
 locale.language.tag: en-EN
 standard.hours.value: ${STD_HRS:144}

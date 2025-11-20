@@ -71,12 +71,12 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
         return this;
     }
 
-    public void setEntityId(@Nullable String entityId) {
+    protected void setEntityId(@Nullable String entityId) {
         checkIfConfigurationModificationIsAllowed();
         this.entityId = entityId;
     }
 
-    public void setIdColumnName(@Nullable String idColumnName) {
+    protected void setIdColumnName(@Nullable String idColumnName) {
         checkIfConfigurationModificationIsAllowed();
         this.idColumnName = idColumnName;
     }
