@@ -167,7 +167,7 @@ td.hrsCellEdited {
     border-right: 1px dotted #aaaaaa;
     padding-right: 4px;
     color: chartreuse;
-    min-width: 90px;
+    min-width: 99px;
 }
 
 td.errorCell {
@@ -196,11 +196,11 @@ td.rightLabel {
 }
 
 th.holiday {
-    background-color: #444444;
+    background-color: #260000;
 }
 
 td.holiday {
-    background-color: #333333;
+    background-color: #3f0000;
 }
 
 .redAlert {

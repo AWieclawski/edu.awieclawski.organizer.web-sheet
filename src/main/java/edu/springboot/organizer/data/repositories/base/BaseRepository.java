@@ -56,6 +56,10 @@ public abstract class BaseRepository<S extends BaseEntity, T extends BaseDto> ex
         return executeInsertDtos(dtos);
     }
 
+    public List<T> updateDtos(List<T> dtos) throws InstantiationException {
+        return executeUpdateDtos(dtos);
+    }
+
     public S updateEntity(Map<String, Object> entityParameters, S entity) throws InstantiationException {
         int result = executeEntityUpdate(entityParameters);
         if (result == 0) {

@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,6 +36,10 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
         return createEntity(dateCellDto);
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public List<DateCellDto> saveDateCells(List<DateCellDto> dateCellDtos) {
+        return persistDtos(dateCellDtos);
+    }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public DateCellDto updateDateCell(DateCellDto dateCell) {
@@ -103,17 +106,11 @@ public class DateCellService extends BaseService<DateCell, DateCellDto> {
     }
 
     public List<DateCellDto> createDateCells(List<DateCellDto> dateCellDtos) {
-        return dateCellDtos.stream()
-                .filter(Objects::nonNull)
-                .map(this::createDateCell)
-                .collect(Collectors.toList());
+        return saveDateCells(dateCellDtos);
     }
 
     public List<DateCellDto> updateDateCells(List<DateCellDto> dateCellDtos) {
-        return dateCellDtos.stream()
-                .filter(Objects::nonNull)
-                .map(this::updateDateCell)
-                .collect(Collectors.toList());
+        return updateDtos(dateCellDtos);
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

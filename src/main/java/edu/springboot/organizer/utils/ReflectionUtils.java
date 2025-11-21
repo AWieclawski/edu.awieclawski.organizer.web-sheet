@@ -124,22 +124,30 @@ public class ReflectionUtils {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T getFieldValue(Object object, String fieldName, boolean force) {
+        if (object == null) {
+            return null;
+        }
         Class<?> clazz = object.getClass();
         while (clazz != null) {
             try {
                 Field field = clazz.getDeclaredField(fieldName);
                 field.setAccessible(force);
+                if (log.isDebugEnabled()) {
+                    log.debug("Field [{}] in Class [{}] found!", fieldName, clazz.getSimpleName());
+                }
                 return (T) field.get(object);
             } catch (NoSuchFieldException e) {
                 if (log.isDebugEnabled()) {
-                    log.debug("Getting Value of Field [{}] in Class [{}] failed!", fieldName, clazz.getSimpleName(), e);
+                    log.debug("Getting Value of Field [{}] in Class [{}] failed! | {}", fieldName, clazz.getSimpleName(), e.getMessage());
                 }
                 clazz = clazz.getSuperclass();
             } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
         }
+        log.info("Field [{}] in Class [{}] and its supperClasses not found!", fieldName, object.getClass().getSimpleName());
         return null;
     }
 

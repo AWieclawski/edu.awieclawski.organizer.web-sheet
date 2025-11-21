@@ -1,10 +1,14 @@
 package edu.springboot.organizer.data.repositories.handlers;
 
+import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.utils.ReflectionUtils;
+import edu.springboot.organizer.web.dtos.base.BaseDto;
+import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlTypeValue;
+import org.springframework.jdbc.core.StatementCreatorUtils;
 import org.springframework.jdbc.core.metadata.TableMetaDataContext;
 import org.springframework.jdbc.core.metadata.TableMetaDataProvider;
 import org.springframework.jdbc.core.metadata.TableParameterMetaData;
@@ -14,6 +18,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -22,7 +28,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 @Slf4j
-public class SimpleJdbcUpdate extends SimpleJdbcInsert {
+public class SimpleJdbcUpdate<S extends BaseEntity, T extends BaseDto> extends SimpleJdbcInsert {
 
     protected TableMetaDataContext tableMetaDataContextUpd;
 
@@ -36,9 +42,15 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
 
     protected List<String> tableColumnsUpd;
 
-    protected String idColumnName;
+    protected String primaryKeyColumnName;
 
-    private final Predicate<String> isId = column -> idColumnName != null && idColumnName.equals(column);
+    protected Integer batchSize;
+
+    protected BaseRowMapper<S, T> rowMapper;
+
+    private final Predicate<String> isId = column -> primaryKeyColumnName != null && primaryKeyColumnName.equals(column);
+
+    private Boolean isBatch;
 
     public SimpleJdbcUpdate(DataSource dataSource) {
         super(dataSource);
@@ -61,13 +73,23 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
         onCompileInternal();
     }
 
-    public SimpleJdbcUpdate withEntityId(String entityId) {
+    public SimpleJdbcUpdate<S, T> withEntityId(String entityId) {
         setEntityId(entityId);
         return this;
     }
 
-    public SimpleJdbcUpdate withIdColumnName(String idColumnName) {
-        setIdColumnName(idColumnName);
+    public SimpleJdbcUpdate<S, T> withIdColumnName(String idColumnName) {
+        setPrimaryKeyColumnName(idColumnName);
+        return this;
+    }
+
+    public SimpleJdbcUpdate<S, T> withBatchSize(Integer batchSize) {
+        setBatchSize(batchSize);
+        return this;
+    }
+
+    public SimpleJdbcUpdate<S, T> withRawMapper(BaseRowMapper<S, T> rowMapper) {
+        setRowMapper(rowMapper);
         return this;
     }
 
@@ -76,9 +98,9 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
         this.entityId = entityId;
     }
 
-    protected void setIdColumnName(@Nullable String idColumnName) {
+    protected void setPrimaryKeyColumnName(@Nullable String primaryKeyColumnName) {
         checkIfConfigurationModificationIsAllowed();
-        this.idColumnName = idColumnName;
+        this.primaryKeyColumnName = primaryKeyColumnName;
     }
 
     public List<String> getTableColumns() {
@@ -86,6 +108,7 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
     }
 
     public int executeUpdate(Map<String, Object> args) {
+        isBatch = false;
         checkCompiled();
         this.metaDataProviderUpd = ReflectionUtils.getFieldValue(tableMetaDataContextUpd, "metaDataProvider", true);
         this.tableColumnsUpd = tableMetaDataContextUpd.getTableColumns();
@@ -95,9 +118,55 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
         this.updateTypes = createUpdateTypes();
         compileInternalUpd();
         if (log.isDebugEnabled()) {
-            log.debug("The following parameters are used for update {} with: {}", this.updateStringUpd, values);
+            log.debug("Sql used for list update: [{}] with values: {}", this.updateStringUpd, values);
         }
         return getJdbcTemplate().update(this.updateStringUpd, values.toArray(), this.updateTypes);
+    }
+
+
+    /**
+     * Source: https://medium.com/@AlexanderObregon/bulk-insert-optimization-with-spring-boot-and-jdbc-batching-57dd031ecad8
+     *
+     * @param dtos
+     * @return
+     */
+    public int[][] executeBatchUpdate(List<T> dtos) {
+        isBatch = true;
+        checkCompiled();
+        this.metaDataProviderUpd = ReflectionUtils.getFieldValue(tableMetaDataContextUpd, "metaDataProvider", true);
+        this.tableColumnsUpd = tableMetaDataContextUpd.getTableColumns();
+        // remove Primary Key column
+        this.tableColumnsUpd.removeIf(isId);
+        this.updateTypes = createUpdateTypes();
+        compileInternalUpd();
+        return getJdbcTemplate().batchUpdate(updateStringUpd, dtos, batchSize,
+                (ps, dto) -> {
+                    Map<String, Object> entityParameters = rowMapper.toMap(dto);
+                    Object idObjectValue = entityParameters.get(primaryKeyColumnName);
+                    if (idObjectValue != null) {
+                        this.entityId = (String) idObjectValue;
+                        entityParameters.remove(BaseEntity.BaseConst.ID.getColumn());
+                        List<Object> values = matchInParameterValuesWithUpdateColumns(entityParameters);
+                        if (log.isDebugEnabled()) {
+                            log.debug("Sql used for list update: [{}] with values: {} where Primary Key: [{}]", this.updateStringUpd, values, entityId);
+                        }
+                        setParameterValues(ps, values, updateTypes);
+                        // assign Primary Key value with last parameter index in 'WHERE' clause
+                        ps.setString(entityParameters.size() + 1, entityId);
+                    } else {
+                        log.warn("No Primary Key value found - {} record update skipped", getTableName());
+                    }
+                });
+    }
+
+    protected void setBatchSize(@Nullable Integer batchSize) {
+        checkIfConfigurationModificationIsAllowed();
+        this.batchSize = batchSize;
+    }
+
+    protected void setRowMapper(@Nullable BaseRowMapper<S, T> rowMapper) {
+        checkIfConfigurationModificationIsAllowed();
+        this.rowMapper = rowMapper;
     }
 
     protected void compileInternalUpd() {
@@ -108,8 +177,7 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
     }
 
     protected String createUpdateString(String... generatedKeyNames) {
-
-        if (entityId == null) {
+        if (isBatch != null && !isBatch && entityId == null) {
             String message = "Unable to update columns for table '" + getTableName()
                     + "' if no entity id.";
             throw new InvalidDataAccessApiUsageException(message);
@@ -137,8 +205,11 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
                 updateStatement.append(columnName).append(" = ?");
             }
         }
-        updateStatement.append(" WHERE ID = '").append(entityId).append("'");
-
+        if (isBatch != null && isBatch) {
+            updateStatement.append(" WHERE ID = ?");
+        } else {
+            updateStatement.append(" WHERE ID = '").append(entityId).append("'");
+        }
         if (columnCount < 1) {
             String message = "Unable to locate columns for table '" + getTableName()
                     + "' so an insert statement can't be generated.";
@@ -175,8 +246,8 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
         for (TableParameterMetaData tpmd : parameters) {
             parameterMap.put(tpmd.getParameterName().toUpperCase(), tpmd);
         }
-        // remove id column
-        parameterMap.remove(idColumnName.toUpperCase());
+        // remove Primary Key column
+        parameterMap.remove(primaryKeyColumnName.toUpperCase());
         int typeIndx = 0;
         for (String column : getTableColumns()) {
             if (column == null) {
@@ -192,6 +263,27 @@ public class SimpleJdbcUpdate extends SimpleJdbcInsert {
             typeIndx++;
         }
         return types;
+    }
+
+    /**
+     * Copy of: org.springframework.jdbc.core.simple.AbstractJdbcInsert#setParameterValues(java.sql.PreparedStatement, java.util.List, int...)
+     *
+     * @param preparedStatement
+     * @param values
+     * @param columnTypes
+     * @throws SQLException
+     */
+    private void setParameterValues(PreparedStatement preparedStatement, List<?> values, @Nullable int... columnTypes)
+            throws SQLException {
+        int colIndex = 0;
+        for (Object value : values) {
+            colIndex++;
+            if (columnTypes == null || colIndex > columnTypes.length) {
+                StatementCreatorUtils.setParameterValue(preparedStatement, colIndex, SqlTypeValue.TYPE_UNKNOWN, value);
+            } else {
+                StatementCreatorUtils.setParameterValue(preparedStatement, colIndex, columnTypes[colIndex - 1], value);
+            }
+        }
     }
 
 }

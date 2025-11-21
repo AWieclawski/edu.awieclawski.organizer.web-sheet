@@ -81,6 +81,7 @@ public class RecordsSetFacade {
             log.error("RecordsSet [{}] date [{}-{}] is not valid! [{}]", recordsSetDto.getCreated(), recordsSetDto.getYear(), recordsSetDto.getDisplayMonthNo(), date);
             throw new ResultNotFoundException("RecordsSet date is not valid!");
         }
+        recordsSetDto.getMonthRecords().forEach(monthRecordService::updateMonthRecordDto);
         return recordsSetDto;
     }
 

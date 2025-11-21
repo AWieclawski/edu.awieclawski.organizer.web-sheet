@@ -50,9 +50,19 @@ public abstract class BaseService<S extends BaseEntity, T extends BaseDto> {
         try {
             return getRepository().insertDtos(dtos);
         } catch (Exception e) {
-            log.error("Persist {} dtos failed! ", getRepository().getTableName(), e);
+            log.error("Persist {} dtos list failed! ", getRepository().getTableName(), e);
         }
         throw new ResultNotFoundException("Persist List error!");
+
+    }
+
+    protected List<T> updateDtos(List<T> dtos) {
+        try {
+            return getRepository().updateDtos(dtos);
+        } catch (Exception e) {
+            log.error("Update {} dtos list failed! ", getRepository().getTableName(), e);
+        }
+        throw new ResultNotFoundException("Update List error!");
 
     }
 

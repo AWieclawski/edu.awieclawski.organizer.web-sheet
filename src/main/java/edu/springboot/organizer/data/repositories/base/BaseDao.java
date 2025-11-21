@@ -104,10 +104,12 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
     }
 
     int executeEntityUpdate(Map<String, Object> entityParameters) throws InstantiationException {
-        Object objectValue = entityParameters.get(BaseEntity.BaseConst.ID.getColumn());
-        if (objectValue != null) {
-            String entityId = (String) objectValue;
-            SimpleJdbcUpdate simpleJdbcUpdate = ((SimpleJdbcUpdate) getEntityUpdate()
+        Object idObjectValue = entityParameters.get(BaseEntity.BaseConst.ID.getColumn());
+        if (idObjectValue != null) {
+            String entityId = (String) idObjectValue;
+
+            @SuppressWarnings("unchecked")
+            SimpleJdbcUpdate<S, T> simpleJdbcUpdate = ((SimpleJdbcUpdate<S, T>) getEntityUpdate()
                     .withTableName(getTableName()))
                     .withIdColumnName(BaseEntity.BaseConst.ID.getColumn())
                     .withEntityId(entityId);
@@ -116,6 +118,21 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
         }
         log.warn("No Entity Id to update [{}]", getTableName());
         return 0;
+    }
+
+    List<T> executeUpdateDtos(List<T> dtos) throws InstantiationException {
+        @SuppressWarnings("unchecked")
+        SimpleJdbcUpdate<S, T> simpleJdbcUpdate = ((SimpleJdbcUpdate<S, T>) getEntityUpdate()
+                .withTableName(getTableName()))
+                .withIdColumnName(BaseEntity.BaseConst.ID.getColumn())
+                .withBatchSize(50)
+                .withRawMapper(getBaseRowMapper());
+
+        int[][] result = simpleJdbcUpdate.executeBatchUpdate(dtos);
+        if (result != null && result.length > 0) {
+            return dtos;
+        }
+        return new ArrayList<>();
     }
 
     List<T> executeInsertDtos(List<T> dtos) throws InstantiationException {
@@ -163,10 +180,10 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
         throw new InstantiationException("No DataSource instantiation!");
     }
 
-    private SimpleJdbcUpdate getEntityUpdate() throws InstantiationException {
+    private SimpleJdbcUpdate<S, T> getEntityUpdate() throws InstantiationException {
         DataSource dataSource = getDataSource();
         if (dataSource != null) {
-            return new SimpleJdbcUpdate(dataSource);
+            return new SimpleJdbcUpdate<S, T>(dataSource);
         }
         throw new InstantiationException("No DataSource instantiation!");
     }

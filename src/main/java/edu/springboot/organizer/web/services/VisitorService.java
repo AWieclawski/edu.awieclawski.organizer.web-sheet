@@ -41,8 +41,19 @@ public class VisitorService extends BaseService<Visitor, VisitorDto> {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
+    public List<VisitorDto> updateVisitors(List<VisitorDto> visitors) {
+        return updateDtos(visitors);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public VisitorDto updateVisitor(Visitor visitor) {
         return entityUpdate(visitor);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public VisitorDto updateVisitor(VisitorDto visitor) {
+        Visitor visitorToUpd = getRowMapper().toEntity(visitor);
+        return entityUpdate(visitorToUpd);
     }
 
     @Transactional(readOnly = true)

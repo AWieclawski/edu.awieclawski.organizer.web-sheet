@@ -1,6 +1,7 @@
 package edu.springboot.organizer.data.configs;
 
 import edu.springboot.organizer.data.models.Visitor;
+import edu.springboot.organizer.utils.DateUtils;
 import edu.springboot.organizer.web.dtos.VisitorDto;
 import edu.springboot.organizer.web.dtos.base.BaseDto;
 import edu.springboot.organizer.web.services.CredentialService;
@@ -17,6 +18,9 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -61,16 +65,68 @@ public class DataStarter {
     }
 
     private void populateDataTest() {
+        long start;
+        long finish;
+
+        // create
+        start = System.nanoTime();
         IntStream.range(0, 10)
                 .forEach(it -> visitorService.createVisitor(Visitor.builder().name("TEST_I_" + it).ip("DEMO").build()));
         List<VisitorDto> visitorsByIP = visitorService.getVisitorsByIP("DEMO");
-        log.info("VisitorService demo after create {}", visitorsByIP.size());
-        List<VisitorDto> visitorsByIds = visitorService.getVisitorsByIds(visitorsByIP.stream().map(VisitorDto::getCreated).collect(Collectors.toList()));
-        log.info("VisitorService demo by ids {}", visitorsByIds.size());
-        visitorsByIds.forEach(it -> it.setCreated(null));
-        List<VisitorDto> visitorsSaved = visitorService.saveVisitors(visitorsByIds);
-        log.info("VisitorService demo saved {}", visitorsSaved.size());
-        visitorService.deleteVisitors(visitorsByIP.stream().map(BaseDto::getCreated).collect(Collectors.toList()));
+        finish = System.nanoTime();
+        log.info("VisitorService demo after create {} - time elapsed {}", visitorsByIP.size(), finish - start);
+        List<VisitorDto> visitorsByIds = new ArrayList<>();
+        try {
+            visitorsByIds.addAll(visitorService.getVisitorsByIds(visitorsByIP.stream().map(VisitorDto::getCreated).collect(Collectors.toList())));
+        } catch (Exception e) {
+            log.warn("Error: {}", e.getMessage(), e);
+        }
+        log.info("VisitorService demo found by ids {}", visitorsByIds.size());
+
+        // updateVisitors separately
+        int[] intArr = new int[1];
+        visitorsByIds.forEach(it -> it.setUrl("DEMO_URL_" + ++intArr[0]));
+        final List<VisitorDto> visitorsByIdsUpdated = new ArrayList<>();
+        start = System.nanoTime();
+        try {
+            visitorsByIds.forEach(it -> visitorsByIdsUpdated.add(visitorService.updateVisitor(it)));
+        } catch (Exception e) {
+            log.warn("Error: {}", e.getMessage(), e);
+        }
+        finish = System.nanoTime();
+        log.info("VisitorService demo separately updated {} - time elapsed {}", visitorsByIdsUpdated.size(), finish - start);
+
+        // updateVisitors list
+        List<VisitorDto> visitorsByIdsUpdatedList = new ArrayList<>(visitorsByIdsUpdated);
+        visitorsByIdsUpdatedList.forEach(it -> it.setTimestamp(DateUtils.getStringFromTimestamp(new Timestamp(new Date().getTime()), DateUtils.DATE_PATTERN_STANDARD)));
+        start = System.nanoTime();
+        try {
+            visitorsByIdsUpdatedList = visitorService.updateVisitors(visitorsByIdsUpdatedList);
+        } catch (Exception e) {
+            log.warn("Error: {}", e.getMessage(), e);
+        }
+        finish = System.nanoTime();
+        log.info("VisitorService demo list updated {} - time elapsed {}", visitorsByIdsUpdatedList.size(), finish - start);
+
+        // save list
+        visitorsByIdsUpdated.forEach(it -> it.setCreated(null));
+        start = System.nanoTime();
+        List<VisitorDto> visitorsSaved = new ArrayList<>();
+        try {
+            visitorsSaved.addAll(visitorService.saveVisitors(visitorsByIdsUpdated));
+        } catch (Exception e) {
+            log.warn("Error: {}", e.getMessage(), e);
+        }
+        finish = System.nanoTime();
+        log.info("VisitorService demo list saved {} - time elapsed {}", visitorsSaved.size(), finish - start);
+
+        // delete demo
+        List<VisitorDto> visitorsByIPDemo = visitorService.getVisitorsByIP("DEMO");
+        try {
+            visitorService.deleteVisitors(visitorsByIPDemo.stream().map(BaseDto::getCreated).collect(Collectors.toList()));
+        } catch (Exception e) {
+            log.warn("Error: {}", e.getMessage(), e);
+        }
         log.info("VisitorService demo after delete {}", visitorService.getVisitorsByIP("DEMO").size());
     }
 

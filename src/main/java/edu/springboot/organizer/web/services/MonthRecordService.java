@@ -58,7 +58,8 @@ public class MonthRecordService extends BaseService<MonthRecord, MonthRecordDto>
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public MonthRecordDto updateMonthRecordDto(MonthRecordDto monthRecordDto) {
         List<DateCellDto> dateCellDtos = monthRecordDto.getDateCells();
-        dateCellDtos.forEach(this::dateCellDtoUpdate);
+        dateCellDtos.forEach(DateCellDto::autoUpdate);
+        dateCellService.updateDateCells(dateCellDtos);
         return dtoUpdate(monthRecordDto);
     }
 
