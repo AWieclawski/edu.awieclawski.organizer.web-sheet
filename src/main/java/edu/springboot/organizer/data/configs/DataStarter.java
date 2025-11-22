@@ -74,7 +74,7 @@ public class DataStarter {
                 .forEach(it -> visitorService.createVisitor(Visitor.builder().name("TEST_I_" + it).ip("DEMO").build()));
         List<VisitorDto> visitorsByIP = visitorService.getVisitorsByIP("DEMO");
         finish = System.nanoTime();
-        log.info("VisitorService demo after create {} - time elapsed {}", visitorsByIP.size(), finish - start);
+        log.info("VisitorService demo after separately created {} - time elapsed {}", visitorsByIP.size(), finish - start);
         List<VisitorDto> visitorsByIds = new ArrayList<>();
         try {
             visitorsByIds.addAll(visitorService.getVisitorsByIds(visitorsByIP.stream().map(VisitorDto::getCreated).collect(Collectors.toList())));

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class BaseStringUtilsTest {
 
@@ -19,10 +20,21 @@ class BaseStringUtilsTest {
     };
 
     @Test
-    void increasedStringHasTheSameLength() {
+    void increasedByOneStringHasTheSameLength() {
         Arrays.stream(arrayTest).forEach(it -> {
                     String replacement = BaseStringUtils.replaceLastDigitsIncreasedByOne(it);
                     assertEquals(it.length(), replacement.length());
+                    assertNotEquals(it, replacement);
+                }
+        );
+    }
+
+    @Test
+    void increasedByThreeStringHasTheSameLength() {
+        Arrays.stream(arrayTest).forEach(it -> {
+                    String replacement = BaseStringUtils.replaceLastDigitsIncreasedByThree(it);
+                    assertEquals(it.length(), replacement.length());
+                    assertNotEquals(it, replacement);
                 }
         );
     }

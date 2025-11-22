@@ -2,9 +2,9 @@ package edu.springboot.organizer.web.controllers.forms;
 
 import edu.springboot.organizer.web.dtos.MonthRecordDto;
 import edu.springboot.organizer.web.dtos.RecordsSetDto;
-import edu.springboot.organizer.web.wrappers.ResultsDto;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.facades.RecordsSetFacade;
+import edu.springboot.organizer.web.wrappers.ResultsDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.DependsOn;
@@ -40,14 +40,21 @@ public class MonthRecordsFormController {
     private final RecordsSetFacade monthRecordsFacade;
 
     @GetMapping(path = EDIT_ALL + "/{lookDate}")
-    public ModelAndView getRecordsSetsForm(@PathVariable String lookDate) {
+    public ModelAndView getRecordsSetsForm(@PathVariable String lookDate,
+                                           @ModelAttribute("flashAttribute") RecordsSetDto recordsSetDtoAttr) {
         Date date = monthRecordsFacade.getSearchDate(lookDate);
         List<RecordsSetDto> recordsSets = monthRecordsFacade.getRecordsDtoSets(date);
-        RecordsSetDto recordsSetDto = recordsSets.stream().findFirst().orElseThrow(ResultNotFoundException::new);
-        if (recordsSetDto == null) {
-            throw new ResultNotFoundException();
-        }
+        RecordsSetDto recordsSetDto;
+        ResultsDto resultsDto;
         ModelAndView mv = getViewPage("records-set-form");
+        if (recordsSetDtoAttr != null && recordsSetDtoAttr.getMonth() != null) {
+            recordsSetDto = recordsSetDtoAttr;
+            mv.addObject("hasError", Boolean.TRUE);
+        } else {
+            recordsSetDto = recordsSets.stream().findFirst().orElseThrow(ResultNotFoundException::new);
+            resultsDto = monthRecordsFacade.getValidatedResults(recordsSetDto);
+            mv.addObject("hasError", resultsDto.getIsError());
+        }
         mv.addObject("lookDate", lookDate);
         mv.addObject("monthName", monthRecordsFacade.getMonthName(recordsSetDto.getMonth()));
         mv.addObject("recordsSet", recordsSetDto);

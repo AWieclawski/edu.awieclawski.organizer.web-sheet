@@ -10,9 +10,9 @@
 <body th:with="editAll=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormController).EDIT_ALL},
 editOne=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormController).EDIT_ONE}">
 
-<h1><a href="/pick-date">Back to pick date</a></h1>
+<h1><a th:text="#{pick.date.back}" href="/pick-date"></a></h1>
 
-<p>The chosen year-month is:
+<p><span th:text="#{chosen.date.is}"></span>:
     <b><span th:text="${lookDate}"></span></b>
     (<span th:text="${monthName}"></span>)
 </p>
@@ -20,14 +20,16 @@ editOne=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormContr
 <a th:with="actionPath=${viewRedirect} + '/add/' + ${lookDate}"
    th:href="@{/{targetPath} (targetPath=${actionPath})}">
     <button id="addBtnID" onclick="disableButton(this)"
-            type="button" class="addBtn">Click to add month record
+            type="button" class="addBtn"
+            th:text="#{add.employee.form}">
     </button>
 </a>
 
 <a th:with="actionPath=${formRedirect} + '/' + ${editAll} + '/' + ${lookDate}"
    th:href="@{/{targetPath} (targetPath=${actionPath})}">
     <button id="edtBtnAllID" onclick="disableButton(this)"
-            type="button" class="edtBtn">Click to edit all rows
+            type="button" class="edtBtn"
+            th:text="#{edit.all.employees.form}">
     </button>
 </a>
 
@@ -40,14 +42,16 @@ editOne=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormContr
         <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
            th:href="@{/{targetPath} (targetPath=${actionPath})}">
             <button id="delBtnID" onclick="disableButton(this)"
-                    type="button" class="delBtn">Click to delete month record below
+                    type="button" class="delBtn"
+                    th:text="#{delete.employee.form}">
             </button>
         </a>
 
         <a th:with="actionPath=${formRedirect} + '/' + ${editOne} + '/' + ${monthRecord?.created}"
            th:href="@{/{targetPath} (targetPath=${actionPath})}">
             <button id="edtBtnID" onclick="disableButton(this)"
-                    type="button" class="edtBtn">Click to edith month record below
+                    type="button" class="edtBtn"
+                    th:text="#{edit.employee.form}">
             </button>
         </a>
 

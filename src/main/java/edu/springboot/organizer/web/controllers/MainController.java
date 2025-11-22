@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Slf4j
 @Controller
 @RequestMapping()
@@ -19,14 +21,20 @@ public class MainController {
     @Value("${endpoint.pick-date}")
     private String viewRedirect;
 
-    @GetMapping(path = {"","/", "/home"})
-    public ModelAndView veryStart() {
+    @GetMapping(path = {"", "/", "/home"})
+    public ModelAndView veryStart(HttpServletRequest httpServletRequest) {
         log.info("Root endpoint [GET] received");
-        return new ModelAndView("welcome");
+        String link = String.valueOf(httpServletRequest.getRequestURL());
+        ModelAndView mv = getViewPage("welcome");
+        mv.addObject("urLink", link);
+        return mv;
     }
 
     @GetMapping("/pick-date")
-    public ModelAndView pickDate() {
+    public ModelAndView pickDate(HttpServletRequest httpServletRequest) {
+        ModelAndView mv = getRedirectViewPage();
+        String link = String.valueOf(httpServletRequest.getRequestURL());
+        mv.addObject("urLink", link);
         return getRedirectViewPage();
     }
 

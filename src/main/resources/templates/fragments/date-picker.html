@@ -4,11 +4,13 @@
           onsubmit="disableButton(this.lookDateSubmitButton)"
           method="post" th:object="${datePickerForm}">
         <div>
-            <label for="look-date">Choose the year and month (yyyy-MM):</label>
+            <label th:text="#{pick.date}"  for="look-date"> (yyyy-MM):</label>
             <input type="month" th:field="${datePickerForm.lookDate}" id="look-date"/>
         </div>
         <div>
-            <button id="lookDateSubmitButtonID" name="lookDateSubmitButton" type="submit" class="button">Submit</button>
+            <button id="lookDateSubmitButtonID" name="lookDateSubmitButton"
+                    th:text="#{send.date.form}"
+                    type="submit" class="button"></button>
         </div>
     </form>
 

@@ -44,11 +44,19 @@ public class MonthRecordsViewController {
     }
 
     @PostMapping(value = "show/{lookDate}")
-    public ModelAndView monthDateView(@PathVariable String lookDate,
-                                      @ModelAttribute("recordsSet") RecordsSetDto recordsSet) {
+    public Object monthDateView(@PathVariable String lookDate,
+                                      @ModelAttribute("recordsSet") RecordsSetDto recordsSet
+            , RedirectAttributes redirectAttributes) {
         Date date = monthRecordsFacade.getSearchDate(lookDate);
         if (recordsSet == null) {
             throw new ResultNotFoundException("Record set missed!");
+        }
+        ResultsDto resultsDto = monthRecordsFacade.getValidatedResults(recordsSet);
+        if (resultsDto.getIsError()) {
+            redirectAttributes.addFlashAttribute("flashAttribute", resultsDto.getRecordsSetDto());
+            String formRedirect = monthRecordsFacade.getFormRedirect();
+            String redirectedUrl = formRedirect + "/" + MonthRecordsFormController.EDIT_ALL + "/" + lookDate;
+            return "redirect:/" + redirectedUrl;
         }
         RecordsSetDto recordsSetDto = monthRecordsFacade.updateRecordsSet(date, recordsSet);
         return getViewModelPopulatedObjects("display-month-days", lookDate, recordsSetDto);

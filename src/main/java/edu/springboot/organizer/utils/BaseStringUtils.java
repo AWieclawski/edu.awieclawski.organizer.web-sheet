@@ -8,11 +8,16 @@ import lombok.NoArgsConstructor;
 public class BaseStringUtils {
 
     public static String replaceLastDigitsIncreasedByOne(String inputString) {
-        Dto dto = doReplaceLastDigitsIncreasedByOne(Dto.builder().inputString(inputString).digitsQuantity(1).build());
+        Dto dto = doReplaceLastDigitsIncreasedByDelta(Dto.builder().inputString(inputString).digitsQuantity(1).build(), 1);
         return inputString.substring(0, inputString.length() - dto.digitsQuantity) + (dto.replacement);
     }
 
-    private static Dto doReplaceLastDigitsIncreasedByOne(Dto dto) {
+    public static String replaceLastDigitsIncreasedByThree(String inputString) {
+        Dto dto = doReplaceLastDigitsIncreasedByDelta(Dto.builder().inputString(inputString).digitsQuantity(1).build(), 3);
+        return inputString.substring(0, inputString.length() - dto.digitsQuantity) + (dto.replacement);
+    }
+
+    private static Dto doReplaceLastDigitsIncreasedByDelta(Dto dto, int delta) {
         if (dto.inputString == null || dto.inputString.isEmpty()) {
             return dto;
         }
@@ -20,10 +25,10 @@ public class BaseStringUtils {
         int deco = (int) Math.pow(10, dto.digitsQuantity);
         Integer lastDigits = parseInt(lastChar);
         if (lastDigits != null) {
-            dto.replacement = lastDigits + 1;
-            if (dto.replacement > deco - 1) {
-                dto.digitsQuantity = dto.digitsQuantity + 1;
-                doReplaceLastDigitsIncreasedByOne(dto);
+            dto.replacement = lastDigits + delta;
+            if (dto.replacement > deco - delta) {
+                dto.digitsQuantity = dto.digitsQuantity + delta;
+                doReplaceLastDigitsIncreasedByDelta(dto, delta);
             }
         }
         return dto;

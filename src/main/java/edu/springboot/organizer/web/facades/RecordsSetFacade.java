@@ -98,8 +98,8 @@ public class RecordsSetFacade {
     }
 
     public String getMonthName(Date date) {
-        checkDate(date);
-        Calendar calendar = DateUtils.getCalendarFromDate(date);
+        Date finalDate = checkDate(date);
+        Calendar calendar = DateUtils.getCalendarFromDate(finalDate);
         int monthNo = calendar.get(Calendar.MONTH) + 1;
         Month month = Month.of(monthNo);
         return monthRecordService.getDateMonthGenerator().getMonthName(month);
@@ -144,10 +144,11 @@ public class RecordsSetFacade {
     }
 
     public String getFromSearchDate(Date lookDate) {
+        Date finalDate = checkDate(lookDate);
         try {
-            return DateUtils.getStringFromDate(lookDate, DateUtils.YEAR_MONTH_PATTERN);
+            return DateUtils.getStringFromDate(finalDate, DateUtils.YEAR_MONTH_PATTERN);
         } catch (Exception e) {
-            log.error("Incorrect search date [{}]", lookDate, e);
+            log.error("Incorrect search date [{}]", finalDate, e);
             throw new ControllerException("Incorrect search date!");
         }
     }
@@ -189,6 +190,25 @@ public class RecordsSetFacade {
         monthRecordDto.getDateCells().forEach(DateCellDto::validate);
         isError = monthRecordDto.hasError() || monthRecordDto.getDateCells().stream().anyMatch(BaseDto::hasError);
         return ResultsDto.builder().isError(isError).monthRecordDto(monthRecordDto).build();
+    }
+
+    public ResultsDto getValidatedResults(RecordsSetDto setDto) {
+        boolean[] isErrorArr = new boolean[1];
+        setDto.autoUpdate();
+        setDto.validate();
+        isErrorArr[0] = setDto.hasError();
+        if (!isErrorArr[0]) {
+            setDto.getMonthRecords().forEach(monthRecordDto -> {
+                boolean isError;
+                monthRecordDto.validate();
+                monthRecordDto.getDateCells().forEach(DateCellDto::validate);
+                isError = monthRecordDto.hasError() || monthRecordDto.getDateCells().stream().anyMatch(BaseDto::hasError);
+                if (isError) {
+                    isErrorArr[0] = true;
+                }
+            });
+        }
+        return ResultsDto.builder().isError(isErrorArr[0]).recordsSetDto(setDto).build();
     }
 
 

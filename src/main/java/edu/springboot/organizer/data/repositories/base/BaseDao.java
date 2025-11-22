@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static edu.springboot.organizer.utils.BaseDateUtils.getBaseTimestampId;
-import static edu.springboot.organizer.utils.BaseStringUtils.replaceLastDigitsIncreasedByOne;
+import static edu.springboot.organizer.utils.BaseStringUtils.replaceLastDigitsIncreasedByThree;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -143,7 +143,7 @@ public abstract class BaseDao<S extends BaseEntity, T extends BaseDto> {
                 throw new RuntimeException("Inserted dto must have null ID [" + it.getCreated() + "] " + getTableName());
             }
             it.setCreated(baseTimestampArr[0]);
-            baseTimestampArr[0] = replaceLastDigitsIncreasedByOne(baseTimestampArr[0]);
+            baseTimestampArr[0] = replaceLastDigitsIncreasedByThree(baseTimestampArr[0]);
         });
 
         @SuppressWarnings("unchecked")

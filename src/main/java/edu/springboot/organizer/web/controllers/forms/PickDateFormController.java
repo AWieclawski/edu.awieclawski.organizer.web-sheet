@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/${endpoint.pick-date}")
 @RequiredArgsConstructor
@@ -21,9 +23,11 @@ public class PickDateFormController {
     private String viewRedirect;
 
     @GetMapping(CHOICE)
-    public ModelAndView chooseDateForm(Model model) {
+    public ModelAndView chooseDateForm(Model model, HttpServletRequest httpServletRequest) {
         model.addAttribute("datePickerForm", new DatePickerDto());
         model.addAttribute("viewRedirect", getViewRedirect());
+        String link = String.valueOf(httpServletRequest.getRequestURL());
+        model.addAttribute("urLink", link);
         return new ModelAndView("pick-date");
     }
 

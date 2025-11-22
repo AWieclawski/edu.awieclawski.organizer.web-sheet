@@ -93,5 +93,16 @@
             </td>
         </th:block>
     </tr>
+    <tr th:if="${hasError}">
+        <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <td th:if="${cellNo == 0}" class="leftLabel errorCell"><span>Errors</span></td>
+            <td colspan="3" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="errorCell"
+                th:title="'error (' + ${dateCell?.date} + ')'"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:text="${dateCell?.errorMessage}"></span>
+            </td>
+        </th:block>
+    </tr>
     </tbody>
 </table>
