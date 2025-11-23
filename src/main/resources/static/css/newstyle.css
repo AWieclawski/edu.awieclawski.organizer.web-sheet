@@ -78,8 +78,12 @@ a:active {
     text-decoration: none;
 }
 
-.tableDiv {
+.allTablesDiv {
     margin-top: 20px;
+}
+
+.tableDiv {
+    margin: 0;
 }
 
 .tBody {
@@ -105,13 +109,13 @@ table {
 
 .tBody input[type="number"] {
     margin: 0 auto;
-    max-width: 35px;
+    max-width: 32px;
 }
 
 .tBody input[type="number"]:focus {
     border: 2px solid #007BFF;
     outline: none;
-    max-width: 35px;
+    max-width: 32px;
 }
 
 th {
@@ -121,13 +125,16 @@ th {
 
 th.workType {
     border-right: 1px dotted #aaaaaa;
+    font-weight: normal;
+    text-align: right;
+    padding-right: 4px;
 }
 
 th.leftLabel {
     border-right: 1px dotted #999999;
     font-weight: bold;
     min-width: 90px;
-    text-align: left;
+    text-align: right;
     padding-left: 4px;
 }
 
@@ -188,7 +195,29 @@ td.leftLabel {
     border-right: 1px dotted #999999;
     font-weight: bold;
     min-width: 90px;
+    text-align: right;
+    padding-left: 4px;
+}
+
+td input.hrsLimit {
+    min-width: 90px;
+}
+
+.leftDataLabel {
+    background-color: #222222;
+    color: #cccccc;
+    border-right: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 190px;
     text-align: left;
+    padding-left: 4px;
+}
+
+.leftDataInput {
+    color: #aaaaaa;
+    border-right: 1px dotted #999999;
+    min-width: 190px;
+    text-align: right;
     padding-left: 4px;
 }
 
@@ -196,6 +225,12 @@ td.rightLabel {
     border-left: 1px dotted #999999;
     font-weight: bold;
     min-width: 40px;
+    text-align: right;
+    padding-right: 4px;
+}
+
+.dayCell {
+    font-weight: normal;
     text-align: right;
     padding-right: 4px;
 }

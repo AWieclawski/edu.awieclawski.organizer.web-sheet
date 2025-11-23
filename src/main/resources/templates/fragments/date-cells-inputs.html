@@ -3,7 +3,8 @@
     <thead class="tHead">
     <tr>
         <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
-            <th th:if="${cellNo == 0}" class="leftLabel"><span>Day of month</span></th>
+            <th th:if="${cellNo == 0}" class="leftDataLabel"><span th:text="#{monthRecord.employee}">:</span></th>
+            <th th:if="${cellNo == 0}" class="leftLabel"><span th:text="#{monthRecord.day}"></span></th>
             <th colspan="1" th:if="${cellNo < dateMonthSize}"
                 th:with="dateCell=${monthRecord.dateCells?.get(cellNo)}" class="dayCell"
                 th:title="${dateCell?.weekDay} + ' (' + ${dateCell?.date} + ')'"
@@ -41,28 +42,38 @@
     <tbody class="tBody">
     <tr>
         <th:block th:each="dateCellHr, dateCellHrStat : ${monthRecord?.dateCells}">
-            <td th:if="${dateCellHrStat.index == 0}" class="leftLabel hrCell"><span>Hours range</span></td>
+            <td th:if="${dateCellHrStat.index == 0}" class="leftDataInput"><span>
+                <input type="text" th:field="*{monthRecords[__${monthRecordStat.index}__].employee}"
+                       placeholder="Enter employee name"/>
+                            </span></td>
+            <td th:if="${dateCellHrStat.index == 0}" class="leftLabel hrCell"><span th:text="#{hours.range}"></span>
+            </td>
             <span th:if="${dateCellHr?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
-            <td colspan="1" class="hrCell hrBegin" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
-                th:title="'begin hour (' + ${dateCellHr?.date} + ')'">
-                <input type="number" th:id="'dateCellHr_beginHour_'  + ${dateCellHr?.hashId}"
-                       th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${dateCellHrStat.index}__].beginHour}"/>
-            </td>
-            <td colspan="1" class="hrPause" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}">-</td>
-            <td colspan="1" class="hrCell hrEnd" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
-                th:title="'end hour (' + ${dateCellHr?.date} + ')'">
-                <input type="number" th:id="'dateCellHr_endHour_' + ${dateCellHr?.hashId}"
-                       th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${dateCellHrStat.index}__].endHour}"/>
-            </td>
-            </span>
+                            <td colspan="1" class="hrCell hrBegin"
+                                th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
+                                th:title="'begin hour (' + ${dateCellHr?.date} + ')'">
+                                <input type="number" th:id="'dateCellHr_beginHour_'  + ${dateCellHr?.hashId}"
+                                       th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${dateCellHrStat.index}__].beginHour}"/>
+                            </td>
+                            <td colspan="1" class="hrPause"
+                                th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}">-</td>
+                            <td colspan="1" class="hrCell hrEnd"
+                                th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
+                                th:title="'end hour (' + ${dateCellHr?.date} + ')'">
+                                <input type="number" th:id="'dateCellHr_endHour_' + ${dateCellHr?.hashId}"
+                                       th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${dateCellHrStat.index}__].endHour}"/>
+                            </td>
+                            </span>
             <span th:unless="${dateCellHr?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
-                <td colspan="3" class="hrCell hrNa" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}">n/a</td>
-            </span>
+                                <td colspan="3" class="hrCell hrNa"
+                                    th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}">n/a</td>
+                            </span>
         </th:block>
     </tr>
     <tr>
         <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
-            <td th:if="${cellNo == 0}" class="leftLabel hrsCell"><span>Working hours</span></td>
+            <td th:if="${cellNo == 0}" class="leftDataLabel"><span th:text="#{monthRecord.standard.hours}">:</span></td>
+            <td th:if="${cellNo == 0}" class="leftLabel hrsCell"><span th:text="#{working.hours}"></span></td>
             <td colspan="3" th:if="${cellNo < dateMonthSize}"
                 th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="hrsCellEdited"
                 th:title="'hours (' + ${dateCell?.date} +')'"
@@ -77,15 +88,19 @@
     </tr>
     <tr>
         <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
-            <td th:if="${cellNo == 0}" class="leftLabel ovrHrsCell"><span>Overtime</span></td>
+            <td th:if="${cellNo == 0}" class="leftDataInput"><span>
+                <input class="hrsLimit" type="number" th:field="*{monthRecords[__${monthRecordStat.index}__].standardHours}"
+                       placeholder="Enter standard hours"/>
+            </span></td>
+            <td th:if="${cellNo == 0}" class="leftLabel ovrHrsCell"><span th:text="#{overtime.hours}"></span></td>
             <td colspan="3" th:if="${cellNo < dateMonthSize}"
                 th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="ovrHrsCell"
                 th:title="'overtime (' + ${dateCell?.date} + ')'"
                 th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
-                <span th:if="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
-                <input type="number" th:id="'dateCell_overtime_'  + ${dateCell?.hashId}"
-                       th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${cellNo}__].overtime}"/>
-                </span>
+                                <span th:if="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
+                                <input type="number" th:id="'dateCell_overtime_'  + ${dateCell?.hashId}"
+                                       th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${cellNo}__].overtime}"/>
+                                </span>
                 <span th:unless="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">n/a</span>
             </td>
             <td th:if="${cellNo == dateMonthSize}" class="rightLabel ovrHrsCell">
@@ -95,6 +110,7 @@
     </tr>
     <tr th:if="${hasError}">
         <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <td th:if="${cellNo == 0}" class="leftLabel"><span>---</span></td>
             <td th:if="${cellNo == 0}" class="leftLabel errorCell"><span>Errors</span></td>
             <td colspan="3" th:if="${cellNo < dateMonthSize}"
                 th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="errorCell"

@@ -29,7 +29,7 @@ public class MonthRecordDto extends BaseDto {
     }
 
     public int hoursCellsSize() {
-        return this.dateCells != null ? (dateCellsSize() * 2) - 1 : 0;
+        return this.dateCells != null ? (dateCellsSize() * 2) : 0;
     }
 
     public void addDateCells(List<DateCellDto> dateCellDtos) {

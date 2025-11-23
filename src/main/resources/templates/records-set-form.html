@@ -8,8 +8,8 @@
 
 </head>
 <body>
-<h1>Form</h1>
-<p>The chosen year-month is:
+<h1 th:text="#{form.all.employees.header}"></h1>
+<p><span th:text="#{chosen.date.is}"></span>:
     <b><span th:text="${recordsSet.getYear()}+'-'+${recordsSet.getDisplayMonthNo()}"></span></b>
     (<span th:text="${monthName}"></span>)
 </p>
@@ -29,18 +29,12 @@
         <input type="hidden" th:field="*{monthRecords[__${monthRecordStat.index}__].setId}"/>
 
         <div class="tableDiv">
-            <p>Employee time sheet for:
-                <input type="text" th:field="*{monthRecords[__${monthRecordStat.index}__].employee}"
-                       placeholder="Enter employee name"/>
-                | standard hours:
-                <input type="number" th:field="*{monthRecords[__${monthRecordStat.index}__].standardHours}"
-                       placeholder="Enter standard hours"/>
-            </p>
+
             <div th:if="*{monthRecords[__${monthRecordStat.index}__].dateCells?.size()>0}">
                 <span th:replace="~{fragments/date-cells-inputs :: date-cells-form}"></span>
             </div>
             <div th:unless="*{monthRecords[__${monthRecordStat.index}__].dateCells?.size()>0}">
-                <span>No day date cells</span>
+                <span th:text="#{no.date.cells}"></span>
             </div>
         </div>
 
@@ -48,7 +42,8 @@
 
     <div>
         <button id="recordsSetFormSubmitButtonID" name="recordsSetFormSubmitButton"
-                type="submit" th:value="${recordsSet}" class="subBtn">Submit DateSet
+                type="submit" th:value="${recordsSet}" class="subBtn"
+                th:text="#{submit.dateset}">
         </button>
     </div>
 </form>

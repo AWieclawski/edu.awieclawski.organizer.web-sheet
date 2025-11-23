@@ -33,36 +33,21 @@ editOne=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormContr
     </button>
 </a>
 
-<div th:each="monthRecord, iterStat : ${recordsSet?.monthRecords}">
+<div class="allTablesDiv">
+<span th:each="monthRecord, iterStat : ${recordsSet?.monthRecords}">
 
-    <div class="tableDiv">
-        <p>Employee time sheet for: <b><span th:text="${monthRecord?.employee}"></span></b> | standard hours: <span
-                th:text="${monthRecord?.standardHours}"></span></p>
+    <span class="tableDiv">
 
-        <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
-           th:href="@{/{targetPath} (targetPath=${actionPath})}">
-            <button id="delBtnID" onclick="disableButton(this)"
-                    type="button" class="delBtn"
-                    th:text="#{delete.employee.form}">
-            </button>
-        </a>
-
-        <a th:with="actionPath=${formRedirect} + '/' + ${editOne} + '/' + ${monthRecord?.created}"
-           th:href="@{/{targetPath} (targetPath=${actionPath})}">
-            <button id="edtBtnID" onclick="disableButton(this)"
-                    type="button" class="edtBtn"
-                    th:text="#{edit.employee.form}">
-            </button>
-        </a>
-
-        <div th:if="${monthRecord?.dateCellsSize>0}">
+        <span th:if="${monthRecord?.dateCellsSize>0}">
             <span th:replace="~{fragments/date-cells-rows :: date-cells-table}"></span>
-        </div>
-        <div th:unless="${monthRecord.dateCellsSize>0}">
-            <span>No day date cells</span>
-        </div>
-    </div>
+        </span>
+        <span th:unless="${monthRecord.dateCellsSize>0}">
+            <span th:text="#{no.date.cells}"></span>
+        </span>
 
+    </span>
+
+</span>
 </div>
 
 </body>
