@@ -255,6 +255,7 @@ td.holiday {
 .delBtn {
     margin-top: 2px;
     background-color: lightcoral;
+    min-width: 41px;
 }
 
 .addBtn {
@@ -265,6 +266,7 @@ td.holiday {
 .edtBtn {
     margin-top: 2px;
     background-color: lightskyblue;
+    min-width: 41px;
 }
 
 .subBtn {

@@ -28,5 +28,7 @@ logging:
     edu.springboot.organizer: DEBUG
 # general variables
 populate.initial.data: true
-locale.language.tag: en-EN
+locale:
+  language.tag: ${LANG_TAG:pl-PL}
+  resolver.type: ${LANG_RESOLVER:COOKIE}
 standard.hours.value: ${STD_HRS:144}

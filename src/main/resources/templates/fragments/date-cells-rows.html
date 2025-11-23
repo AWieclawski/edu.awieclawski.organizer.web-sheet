@@ -17,6 +17,16 @@
                 th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
                 <span th:text="${dateCell?.workType?.name}"></span>
             </th>
+            <td th:if="${cellNo == dateMonthSize}">
+                <a th:with="actionPath=${formRedirect} + '/' + ${editOne} + '/' + ${monthRecord?.created}"
+                   th:href="@{/{targetPath} (targetPath=${actionPath})}">
+                    <button id="edtBtnID" onclick="disableButton(this)"
+                            type="button" class="edtBtn"
+                            th:title="#{edit.employee.form.title}"
+                            th:text="#{edit.employee.form}">
+                    </button>
+                </a>
+            </td>
         </th:block>
     </tr>
     </thead>
@@ -39,6 +49,16 @@
                     th:title="'(' + ${dateCellHr?.date} + ')'">n/a</td>
             </span>
         </th:block>
+        <td>
+            <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
+               th:href="@{/{targetPath} (targetPath=${actionPath})}">
+                <button id="delBtnID" onclick="disableButton(this)"
+                        type="button" class="delBtn"
+                        th:title="#{delete.employee.form.title}"
+                        th:text="#{delete.employee.form}">
+                </button>
+            </a>
+        </td>
     </tr>
     <tr>
         <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">

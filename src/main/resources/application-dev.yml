@@ -34,5 +34,7 @@ logging:
     edu.springboot.organizer.data: ${LOG_LEVEL_CON:INFO}
 # general variables
 populate.initial.data: false
-locale.language.tag: ${LANG_TAG:pl-PL}
+locale:
+  language.tag: ${LANG_TAG:pl-PL}
+  resolver.type: ${LANG_RESOLVER:COOKIE}
 standard.hours.value: ${STD_HRS:144}
