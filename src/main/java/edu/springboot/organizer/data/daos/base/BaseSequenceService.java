@@ -1,8 +1,8 @@
 package edu.springboot.organizer.data.daos.base;
 
-import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.data.daos.base.dtos.RetryDataDto;
 import edu.springboot.organizer.data.daos.base.helpers.TransactionBeansHelper;
+import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.utils.BaseDateUtils;
 import edu.springboot.organizer.utils.BaseStringUtils;
 import edu.springboot.organizer.utils.ReflectionUtils;
@@ -44,7 +44,7 @@ public class BaseSequenceService<S extends BaseEntity, T extends BaseDto> {
         try {
             return retryDataDto.getInsertMethod().apply(entity);
         } catch (DataAccessException e) {
-            log.warn("Try attempt No [{}] inserting Entity [{}] failed!", ++count, entity.getClass().getSimpleName(), e);
+            log.warn("Try attempt No [{}] inserting Entity [{}|{}] failed!", ++count, entity.getClass().getSimpleName(), entity.getId(), e);
             if (count <= MAX_TRY_NUMBER) {
                 incrementId(entity, retryDataDto.getBaseIdKey());
                 retryDataDto.setEntity(entity);
