@@ -1,0 +1,30 @@
+<footer th:fragment="footer">
+
+    <div class="footer">
+
+        <span class="footer-top">
+
+        </span>
+
+        <div class="footer-bottom">
+<!--        <span th:text="${urLink}"></span><br/>-->
+            <span th:text="#{lang.change}"></span>:
+            <a th:href="${urLink} + '?lang=en'">
+                <button id="chngBttnEng"
+                        th:text="#{switch.en}"
+                        type="button" class="edtBtn">
+                </button>
+            </a>
+            <a th:href="${urLink} + '?lang=pl'">
+                <button id="chngBttnPl"
+                        th:text="#{switch.pl}"
+                        type="button" class="edtBtn">
+                </button>
+            </a>
+
+        </div>
+
+        <span class="cleaner"></span>
+
+    </div>
+</footer>

@@ -1,0 +1,102 @@
+package edu.springboot.organizer.data.daos.base.helpers;
+
+import edu.springboot.organizer.data.models.base.BaseEntity;
+import edu.springboot.organizer.utils.ReflectionUtils;
+import edu.springboot.organizer.web.dtos.base.BaseDto;
+import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
+import org.springframework.jdbc.core.metadata.TableMetaDataContext;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+
+import javax.sql.DataSource;
+import java.util.List;
+import java.util.Map;
+
+public class JdbcInsertHelper<S extends BaseEntity, T extends BaseDto> extends SimpleJdbcInsert implements JdbcBatchHelper<S, T> {
+
+    public JdbcInsertHelper(DataSource dataSource) {
+        super(dataSource);
+    }
+
+    protected TableMetaDataContext tableMetaDataContextExt;
+
+    protected List<String> tableColumnsExt;
+
+    protected String insertStringExt;
+
+    protected int[] insertTypesExt;
+
+    protected Class<T> dtoType;
+
+    protected Integer batchSize;
+
+    protected BaseRowMapper<S, T> rowMapper;
+
+    @Override
+    public JdbcInsertHelper<S, T> withBatchSize(Integer batchSize) {
+        setBatchSize(batchSize);
+        return this;
+    }
+
+    @Override
+    public JdbcInsertHelper<S, T> withRawMapper(BaseRowMapper<S, T> rowMapper) {
+        setRowMapper(rowMapper);
+        return this;
+    }
+
+    public JdbcInsertHelper<S, T> withDtoType(Class<T> entityType) {
+        setDtoType(dtoType);
+        return this;
+    }
+
+    /**
+     * Source: https://medium.com/@AlexanderObregon/bulk-insert-optimization-with-spring-boot-and-jdbc-batching-57dd031ecad8
+     *
+     * @param dtos
+     * @return
+     */
+    public int[][] executeBatchInsert(List<T> dtos) {
+        checkCompiled();
+        return getJdbcTemplate().batchUpdate(insertStringExt, dtos, batchSize,
+                (ps, dto) -> {
+                    Map<String, Object> entityParameters = rowMapper.toMap(dto);
+                    List<Object> values = matchInParameterValuesWithInsertColumns(entityParameters);
+                    setParameterValuesList(ps, values, insertTypesExt);
+                });
+    }
+
+    @Override
+    protected void compileInternal() {
+        DataSource dataSource = getJdbcTemplate().getDataSource();
+        Assert.state(dataSource != null, "No DataSource set!");
+        if (this.tableMetaDataContextExt == null) {
+            this.tableMetaDataContextExt = ReflectionUtils.getFieldValue(this, "tableMetaDataContext", true);
+            Assert.state(this.tableMetaDataContextExt != null, "No TableMetaDataContext instance!");
+            this.tableMetaDataContextExt.processMetaData(dataSource, getColumnNames(), getGeneratedKeyNames());
+            this.insertStringExt = this.tableMetaDataContextExt.createInsertString(getGeneratedKeyNames());
+            this.insertTypesExt = this.tableMetaDataContextExt.createInsertTypes();
+            this.tableColumnsExt = tableMetaDataContextExt.getTableColumns();
+            if (logger.isDebugEnabled()) {
+                logger.debug("Compiled insert object: insert string is [" + this.insertStringExt + "]");
+            }
+            onCompileInternal();
+        }
+    }
+
+    protected void setDtoType(@Nullable Class<T> dtoType) {
+        checkIfConfigurationModificationIsAllowed();
+        this.dtoType = dtoType;
+    }
+
+    protected void setBatchSize(@Nullable Integer batchSize) {
+        checkIfConfigurationModificationIsAllowed();
+        this.batchSize = batchSize;
+    }
+
+    protected void setRowMapper(@Nullable BaseRowMapper<S, T> rowMapper) {
+        checkIfConfigurationModificationIsAllowed();
+        this.rowMapper = rowMapper;
+    }
+
+}

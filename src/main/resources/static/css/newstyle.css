@@ -1,0 +1,287 @@
+@font-face {
+    font-family: Lato;
+    font-weight: normal;
+    src: url("/fonts/Lato-Regular.ttf");
+}
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+p,
+blockquote,
+em,
+img,
+q,
+strong,
+sub,
+sup,
+b,
+i,
+ol,
+ul,
+li,
+table,
+tbody,
+tfoot,
+tr,
+th,
+td,
+article,
+aside,
+figure,
+footer,
+header,
+menu,
+nav,
+section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    color: #eeeeee;
+    background-color: #111111;
+    font-family: Lato, sans-serif;
+    padding: 10px;
+}
+
+a:link {
+    color: #3cffff;
+    background-color: transparent;
+    text-decoration: none;
+    opacity: 1 !important;
+}
+
+a:visited {
+    color: #3498db;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.allTablesDiv {
+    margin-top: 20px;
+}
+
+.tableDiv {
+    margin: 0;
+}
+
+.tBody {
+    font-size: 12px;
+    color: #aaaaaa;
+    text-align: right;
+}
+
+.tHead {
+    font-size: 12px;
+    color: #eeeeee;
+    text-align: center;
+}
+.footer-bottom {
+    margin-top: 10px;
+    padding: 2px;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #eeeeee;
+}
+
+.tBody input[type="number"] {
+    margin: 0 auto;
+    max-width: 32px;
+}
+
+.tBody input[type="number"]:focus {
+    border: 2px solid #007BFF;
+    outline: none;
+    max-width: 32px;
+}
+
+th {
+    background-color: #222222;
+    padding: 2px;
+}
+
+th.workType {
+    border-right: 1px dotted #aaaaaa;
+    font-weight: normal;
+    text-align: right;
+    padding-right: 4px;
+}
+
+th.leftLabel {
+    border-right: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 90px;
+    text-align: right;
+    padding-left: 4px;
+}
+
+td {
+    background-color: #111111;
+    padding: 2px;
+    min-width: 12px;
+}
+
+td.hrCell {
+    color: skyblue;
+}
+
+td.hrPause {
+    padding: 1px;
+    min-width: 5px;
+    text-align: center;
+}
+
+td.ovrHrsCell {
+    border-right: 1px dotted #aaaaaa;
+    padding-right: 4px;
+    color: orange;
+}
+
+td.hrEnd {
+    border-right: 1px dotted #aaaaaa;
+    color: cornflowerblue;
+    padding: 4px;
+}
+
+td.hrNa {
+    border-right: 1px dotted #aaaaaa;
+    color: cornflowerblue;
+    padding: 4px;
+}
+
+td.hrsCell {
+    border-right: 1px dotted #aaaaaa;
+    padding-right: 4px;
+    color: chartreuse;
+    min-width: 40px;
+}
+
+td.hrsCellEdited {
+    border-right: 1px dotted #aaaaaa;
+    padding-right: 4px;
+    color: chartreuse;
+    min-width: 99px;
+}
+
+td.errorCell {
+    color: red;
+    padding: 4px;
+}
+
+td.leftLabel {
+    border-right: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 90px;
+    text-align: right;
+    padding-left: 4px;
+}
+
+td input.hrsLimit {
+    min-width: 90px;
+}
+
+.leftDataLabel {
+    background-color: #222222;
+    color: #cccccc;
+    border-right: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 190px;
+    text-align: left;
+    padding-left: 4px;
+}
+
+.leftDataInput {
+    color: #aaaaaa;
+    border-right: 1px dotted #999999;
+    min-width: 190px;
+    text-align: right;
+    padding-left: 4px;
+}
+
+td.rightLabel {
+    border-left: 1px dotted #999999;
+    font-weight: bold;
+    min-width: 40px;
+    text-align: right;
+    padding-right: 4px;
+}
+
+.dayCell {
+    font-weight: normal;
+    text-align: right;
+    padding-right: 4px;
+}
+
+.holiday {
+    color: yellow;
+}
+
+th.holiday {
+    background-color: #260000;
+}
+
+td.holiday {
+    background-color: #3f0000;
+}
+
+.redAlert {
+    color: yellow;
+    background-color: red;
+}
+
+.delBtn {
+    margin-top: 2px;
+    background-color: lightcoral;
+    min-width: 41px;
+}
+
+.addBtn {
+    margin-top: 2px;
+    background-color: lightgreen;
+}
+
+.edtBtn {
+    margin-top: 2px;
+    background-color: lightskyblue;
+    min-width: 41px;
+}
+
+.subBtn {
+    margin-top: 2px;
+}
+
+@media screen and (max-width: 1200px) {
+
+}
+
+@media screen and (max-width: 900px) {
+
+}
+
+@media screen and (max-width: 600px) {
+
+}
+

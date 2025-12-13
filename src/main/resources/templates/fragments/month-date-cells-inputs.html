@@ -1,0 +1,107 @@
+<table th:fragment="month-date-cells-form"
+       th:with="dateMonthSize=${monthRecord.dateCellsSize}, hoursCellsSize=${monthRecord.hoursCellsSize}">
+    <thead class="tHead">
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <th th:if="${cellNo == 0}" class="leftLabel"><span>Day of month</span></th>
+            <th colspan="1" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord.dateCells?.get(cellNo)}" class="baseCell"
+                th:title="${dateCell?.weekDay} + ' (' + ${dateCell?.date} + ')'"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:text="${dateCell?.day}"></span>
+                <input type="hidden"
+                       th:field="*{dateCells[__${cellNo}__].created}"/>
+                <input type="hidden"
+                       th:field="*{dateCells[__${cellNo}__].hashId}"/>
+                <input type="hidden"
+                       th:field="*{dateCells[__${cellNo}__].monthRecordId}"/>
+                <input type="hidden"
+                       th:field="*{dateCells[__${cellNo}__].day}"/>
+                <input type="hidden"
+                       th:field="*{dateCells[__${cellNo}__].weekDay}"/>
+                <input type="hidden"
+                       th:field="*{dateCells[__${cellNo}__].holiday}"/>
+                <input type="hidden"
+                       th:field="*{dateCells[__${cellNo}__].date}"/>
+            </th>
+            <th colspan="2" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord.dateCells?.get(cellNo)}" class="workType"
+                th:title="${dateCell?.workType?.description}"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <select class="options" th:id="'dateCell_workType_' + ${dateCell?.hashId}"
+                        th:field="*{dateCells[__${cellNo}__]?.workType}">
+                    <option th:each="workTypeOpt : ${T(edu.springboot.organizer.web.enums.WorkType).values()}"
+                            th:title="${workTypeOpt?.description}"
+                            th:value="${workTypeOpt}" th:text="${workTypeOpt?.name}"></option>
+                </select>
+            </th>
+        </th:block>
+    </tr>
+    </thead>
+    <tbody class="tBody">
+    <tr>
+        <th:block th:each="dateCellHr, dateCellHrStat : ${monthRecord?.dateCells}">
+            <td th:if="${dateCellHrStat.index == 0}" class="leftLabel hrCell"><span>Hours range</span></td>
+            <span th:if="${dateCellHr?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
+            <td colspan="1" class="hrCell hrBegin" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
+                th:title="'begin hour (' + ${dateCellHr?.date} + ')'">
+                <input type="number" th:id="'dateCellHr_beginHour_'  + ${dateCellHr?.hashId}"
+                       th:field="*{dateCells[__${dateCellHrStat.index}__].beginHour}"/>
+            </td>
+            <td colspan="1" class="hrPause" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}">-</td>
+            <td colspan="1" class="hrCell hrEnd" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
+                th:title="'end hour (' + ${dateCellHr?.date} + ')'">
+                <input type="number" th:id="'dateCellHr_endHour_'  + ${dateCellHr?.hashId}"
+                       th:field="*{dateCells[__${dateCellHrStat.index}__].endHour}"/>
+            </span>
+            <span th:unless="${dateCellHr?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
+                <td colspan="3" class="hrCell hrNa" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}">n/a</td>
+            </span>
+        </th:block>
+    </tr>
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <td th:if="${cellNo == 0}" class="leftLabel hrsCell"><span>Working hours</span></td>
+            <td colspan="3" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="hrsCellEdited"
+                th:title="'hours (' + ${dateCell?.date} +')'"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:text="${dateCell?.hours}"></span>
+            </td>
+            <td th:if="${cellNo == dateMonthSize}" class="rightLabel"
+                th:classappend="${monthRecord?.calculateHours <= monthRecord?.standardHours ? ' hrsCell' : 'redAlert'}">
+                <span th:text="${monthRecord?.calculateHours}"></span>
+            </td>
+        </th:block>
+    </tr>
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <td th:if="${cellNo == 0}" class="leftLabel ovrHrsCell"><span>Overtime</span></td>
+            <td colspan="3" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="ovrHrsCell"
+                th:title="'overtime (' + ${dateCell?.date} + ')'"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:if="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
+                <input type="number" th:id="'dateCell_overtime_'  + ${dateCell?.hashId}"
+                       th:field="*{dateCells[__${cellNo}__].overtime}"/>
+                </span>
+                <span th:unless="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">n/a</span>
+            </td>
+            <td th:if="${cellNo == dateMonthSize}" class="rightLabel ovrHrsCell">
+                <span th:text="${monthRecord?.calculateOvertime}"></span>
+            </td>
+        </th:block>
+    </tr>
+    <tr th:if="${hasError}">
+        <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <td th:if="${cellNo == 0}" class="leftLabel errorCell"><span>Errors</span></td>
+            <td colspan="3" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="errorCell"
+                th:title="'error (' + ${dateCell?.date} + ')'"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:text="${dateCell?.errorMessage}"></span>
+            </td>
+        </th:block>
+    </tr>
+    </tbody>
+</table>

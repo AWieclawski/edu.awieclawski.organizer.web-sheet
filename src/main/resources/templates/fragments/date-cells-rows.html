@@ -1,0 +1,95 @@
+<table th:fragment="date-cells-table"
+       th:with="dateMonthSize=${monthRecord.dateCellsSize}, hoursCellsSize=${monthRecord.hoursCellsSize}">
+    <thead class="tHead">
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <th th:if="${cellNo == 0}" class="leftDataLabel"><span th:text="#{monthRecord.employee}">:</span></th>
+            <th th:if="${cellNo == 0}" class="leftLabel"><span th:text="#{monthRecord.day}"></span></th>
+            <th colspan="1" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord.dateCells?.get(cellNo)}" class="dayCell"
+                th:title="${dateCell?.weekDay} + ' (' + ${dateCell?.date} +')'"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:text="${dateCell?.day}"></span>
+            </th>
+            <th colspan="2" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord.dateCells?.get(cellNo)}" class="workType"
+                th:title="${dateCell?.workType?.description}"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:text="${dateCell?.workType?.name}"></span>
+            </th>
+            <td th:if="${cellNo == dateMonthSize}">
+                <a th:with="actionPath=${formRedirect} + '/' + ${editOne} + '/' + ${monthRecord?.created}"
+                   th:href="@{/{targetPath} (targetPath=${actionPath})}">
+                    <button id="edtBtnID" onclick="disableButton(this)"
+                            type="button" class="edtBtn"
+                            th:title="#{edit.employee.form.title}"
+                            th:text="#{edit.employee.form}">
+                    </button>
+                </a>
+            </td>
+        </th:block>
+    </tr>
+    </thead>
+    <tbody class="tBody">
+    <tr>
+        <th:block th:each="dateCellHr, dateCellHrStat : ${monthRecord?.dateCells}">
+            <td th:if="${dateCellHrStat.index == 0}" class="leftDataInput"><span th:text="${monthRecord?.employee}"></span></td>
+            <td th:if="${dateCellHrStat.index == 0}" class="leftLabel hrCell"><span th:text="#{hours.range}"></span></td>
+            <span th:if="${dateCellHr?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
+            <td colspan="1" class="hrCell hrBegin" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
+                th:title="'begin hour (' + ${dateCellHr?.date} + ')'">
+                <span th:text="${dateCellHr.beginHour}"></span></td>
+            <td colspan="1" class="hrPause" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}">-</td>
+            <td colspan="1" class="hrCell hrEnd" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
+                th:title="'end hour (' + ${dateCellHr?.date} + ')'">
+                <span th:text="${dateCellHr.endHour}"></span></td>
+            </span>
+            <span th:unless="${dateCellHr?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
+                <td colspan="3" class="hrCell hrNa" th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
+                    th:title="'(' + ${dateCellHr?.date} + ')'">n/a</td>
+            </span>
+        </th:block>
+        <td>
+            <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
+               th:href="@{/{targetPath} (targetPath=${actionPath})}">
+                <button id="delBtnID" onclick="disableButton(this)"
+                        type="button" class="delBtn"
+                        th:title="#{delete.employee.form.title}"
+                        th:text="#{delete.employee.form}">
+                </button>
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <td th:if="${cellNo == 0}" class="leftDataLabel"><span th:text="#{monthRecord.standard.hours}">:</span></td>
+            <td th:if="${cellNo == 0}" class="leftLabel hrsCell"><span th:text="#{working.hours}"></span></td>
+            <td colspan="3" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="hrsCell"
+                th:title="'hours (' + ${dateCell?.date} +')'"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:text="${dateCell?.hours}"></span>
+            </td>
+            <td th:if="${cellNo == dateMonthSize}" class="rightLabel"
+                th:classappend="${monthRecord?.calculateHours <= monthRecord?.standardHours ? ' hrsCell' : 'redAlert'}">
+                <span th:text="${monthRecord?.calculateHours}"></span>
+            </td>
+        </th:block>
+    </tr>
+    <tr>
+        <th:block th:each="cellNo : ${#numbers.sequence(0, hoursCellsSize)}">
+            <td th:if="${cellNo == 0}" class="leftDataInput"><span th:text="${monthRecord?.standardHours}"></span></td>
+            <td th:if="${cellNo == 0}" class="leftLabel ovrHrsCell"><span th:text="#{overtime.hours}"></span></td>
+            <td colspan="3" th:if="${cellNo < dateMonthSize}"
+                th:with="dateCell=${monthRecord.dateCells?.get(cellNo)}" class="ovrHrsCell"
+                th:title="'overtime (' + ${dateCell?.date} + ')'"
+                th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
+                <span th:text="${dateCell?.overtime}"></span>
+            </td>
+            <td th:if="${cellNo == dateMonthSize}" class="rightLabel ovrHrsCell">
+                <span th:text="${monthRecord?.calculateOvertime}"></span>
+            </td>
+        </th:block>
+    </tr>
+    </tbody>
+</table>

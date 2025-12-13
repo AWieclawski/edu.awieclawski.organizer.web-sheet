@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en-En">
+<head>
+    <title>Month days form</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+</head>
+<body>
+<h1 th:text="#{form.all.employees.header}"></h1>
+<p><span th:text="#{chosen.date.is}"></span>:
+    <b><span th:text="${recordsSet.getYear()}+'-'+${recordsSet.getDisplayMonthNo()}"></span></b>
+    (<span th:text="${monthName}"></span>)
+</p>
+
+<form th:with="actionPath=${viewRedirect} + '/show/' + ${lookDate}"
+      onsubmit="disableButton(this.recordsSetFormSubmitButton)"
+      th:action="@{/{path} (path=${actionPath})}" method="post" th:object="${recordsSet}">
+
+    <input type="hidden" th:field="*{created}"/>
+    <input type="hidden" th:field="*{year}"/>
+    <input type="hidden" th:field="*{month}"/>
+    <input type="hidden" th:field="*{userId}"/>
+
+    <div th:each="monthRecord, monthRecordStat : *{monthRecords}">
+
+        <input type="hidden" th:field="*{monthRecords[__${monthRecordStat.index}__].created}"/>
+        <input type="hidden" th:field="*{monthRecords[__${monthRecordStat.index}__].setId}"/>
+
+        <div class="tableDiv">
+
+            <div th:if="*{monthRecords[__${monthRecordStat.index}__].dateCells?.size()>0}">
+                <span th:replace="~{fragments/date-cells-inputs :: date-cells-form}"></span>
+            </div>
+            <div th:unless="*{monthRecords[__${monthRecordStat.index}__].dateCells?.size()>0}">
+                <span th:text="#{no.date.cells}"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <div>
+        <button id="recordsSetFormSubmitButtonID" name="recordsSetFormSubmitButton"
+                type="submit" th:value="${recordsSet}" class="subBtn"
+                th:text="#{submit.dateset}">
+        </button>
+    </div>
+</form>
+
+</body>
+</html>
