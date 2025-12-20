@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en-En">
+<head>
+    <title>Month days form</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+</head>
+<body>
+<h1>Form month days</h1>
+
+<form th:with="actionPath=${viewRedirect} + '/record/' + ${lookDate}"
+      onsubmit="disableButton(this.monthDaysFormSubmitButton)"
+      th:action="@{/{path} (path=${actionPath})}" method="post" th:object="${monthRecord}">
+
+    <input type="hidden" th:field="*{created}"/>
+    <input type="hidden" th:field="*{setId}"/>
+
+    <div class="tableDiv">
+        <p>Employee time sheet for:
+            <input type="text" th:field="*{employee}"
+                   placeholder="Enter employee name"/>
+            | standard hours:
+            <input type="number" th:field="*{standardHours}"
+                   placeholder="Enter standard hours"/>
+        </p>
+        <div th:if="*{dateCells?.size()>0}">
+            <span th:replace="~{fragments/month-date-cells-inputs :: month-date-cells-form}"></span>
+        </div>
+        <div th:unless="*{dateCells?.size()>0}">
+            <span>No day date cells</span>
+        </div>
+    </div>
+
+    <div>
+        <button id="monthDaysFormSubmitButtonID" name="monthDaysFormSubmitButton"
+                type="submit" th:value="${monthRecord}" class="subBtn">Submit MonthRecord
+        </button>
+    </div>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+# spring context variables
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  application:
+    name: web-sheet-dev
+  main:
+    banner-mode: console
+  mvc:
+    servlet:
+      load-on-startup: 1
+  datasource:
+    url: jdbc:sqlite:datastore/appdata.db
+    hikari:
+      connection-init-sql: PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA cache_size=-10000; PRAGMA temp_store=MEMORY;
+# end-points
+endpoint:
+  visitors: api/visitors
+  users: api/users
+  date-cells: api/date-cells
+  month-records: api/month-records
+  pick-date: form/date-picker
+  form-date: form/month-records
+  view-date: view/month-records
+# logging
+logging:
+  level:
+    root: WARN
+    org.springframework.web: INFO
+    edu.springboot.organizer: ${LOG_LEVEL:INFO}
+    edu.springboot.organizer.data: ${LOG_LEVEL_CON:INFO}
+# general variables
+populate.initial.data: false
+locale:
+  language.tag: ${LANG_TAG:pl-PL}
+  resolver.type: ${LANG_RESOLVER:COOKIE}
+standard.hours.value: ${STD_HRS:144}

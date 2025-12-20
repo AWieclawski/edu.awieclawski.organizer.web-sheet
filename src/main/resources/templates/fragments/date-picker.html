@@ -1,0 +1,17 @@
+<span th:fragment="choose-look-date">
+
+    <form th:action="@{/{path} (path=${viewRedirect})}"
+          onsubmit="disableButton(this.lookDateSubmitButton)"
+          method="post" th:object="${datePickerForm}">
+        <div>
+            <label th:text="#{pick.date}"  for="look-date"> (yyyy-MM):</label>
+            <input type="month" th:field="${datePickerForm.lookDate}" id="look-date"/>
+        </div>
+        <div>
+            <button id="lookDateSubmitButtonID" name="lookDateSubmitButton"
+                    th:text="#{send.date.form}"
+                    type="submit" class="button"></button>
+        </div>
+    </form>
+
+</span>

@@ -1,0 +1,8 @@
+.dockerignore
+**/*.log
+**/temp
+Dockerfile
+.git
+.gitignore
+.idea
+!.env

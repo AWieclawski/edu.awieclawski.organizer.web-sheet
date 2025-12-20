@@ -1,0 +1,34 @@
+# spring context variables
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  application:
+    name: web-sheet-test
+  main:
+    banner-mode: off
+  datasource:
+    url: jdbc:sqlite:appdata.db
+# end-points
+endpoint:
+  visitors: api/visitors
+  users: api/users
+  date-cells: api/date-cells
+  month-records: api/month-records
+  pick-date: form/date-picker
+  form-date: form/month-records
+  view-date: view/month-records
+# logging
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    edu.springboot.organizer: DEBUG
+# general variables
+populate.initial.data: true
+locale:
+  language.tag: ${LANG_TAG:pl-PL}
+  resolver.type: ${LANG_RESOLVER:COOKIE}
+standard.hours.value: ${STD_HRS:144}

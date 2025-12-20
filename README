@@ -1,0 +1,22 @@
+# https://stackoverflow.com/questions/27767264/how-to-dockerize-a-maven-project-how-many-ways-to-accomplish-it/27768965#27768965
+
+# https://stackoverflow.com/questions/26050899/how-to-mount-host-volumes-into-docker-containers-in-dockerfile-during-build/52762779#52762779
+
+# https://www.baeldung.com/thymeleaf-custom-html-attributes
+
+add datastore/appdata.db
+
+# endpoints
+
+ .../api/visitors/all
+
+ .../api/visitors/between/2025-04-02/2025-04-04
+
+ .../api/date-cells/date/2025-07-02
+
+ .../api/month-records/all
+
+.../api/month-records/month/7/year/2025/user/userd01
+
+.../form/date-picker/choose-date
+# ex. http://localhost:8080/form/date-picker/choose-date

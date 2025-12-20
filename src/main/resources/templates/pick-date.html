@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{form.date.header}"></title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+</head>
+<body>
+
+<h1><a th:text="#{back.home}" href="/home"></a></h1>
+
+<h2 th:text="#{form.date.header}"></h2>
+
+<div th:replace="~{fragments/date-picker :: choose-look-date}"></div>
+
+</body>
+</html>

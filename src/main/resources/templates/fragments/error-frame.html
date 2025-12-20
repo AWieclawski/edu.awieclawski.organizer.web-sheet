@@ -1,0 +1,16 @@
+<header th:fragment="error-pop-up">
+
+    <div class="errorframe">
+
+        <section>
+            <p style="text-align:center"
+               th:if="${errorMessage != null}" th:text="| Kod błędu: ${errorMessage} |">
+            </p>
+
+            <p style="text-align:center"> There was an application problem! <a href="/home">Back Home</a> </p>
+
+        </section>
+
+    </div>
+
+</header>
