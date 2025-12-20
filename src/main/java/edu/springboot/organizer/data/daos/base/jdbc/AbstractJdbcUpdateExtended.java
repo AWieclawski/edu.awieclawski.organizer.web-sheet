@@ -22,11 +22,11 @@ import java.util.function.Predicate;
 
 abstract class AbstractJdbcUpdateExtended<S extends BaseEntity, T extends BaseDto> extends AbstractJdbcExtended<S, T> {
 
-    protected TableMetaDataProvider metaDataProviderExt;
+    TableMetaDataProvider metaDataProviderExt;
 
-    protected String primaryKeyColumnName;
+    String primaryKeyColumnName;
 
-    protected String entityId;
+    String entityId;
 
     private final Predicate<String> isPrimaryKey = column -> primaryKeyColumnName != null && primaryKeyColumnName.equals(column);
 
@@ -77,7 +77,7 @@ abstract class AbstractJdbcUpdateExtended<S extends BaseEntity, T extends BaseDt
     }
 
     @Override
-    protected void compileInternalExt() {
+    void compileInternalExt() {
         DataSource dataSource = getJdbcTemplate().getDataSource();
         Assert.state(dataSource != null, "No DataSource set");
         if (tableMetaDataContextExt == null) {

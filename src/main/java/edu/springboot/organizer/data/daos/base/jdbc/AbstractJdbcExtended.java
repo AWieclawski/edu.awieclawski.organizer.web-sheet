@@ -20,19 +20,19 @@ import java.util.Map;
 
 abstract class AbstractJdbcExtended<S extends BaseEntity, T extends BaseDto> extends AbstractJdbcInsert {
 
-    protected TableMetaDataContext tableMetaDataContextExt;
+    TableMetaDataContext tableMetaDataContextExt;
 
-    protected List<String> tableColumnsExt;
+    List<String> tableColumnsExt;
 
-    protected int[] intColumnTypes;
+    int[] intColumnTypes;
 
-    protected String sqlStringExt;
+    String sqlStringExt;
 
-    protected Integer batchSize;
+    Integer batchSize;
 
-    protected BaseRowMapper<S, T> rowMapper;
+    BaseRowMapper<S, T> rowMapper;
 
-    protected Boolean isBatch;
+    Boolean isBatch;
 
     protected int[][] doExecuteBatchExt(List<T> dtos) {
         isBatch = true;
@@ -50,7 +50,7 @@ abstract class AbstractJdbcExtended<S extends BaseEntity, T extends BaseDto> ext
         throw new NotImplementedException("Not implemented yet!");
     }
 
-    protected final synchronized void compileExt() throws InvalidDataAccessApiUsageException {
+    final synchronized void compileExt() throws InvalidDataAccessApiUsageException {
         if (!isCompiled()) {
             if (getTableName() == null) {
                 throw new InvalidDataAccessApiUsageException("Table name is required");
@@ -92,12 +92,12 @@ abstract class AbstractJdbcExtended<S extends BaseEntity, T extends BaseDto> ext
         throw new NotImplementedException();
     }
 
-    protected void setParameterValuesList(PreparedStatement preparedStatement, List<?> values, @Nullable int... columnTypes)
+    void setParameterValuesList(PreparedStatement preparedStatement, List<?> values, @Nullable int... columnTypes)
             throws SQLException {
         ReflectionUtils.invokeMethod(this, "setParameterValues", preparedStatement, values, columnTypes);
     }
 
-    protected void compileInternalExt() {
+    void compileInternalExt() {
         DataSource dataSource = getJdbcTemplate().getDataSource();
         Assert.state(dataSource != null, "No DataSource set!");
         if (tableMetaDataContextExt == null) {
@@ -111,7 +111,7 @@ abstract class AbstractJdbcExtended<S extends BaseEntity, T extends BaseDto> ext
         }
     }
 
-    protected void checkCompiledExt() {
+    void checkCompiledExt() {
         if (!isCompiled()) {
             logger.debug("Not compiled JDBC provider before Extended execution - invoking compile");
             compileExt();
