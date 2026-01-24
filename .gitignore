@@ -54,12 +54,10 @@ bin/
 *.iml
 *.ipr
 *.iws
-*.ids
 .idea/
 
 ## .gitignore for eclipse
 *.pydevproject
-.project
 .metadata
 bin/**
 tmp/**
@@ -69,7 +67,6 @@ tmp/**/*
 *.swp
 *~.nib
 local.properties
-.classpath
 .settings/
 .loadpath
 .DS_Store

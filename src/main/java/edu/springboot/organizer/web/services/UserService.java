@@ -1,10 +1,7 @@
 package edu.springboot.organizer.web.services;
 
-import edu.springboot.organizer.data.models.Credential;
 import edu.springboot.organizer.data.models.User;
 import edu.springboot.organizer.data.repositories.UserRepository;
-import edu.springboot.organizer.utils.ReflectionUtils;
-import edu.springboot.organizer.web.dtos.CredentialDto;
 import edu.springboot.organizer.web.dtos.UserDto;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import edu.springboot.organizer.web.services.base.BaseService;
@@ -15,7 +12,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Service(value = UserService.BEAN_NAME)
@@ -26,13 +22,9 @@ public class UserService extends BaseService<User, UserDto> {
 
     private final UserRepository userRepository;
 
-    private final CredentialService credentialService;
-
-    public UserService(UserRepository userRepository,
-                       CredentialService credentialService) {
+    public UserService(UserRepository userRepository) {
         super();
         this.userRepository = userRepository;
-        this.credentialService = credentialService;
     }
 
     public UserDto getCtxUser() {
@@ -89,15 +81,5 @@ public class UserService extends BaseService<User, UserDto> {
         return getRepository().getBaseRowMapper();
     }
 
-    private void assignCredentials(User user) {
-        if (user.getCredentialId() == null) {
-            CredentialDto credential = credentialService.createCredential(Credential.builder()
-                    .email(UUID.randomUUID().toString())
-                    .password(UUID.randomUUID().toString())
-                    .login(UUID.randomUUID().toString())
-                    .build());
-            ReflectionUtils.setFieldValue(user, "credentialId", credential.getCreated(), true);
-        }
-    }
 }
 

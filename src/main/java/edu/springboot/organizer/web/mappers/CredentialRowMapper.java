@@ -15,6 +15,7 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
     public Credential mapRow(ResultSet rs, int rowNum) throws SQLException {
         return Credential.builder()
                 .login(rs.getString(Credential.Const.LOGIN.getColumn()))
+                .role(rs.getString(Credential.Const.ROLE.getColumn()))
                 .email(rs.getString(Credential.Const.EMAIL.getColumn()))
                 .password(rs.getString(Credential.Const.PASS.getColumn()))
                 .id(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
@@ -24,6 +25,7 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
     public CredentialDto toDto(Credential entity) {
         return CredentialDto.builder()
                 .login(entity.getLogin())
+                .role(entity.getRole())
                 .email(entity.getEmail())
                 .password(entity.getPassword())
                 .created(entity.getId())
@@ -35,6 +37,7 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
         Map<String, Object> parameters = newParameters();
         parameters.put(BaseEntity.BaseConst.ID.getColumn(), entity.getId());
         parameters.put(Credential.Const.LOGIN.getColumn(), entity.getLogin());
+        parameters.put(Credential.Const.ROLE.getColumn(), entity.getRole());
         parameters.put(Credential.Const.EMAIL.getColumn(), entity.getEmail());
         parameters.put(Credential.Const.PASS.getColumn(), entity.getPassword());
         return parameters;
@@ -44,6 +47,7 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
         Map<String, Object> parameters = newParameters();
         parameters.put(BaseEntity.BaseConst.ID.getColumn(), dto.getCreated());
         parameters.put(Credential.Const.LOGIN.getColumn(), dto.getLogin());
+        parameters.put(Credential.Const.ROLE.getColumn(), dto.getRole());
         parameters.put(Credential.Const.EMAIL.getColumn(), dto.getEmail());
         parameters.put(Credential.Const.PASS.getColumn(), dto.getPassword());
         return parameters;
@@ -53,6 +57,7 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
     public Credential toEntity(CredentialDto dto) {
         return Credential.builder().id(dto.getCreated())
                 .login(dto.getLogin())
+                .role(dto.getRole())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .build();

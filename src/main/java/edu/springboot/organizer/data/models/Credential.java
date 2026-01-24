@@ -20,12 +20,14 @@ public class Credential extends BaseEntity {
     public static final String TABLE_NAME = "credentials";
     private String login;
     private String password;
+    private String role;
     private String email;
 
     @Getter
     public enum Const {
         LOGIN("login"),
         PASS("password"),
+        ROLE("role"),
         EMAIL("email");
         private final String column;
 
@@ -40,6 +42,7 @@ public class Credential extends BaseEntity {
                         "%s TEXT, " +
                         "%s TEXT, " +
                         "%s TEXT, " +
+                        "%s TEXT, " +
                         "UNIQUE(%s), " +
                         "UNIQUE(%s), " +
                         "UNIQUE(%s));",
@@ -47,6 +50,7 @@ public class Credential extends BaseEntity {
                 BaseEntity.BaseConst.ID.getColumn(),
                 Const.LOGIN.getColumn(),
                 Const.PASS.getColumn(),
+                Const.ROLE.getColumn(),
                 Const.EMAIL.getColumn(),
                 Const.LOGIN.getColumn(),
                 Const.PASS.getColumn(),

@@ -20,11 +20,11 @@ import java.util.List;
 
 /**
  * Knowledge sources:
- * https://www.baeldung.com/thymeleaf-variables
- * https://www.concretepage.com/thymeleaf/thymeleaf-form-action
- * https://www.baeldung.com/thymeleaf-list
- * https://codingtechroom.com/question/bind-object-list-thymeleaf
- * https://www.codejava.net/frameworks/spring-boot/spring-boot-thymeleaf-form-handling-tutorial
+ * <a href="https://www.baeldung.com/thymeleaf-variables">...</a>
+ * <a href="https://www.concretepage.com/thymeleaf/thymeleaf-form-action">...</a>
+ * <a href="https://www.baeldung.com/thymeleaf-list">...</a>
+ * <a href="https://codingtechroom.com/question/bind-object-list-thymeleaf">...</a>
+ * <a href="https://www.codejava.net/frameworks/spring-boot/spring-boot-thymeleaf-form-handling-tutorial">...</a>
  */
 
 @Slf4j

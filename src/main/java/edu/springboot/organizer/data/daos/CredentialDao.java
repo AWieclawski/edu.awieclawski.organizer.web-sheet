@@ -1,15 +1,19 @@
 package edu.springboot.organizer.data.daos;
 
 import edu.springboot.organizer.data.daos.base.BaseEntityDao;
-import edu.springboot.organizer.data.models.Credential;
 import edu.springboot.organizer.data.daos.base.BaseSequenceService;
+import edu.springboot.organizer.data.models.Credential;
 import edu.springboot.organizer.web.dtos.CredentialDto;
 import edu.springboot.organizer.web.mappers.CredentialRowMapper;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component(CredentialDao.BEAN_NAME)
 @DependsOn(BaseSequenceService.BEAN_NAME)
@@ -47,5 +51,13 @@ public class CredentialDao extends BaseEntityDao<Credential, CredentialDto> {
     @Override
     public String getSqlTableCreator() {
         return Credential.getSqlTableCreator();
+    }
+
+    public Optional<Credential> findByLogin(String login) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("login", login);
+        String query = String.format("SELECT * FROM %s WHERE %s = :login",
+                getTableName(), Credential.Const.LOGIN.getColumn());
+        return jdbcNamedParametersQuery(query, namedParameters).stream().findFirst();
     }
 }

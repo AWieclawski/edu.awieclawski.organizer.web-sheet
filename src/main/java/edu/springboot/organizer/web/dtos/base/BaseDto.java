@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public abstract class BaseDto {
-    protected String created;
+    protected String created;     // as ID
     protected Integer hashId;
     protected String errorMessage;
 

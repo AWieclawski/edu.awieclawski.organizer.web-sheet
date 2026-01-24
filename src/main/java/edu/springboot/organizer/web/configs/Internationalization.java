@@ -23,9 +23,8 @@ public class Internationalization implements WebMvcConfigurer {
     private String resolverType;
 
     /**
-     * https://stackoverflow.com/a/73167624/31086313
+     * <a href="https://stackoverflow.com/a/73167624/31086313">Not able to load a font in thymeleaf</a>
      *
-     * @param registry
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

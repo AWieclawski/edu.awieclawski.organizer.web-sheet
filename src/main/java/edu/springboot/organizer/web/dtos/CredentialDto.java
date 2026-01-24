@@ -13,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 public class CredentialDto extends BaseDto {
     private String login;
     private String password;
+    private String role;
     private String email;
 
     @Override

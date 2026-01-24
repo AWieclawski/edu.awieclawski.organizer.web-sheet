@@ -9,6 +9,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Repository(CredentialRepository.BEAN_NAME)
@@ -34,6 +35,10 @@ public class CredentialRepository extends BaseRepository<Credential, CredentialD
     @Override
     public Long howMany() {
         return super.howMany();
+    }
+
+    public Optional<Credential> findByLogin(String login) {
+        return ((CredentialDao) getBaseDao()).findByLogin(login);
     }
 
 }

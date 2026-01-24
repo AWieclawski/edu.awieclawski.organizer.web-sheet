@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service(value = CredentialService.BEAN_NAME)
@@ -50,6 +51,10 @@ public class CredentialService extends BaseService<Credential, CredentialDto> {
     @Override
     public void initTable() {
         initTable(Credential.getSqlTableCreator(), Credential.TABLE_NAME);
+    }
+
+    public Optional<Credential> findByLogin(String login) {
+        return credentialRepository.findByLogin(login);
     }
 
     @Override
