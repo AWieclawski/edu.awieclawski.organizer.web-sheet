@@ -3,6 +3,7 @@ package edu.springboot.organizer.web.mappers;
 import edu.springboot.organizer.data.models.Credential;
 import edu.springboot.organizer.data.models.base.BaseEntity;
 import edu.springboot.organizer.web.dtos.CredentialDto;
+import edu.springboot.organizer.web.dtos.Role;
 import edu.springboot.organizer.web.mappers.base.BaseRowMapper;
 
 import java.sql.ResultSet;
@@ -25,7 +26,7 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
     public CredentialDto toDto(Credential entity) {
         return CredentialDto.builder()
                 .login(entity.getLogin())
-                .role(entity.getRole())
+                .role(Role.findByName(entity.getRole()))
                 .email(entity.getEmail())
                 .password(entity.getPassword())
                 .created(entity.getId())
@@ -57,7 +58,7 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
     public Credential toEntity(CredentialDto dto) {
         return Credential.builder().id(dto.getCreated())
                 .login(dto.getLogin())
-                .role(dto.getRole())
+                .role(dto.getRole().name())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .build();

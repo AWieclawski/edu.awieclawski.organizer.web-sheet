@@ -41,4 +41,7 @@ public class CredentialRepository extends BaseRepository<Credential, CredentialD
         return ((CredentialDao) getBaseDao()).findByLogin(login);
     }
 
+    public Optional<Credential> findByEmail(String email) {
+        return ((CredentialDao) getBaseDao()).findByEmail(email);
+    }
 }

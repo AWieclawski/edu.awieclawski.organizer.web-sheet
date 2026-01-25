@@ -24,7 +24,7 @@ public class BaseSequenceService<S extends BaseEntity, T extends BaseDto> {
     private final TransactionBeansHelper transactionBeansHelper;
 
     public S handleEntityInn(RetryDataDto<S, T> retryDataDto) {
-        return transactionBeansHelper.runInNewTransactionBiFunction(this::handleEntityInn, retryDataDto, 0);
+        return transactionBeansHelper.runInNewTransactionFunction(this::handleEntityRetry, retryDataDto);
     }
 
     /**
@@ -34,24 +34,21 @@ public class BaseSequenceService<S extends BaseEntity, T extends BaseDto> {
      * org.springframework.jdbc.core.PreparedStatementSetter)
      * and retry with incremented id
      *
-     * @param retryDataDto
-     * @param count
-     * @return
+     * @return S entity
      */
-    private S handleEntityInn(RetryDataDto<S, T> retryDataDto, int count) {
-        S entity = retryDataDto.getEntity();
-        assignTimestampId(entity);
-        try {
-            return retryDataDto.getInsertMethod().apply(entity);
-        } catch (DataAccessException e) {
-            log.warn("Try attempt No [{}] inserting Entity [{}|{}] failed!", ++count, entity.getClass().getSimpleName(), entity.getId(), e);
-            if (count <= MAX_TRY_NUMBER) {
-                incrementId(entity, retryDataDto.getBaseIdKey());
-                retryDataDto.setEntity(entity);
-                handleEntityInn(retryDataDto, count);
+    private S handleEntityRetry(RetryDataDto<S, T> retryDataDto) {
+        assignTimestampId(retryDataDto.getEntity());
+        int retries = 0;
+        while (retries < MAX_TRY_NUMBER) {
+            try {
+                return retryDataDto.getInsertMethod().apply(retryDataDto.getEntity());
+            } catch (DataAccessException e) {
+                log.warn("Try attempt No [{}] inserting Entity [{}|{}] failed!", ++retries,
+                        retryDataDto.getEntity().getClass().getSimpleName(), retryDataDto.getEntity().getId(), e);
+                incrementId(retryDataDto.getEntity(), retryDataDto.getBaseIdKey());
             }
         }
-        return null;
+        throw new IllegalStateException(String.format("Task failed after %s attempts", MAX_TRY_NUMBER));
     }
 
     private void incrementId(S entity, String baseIdKey) {

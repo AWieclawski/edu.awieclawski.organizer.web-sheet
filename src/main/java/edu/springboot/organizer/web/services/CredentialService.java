@@ -57,6 +57,10 @@ public class CredentialService extends BaseService<Credential, CredentialDto> {
         return credentialRepository.findByLogin(login);
     }
 
+    public Optional<Credential> findByEmail(String email) {
+        return credentialRepository.findByEmail(email);
+    }
+
     @Override
     protected void setEntityClass() {
         this.entityClass = Credential.class;
@@ -71,6 +75,5 @@ public class CredentialService extends BaseService<Credential, CredentialDto> {
     protected BaseRowMapper<Credential, CredentialDto> getRowMapper() {
         return getRepository().getBaseRowMapper();
     }
-
 }
 

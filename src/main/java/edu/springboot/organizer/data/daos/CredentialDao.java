@@ -60,4 +60,12 @@ public class CredentialDao extends BaseEntityDao<Credential, CredentialDto> {
                 getTableName(), Credential.Const.LOGIN.getColumn());
         return jdbcNamedParametersQuery(query, namedParameters).stream().findFirst();
     }
+
+    public Optional<Credential> findByEmail(String email) {
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("email", email);
+        String query = String.format("SELECT * FROM %s WHERE %s = :email",
+                getTableName(), Credential.Const.EMAIL.getColumn());
+        return jdbcNamedParametersQuery(query, namedParameters).stream().findFirst();
+    }
 }

@@ -16,6 +16,7 @@ public class UserRowMapper implements BaseRowMapper<User, UserDto> {
         return User.builder()
                 .name(rs.getString(User.Const.NAME.getColumn()))
                 .surName(rs.getString(User.Const.SURNAME.getColumn()))
+                .credentialId(rs.getString(User.Const.CREDENTIAL.getColumn()))
                 .id(rs.getString(BaseEntity.BaseConst.ID.getColumn()))
                 .build();
     }
@@ -26,6 +27,7 @@ public class UserRowMapper implements BaseRowMapper<User, UserDto> {
                 .surName(entity.getSurName())
                 .created(entity.getId())
                 .hashId(entity.hashCode())
+                .credentialId(entity.getCredentialId())
                 .build();
     }
 
@@ -34,6 +36,7 @@ public class UserRowMapper implements BaseRowMapper<User, UserDto> {
         parameters.put(BaseEntity.BaseConst.ID.getColumn(), entity.getId());
         parameters.put(User.Const.NAME.getColumn(), entity.getName());
         parameters.put(User.Const.SURNAME.getColumn(), entity.getSurName());
+        parameters.put(User.Const.CREDENTIAL.getColumn(), entity.getCredentialId());
         return parameters;
     }
 
@@ -42,13 +45,16 @@ public class UserRowMapper implements BaseRowMapper<User, UserDto> {
         parameters.put(BaseEntity.BaseConst.ID.getColumn(), dto.getCreated());
         parameters.put(User.Const.NAME.getColumn(), dto.getName());
         parameters.put(User.Const.SURNAME.getColumn(), dto.getSurName());
+        parameters.put(User.Const.CREDENTIAL.getColumn(), dto.getCredentialId());
         return parameters;
     }
 
     public User toEntity(UserDto dto) {
-        return User.builder().id(dto.getCreated())
+        return User.builder()
+                .id(dto.getCreated())
                 .name(dto.getName())
                 .surName(dto.getSurName())
+                .credentialId(dto.getCredentialId())
                 .build();
     }
 }

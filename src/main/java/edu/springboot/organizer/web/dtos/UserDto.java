@@ -17,12 +17,25 @@ import lombok.experimental.SuperBuilder;
 public class UserDto extends BaseDto {
     private String name;
     private String surName;
+    private String credentialId;
 
     @Override
     public void validate() {
+        validateName();
+        validateSurname();
     }
 
     @Override
     public void autoUpdate() {
+    }
+
+    private void validateName() {
+        if (this.name == null)
+            handleErrorMessage("Name cannot be empty!");
+    }
+
+    private void validateSurname() {
+        if (this.surName == null)
+            handleErrorMessage("Surname cannot be empty!");
     }
 }

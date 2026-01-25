@@ -10,7 +10,7 @@ spring:
   main:
     banner-mode: off
   datasource:
-    url: jdbc:sqlite:appdata.db
+    url: jdbc:sqlite:datastore/testdata.db
 # end-points
 endpoint:
   visitors: api/visitors
