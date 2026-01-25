@@ -49,7 +49,7 @@ public class RegistrationController {
     public String registration(@ModelAttribute("userData") UserData userData,
                                Model model) {
 
-        SecurityUser existingUser = (SecurityUser) userService.getUserByUsername(userData.getCredentialData().getLogin());
+        SecurityUser existingUser = (SecurityUser) userService.checkUserByCredentials(userData.getCredentialData());
 
         if (existingUser != null && existingUser.getUsername() != null && !existingUser.getUsername().isEmpty()) {
             log.error("There is already an account registered with the same login [{}]", existingUser.getUsername());
