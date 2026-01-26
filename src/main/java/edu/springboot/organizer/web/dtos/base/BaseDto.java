@@ -7,12 +7,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 public abstract class BaseDto {
+
+    private final static String LIMITER = " ; ";
+
     protected String created;     // as ID
     protected Integer hashId;
     protected String errorMessage;
@@ -55,7 +62,11 @@ public abstract class BaseDto {
      */
     public abstract void autoUpdate();
 
+    public List<String> getErrorList() {
+        return errorMessage != null ? Arrays.asList(errorMessage.split(LIMITER)) : new ArrayList<>();
+    }
+
     protected void handleErrorMessage(String message) {
-        this.errorMessage = this.errorMessage == null ? message : this.errorMessage + " | " + message;
+        this.errorMessage = this.errorMessage == null ? message : this.errorMessage + LIMITER + message;
     }
 }

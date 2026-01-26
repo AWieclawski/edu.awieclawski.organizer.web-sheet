@@ -37,6 +37,10 @@ public class CredentialDto extends BaseDto {
     public void autoUpdate() {
     }
 
+    public void addErrorMessage(String message) {
+        handleErrorMessage(message);
+    }
+
     // validators
 
     private void validateLogin() {

@@ -33,10 +33,14 @@
         <div class="card">
             <div class="card-header">
                 <h2 class="text-center">Registration</h2>
-
-                <p class="text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></p>
-
             </div>
+
+            <div th:if="${errorMessages?.size() > 0}" class="alert alert-danger" >
+                <div th:each="errMsg : ${errorMessages}">
+                    <p th:text="${errMsg}"></p>
+                </div>
+            </div>
+
             <div th:if="${param.success}">
                 <div class="alert alert-info">
                     You have successfully registered our app!
@@ -50,7 +54,7 @@
                         th:object="${userData}"
                 >
                     <div class="form-group mb-3">
-                        <label class="form-label">First Name</label>
+                        <label class="form-label">Name</label>
                         <input
                                 class="form-control"
                                 id="firstName"
@@ -63,12 +67,12 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label">Last Name</label>
+                        <label class="form-label">Surname</label>
                         <input
                                 class="form-control"
-                                id="lastName"
-                                name="lastName"
-                                placeholder="Enter last name"
+                                id="surName"
+                                name="surName"
+                                placeholder="Enter surname"
                                 th:field="*{userSecured.surName}"
                                 type="text"
                         />
@@ -114,7 +118,7 @@
 
                     </div>
 
-                   <div class="form-group">
+                    <div class="form-group">
                         <button class="btn btn-primary" type="submit">Register</button>
                         <span>Already registered? <a th:href="@{/login}">Login here</a></span>
                     </div>

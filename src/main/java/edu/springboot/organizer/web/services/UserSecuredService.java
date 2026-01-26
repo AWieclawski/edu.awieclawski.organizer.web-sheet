@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 /**
@@ -42,25 +41,21 @@ public class UserSecuredService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return getOptionalAppUserByName(username)
+        return getOptionalAppUserByLogin(username)
                 .map(SecurityUser::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found!"));
     }
 
-    public UserDetails checkUserByCredentials(CredentialDto credentialDto) {
-        return getOptionalAppUserByName(credentialDto.getLogin())
-                .map(SecurityUser::new)
-                .orElse(getOptionalAppUserByEmail(credentialDto.getEmail())
-                        .map(SecurityUser::new)
-                        .orElse(null)
-                );
-    }
-
-    public UserDetails getUserByUsername(String username) {
-        return getOptionalAppUserByName(username)
-                .map(SecurityUser::new)
-                .orElse(null);
+    @Transactional(readOnly = true)
+    public void checkUserDate(final UserData userData) {
+        credentialService.findByLogin(userData.getCredentialData().getLogin()).ifPresent(
+                it -> userData.getCredentialData()
+                        .addErrorMessage("Login already taken: " + it.getLogin()));
+        credentialService.findByEmail(userData.getCredentialData().getEmail()).ifPresent(
+                it -> userData.getCredentialData()
+                        .addErrorMessage("Email already taken: " + it.getEmail()));
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -74,37 +69,23 @@ public class UserSecuredService implements UserDetailsService {
         return userService.createUser(user);
     }
 
-    private Optional<UserData> getOptionalAppUserByName(String username) {
-        return Optional.ofNullable(findAtomicUserByLogin(username).get());
+    private Optional<UserData> getOptionalAppUserByLogin(String login) {
+        return Optional.ofNullable(getUserDataByLogin(login));
     }
 
-    private Optional<UserData> getOptionalAppUserByEmail(String username) {
-        return Optional.ofNullable(findAtomicUserByEmail(username).get());
-    }
-
-    private AtomicReference<UserData> findAtomicUserByLogin(String login) {
-        AtomicReference<UserData> userDataAtomicReference = new AtomicReference<>();
+    private UserData getUserDataByLogin(String login) {
+        UserData userData = UserData.builder().build();
         credentialService.findByLogin(login).ifPresent(credential -> userService.getRepository().findByCredential(credential.getId())
-                .ifPresent(getUserConsumer(credential, userDataAtomicReference))
+                .ifPresent(getUserConsumer(credential, userData))
         );
-        return userDataAtomicReference;
+        return userData;
     }
 
-    private AtomicReference<UserData> findAtomicUserByEmail(String email) {
-        AtomicReference<UserData> userDataAtomicReference = new AtomicReference<>();
-        credentialService.findByEmail(email).ifPresent(credential -> userService.getRepository().findByCredential(credential.getId())
-                .ifPresent(getUserConsumer(credential, userDataAtomicReference))
-        );
-        return userDataAtomicReference;
-    }
-
-    private static Consumer<User> getUserConsumer(Credential credential, AtomicReference<UserData> userDataAtomicReference) {
-        return user -> userDataAtomicReference.lazySet(
-                UserData.builder()
-                        .credentialData(new CredentialRowMapper().toDto(credential))
-                        .userSecured(new UserRowMapper().toDto(user))
-                        .build()
-        );
+    private static Consumer<User> getUserConsumer(Credential credential, UserData userData) {
+        return user -> {
+            userData.setCredentialData(new CredentialRowMapper().toDto(credential));
+            userData.setUserSecured(new UserRowMapper().toDto(user));
+        };
     }
 
     private void assignCredentials(UserData userData) {

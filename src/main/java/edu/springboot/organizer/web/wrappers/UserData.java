@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -24,6 +27,13 @@ public class UserData {
                 this.credentialData.getErrorMessage() != null
                         ? " | " + this.credentialData.getErrorMessage() : "")
                 : this.credentialData.getErrorMessage();
+    }
+
+    public List<String> getErrorList() {
+        List<String> result = new ArrayList<>();
+        result.addAll(userSecured.getErrorList());
+        result.addAll(credentialData.getErrorList());
+        return result;
     }
 
 }

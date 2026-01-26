@@ -3,7 +3,6 @@ package edu.springboot.organizer.web.controllers;
 import edu.springboot.organizer.web.dtos.Role;
 import edu.springboot.organizer.web.dtos.UserDto;
 import edu.springboot.organizer.web.services.UserSecuredService;
-import edu.springboot.organizer.web.wrappers.SecurityUser;
 import edu.springboot.organizer.web.wrappers.UserData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,20 +48,12 @@ public class RegistrationController {
     public String registration(@ModelAttribute("userData") UserData userData,
                                Model model) {
 
-        SecurityUser existingUser = (SecurityUser) userService.checkUserByCredentials(userData.getCredentialData());
-
-        if (existingUser != null && existingUser.getUsername() != null && !existingUser.getUsername().isEmpty()) {
-            log.error("There is already an account registered with the same login [{}]", existingUser.getUsername());
-            userData.getCredentialData().setErrorMessage("Login already taken: " + existingUser.getUsername() + " please try another one.");
-            model.addAttribute("errorMessage", userData.getErrorMessages());
-            model.addAttribute("userData", userData);
-            return "/register";
-        }
+        userService.checkUserDate(userData);
         userData.getCredentialData().setRole(Role.ROLE_USER);
         userData.validate();
 
         if (userData.getErrorMessages() != null && !userData.getErrorMessages().isEmpty()) {
-            model.addAttribute("errorMessage", userData.getErrorMessages());
+            model.addAttribute("errorMessages", userData.getErrorList());
             model.addAttribute("userData", userData);
             return "/register";
         }

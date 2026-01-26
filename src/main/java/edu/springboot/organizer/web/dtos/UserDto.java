@@ -30,12 +30,12 @@ public class UserDto extends BaseDto {
     }
 
     private void validateName() {
-        if (this.name == null)
+        if (this.name == null || this.name.isEmpty())
             handleErrorMessage("Name cannot be empty!");
     }
 
     private void validateSurname() {
-        if (this.surName == null)
+        if (this.surName == null || this.surName.isEmpty())
             handleErrorMessage("Surname cannot be empty!");
     }
 }
