@@ -61,6 +61,7 @@ public class CredentialRowMapper implements BaseRowMapper<Credential, Credential
                 .role(dto.getRole().name())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
+                .hashId(dto.hashCode())
                 .build();
     }
 

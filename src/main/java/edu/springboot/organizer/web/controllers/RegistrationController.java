@@ -48,7 +48,7 @@ public class RegistrationController {
     public String registration(@ModelAttribute("userData") UserData userData,
                                Model model) {
 
-        userService.checkUserDate(userData);
+        userService.checkUserData(userData);
         userData.getCredentialData().setRole(Role.ROLE_USER);
         userData.validate();
 

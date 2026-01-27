@@ -55,6 +55,7 @@ public class UserRowMapper implements BaseRowMapper<User, UserDto> {
                 .name(dto.getName())
                 .surName(dto.getSurName())
                 .credentialId(dto.getCredentialId())
+                .hashId(dto.hashCode())
                 .build();
     }
 }

@@ -49,7 +49,7 @@ public class UserSecuredService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public void checkUserDate(final UserData userData) {
+    public void checkUserData(final UserData userData) {
         credentialService.findByLogin(userData.getCredentialData().getLogin()).ifPresent(
                 it -> userData.getCredentialData()
                         .addErrorMessage("Login already taken: " + it.getLogin()));

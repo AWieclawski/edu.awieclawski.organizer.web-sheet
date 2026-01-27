@@ -59,6 +59,7 @@ public class MonthRecordRowMapper implements BaseRowMapper<MonthRecord, MonthRec
                 .setId(dto.getSetId())
                 .standardHours(dto.getStandardHours())
                 .employee(dto.getEmployee())
+                .hashId(dto.hashCode())
                 .build();
     }
 

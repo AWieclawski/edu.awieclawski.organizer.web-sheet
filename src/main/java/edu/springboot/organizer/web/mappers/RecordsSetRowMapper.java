@@ -56,6 +56,7 @@ public class RecordsSetRowMapper implements BaseRowMapper<RecordsSet, RecordsSet
                 .userId(dto.getUserId())
                 .month(dto.getMonth())
                 .year(dto.getYear())
+                .hashId(dto.hashCode())
                 .build();
     }
 

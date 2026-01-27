@@ -88,6 +88,7 @@ public class DateCellRowMapper implements BaseRowMapper<DateCell, DateCellDto> {
                 .localDate(DateUtils.getStandardLocalDate(dto.getDate()))
                 .workType(dto.getWorkType()!= null ? dto.getWorkType().name() : WorkType.T.name())
                 .monthRecordId(dto.getMonthRecordId())
+                .hashId(dto.hashCode())
                 .build();
     }
 

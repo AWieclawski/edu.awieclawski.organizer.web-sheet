@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +17,7 @@ import java.util.List;
 @SuperBuilder
 public abstract class BaseDto {
 
-    private final static String LIMITER = " ; ";
+    private final static String LIMITER = " | ";
 
     protected String created;     // as ID
     protected Integer hashId;
@@ -39,11 +38,6 @@ public abstract class BaseDto {
         return this.hashId;
     }
 
-    public BaseDto(String created, Integer hashId) {
-        this.created = created;
-        hashCode();
-    }
-
     public boolean hasError() {
         return this.errorMessage != null;
     }
@@ -51,19 +45,18 @@ public abstract class BaseDto {
     /**
      * Method to validate after.
      *
-     * @return
      */
     public abstract void validate();
 
     /**
      * Method to populate generated fields values
      *
-     * @return
      */
     public abstract void autoUpdate();
 
     public List<String> getErrorList() {
-        return errorMessage != null ? Arrays.asList(errorMessage.split(LIMITER)) : new ArrayList<>();
+        String nextStep = errorMessage != null ? errorMessage.replace(LIMITER, "#") : "";
+        return Arrays.asList(nextStep.split("#"));
     }
 
     protected void handleErrorMessage(String message) {

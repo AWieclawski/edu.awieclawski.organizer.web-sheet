@@ -65,6 +65,7 @@ public class VisitorRowMapper implements BaseRowMapper<Visitor, VisitorDto> {
                 .url(dto.getUrl())
                 .ip(dto.getIp())
                 .name(dto.getName())
+                .hashId(dto.hashCode())
                 .build();
     }
 

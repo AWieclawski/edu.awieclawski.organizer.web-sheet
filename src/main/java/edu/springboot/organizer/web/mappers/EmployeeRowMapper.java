@@ -60,6 +60,7 @@ public class EmployeeRowMapper implements BaseRowMapper<Employee, EmployeeDto> {
                 .name(dto.getName())
                 .surName(dto.getSurName())
                 .uniqNick(dto.getUniqNick())
+                .hashId(dto.hashCode())
                 .build();
     }
 
