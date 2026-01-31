@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html
-      xmlns:th="http://www.thymeleaf.org">
+        xmlns:th="http://www.thymeleaf.org">
 <head>
 
     <title>Main Page</title>
@@ -13,7 +13,9 @@
 
 <body>
 
-<div class="containeer">
+<div th:replace="~{fragments/user-upper-bar :: user-bar}"></div>
+
+<div class="container">
 
     <div th:replace="~{fragments/welcome-header :: header}"></div>
 

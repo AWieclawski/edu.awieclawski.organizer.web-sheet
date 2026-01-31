@@ -1,0 +1,13 @@
+<nav th:fragment="user-bar" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+    <div class="userBar">
+        <div sec:authorize="isAuthenticated()" class="rightHeader">
+            <p><span th:text="#{user.name} + ': '"></span><b><span sec:authentication="name"></span></b>
+                <a th:href="@{/logout}">
+                    <button id="logOutButton" type="button" class="logOutBtn" th:text="#{user.logout}"></button>
+                </a>
+            </p>
+        </div>
+    </div>
+
+</nav>

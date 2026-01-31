@@ -10,6 +10,8 @@
 <body th:with="editAll=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormController).EDIT_ALL},
 editOne=${T(edu.springboot.organizer.web.controllers.forms.MonthRecordsFormController).EDIT_ONE}">
 
+<div th:replace="~{fragments/user-upper-bar :: user-bar}"></div>
+
 <h1><a th:text="#{pick.date.back}" href="/pick-date"></a></h1>
 
 <p><span th:text="#{chosen.date.is}"></span>:

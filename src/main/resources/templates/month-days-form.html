@@ -8,6 +8,10 @@
 
 </head>
 <body>
+
+
+<div th:replace="~{fragments/user-upper-bar :: user-bar}"></div>
+
 <h1>Form month days</h1>
 
 <form th:with="actionPath=${viewRedirect} + '/record/' + ${lookDate}"

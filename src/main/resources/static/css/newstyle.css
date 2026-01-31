@@ -273,6 +273,32 @@ td.holiday {
     margin-top: 2px;
 }
 
+.userBar {
+    width: 100%;
+    padding-right: 2px;
+    padding-left: 2px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.rightHeader {
+    color: #aaaaaa;
+    min-width: 190px;
+    text-align: right;
+    padding-left: 4px;
+}
+
+.logOutBtn {
+    color: #111111 !important;
+    margin-top: 2px;
+    background-color: lightpink;
+    min-width: 50px;
+}
+
+#logOutButton {
+    margin-left: 15px;
+}
+
 @media screen and (max-width: 1200px) {
 
 }

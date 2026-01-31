@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <title th:text="#{form.date.header}"></title>
 
     <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
 
 </head>
 <body>
+
+<div th:replace="~{fragments/user-upper-bar :: user-bar}"></div>
 
 <h1><a th:text="#{back.home}" href="/home"></a></h1>
 

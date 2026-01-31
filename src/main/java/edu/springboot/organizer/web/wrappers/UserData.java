@@ -36,4 +36,18 @@ public class UserData {
         return result;
     }
 
+    public String getFullName() {
+        String name = getUserSecured() != null ? getUserSecured().getName() : "";
+        String surName = getUserSecured() != null ? getUserSecured().getSurName() : "";
+        String login = getCredentialData() != null ? getCredentialData().getLogin() : "";
+        String limiter1 = name.isEmpty() ? "" : " ";
+        String limiter2 = surName.isEmpty() ? "" : " ";
+        return name + limiter1 + surName + limiter2 + "[" + login + "]";
+    }
+
+    @Override
+    public String toString() {
+        return getFullName();
+    }
+
 }

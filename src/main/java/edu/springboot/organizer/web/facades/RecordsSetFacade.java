@@ -13,12 +13,16 @@ import edu.springboot.organizer.web.exceptions.ControllerException;
 import edu.springboot.organizer.web.exceptions.ResultNotFoundException;
 import edu.springboot.organizer.web.services.MonthRecordService;
 import edu.springboot.organizer.web.services.RecordsSetService;
-import edu.springboot.organizer.web.services.UserService;
 import edu.springboot.organizer.web.wrappers.ResultsDto;
+import edu.springboot.organizer.web.wrappers.SecurityUser;
+import edu.springboot.organizer.web.wrappers.UserData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.Month;
@@ -39,8 +43,6 @@ public class RecordsSetFacade {
     private final RecordsSetService recordsSetService;
 
     private final MonthRecordService monthRecordService;
-
-    private final UserService userService;
 
     @Value("${endpoint.form-date}")
     private String formRedirect;
@@ -266,7 +268,20 @@ public class RecordsSetFacade {
     }
 
     private UserDto getCtxUser() {
-        return userService.getCtxUser();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                UserData appUser = ((SecurityUser) principal).getAppUser();
+                log.info("Got App User: {} from the context", appUser);
+                return appUser.getUserSecured(); // Cast to UserDetails for custom user information
+            } else {
+                log.warn("Unexpected Object [{}] from the context", principal.getClass().getSimpleName());
+            }
+        } else {
+            log.error("No Object from the context!");
+        }
+        return null;
     }
 
 }

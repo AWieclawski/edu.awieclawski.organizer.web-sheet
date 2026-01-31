@@ -8,6 +8,9 @@
 
 </head>
 <body>
+
+<div th:replace="~{fragments/user-upper-bar :: user-bar}"></div>
+
 <h1 th:text="#{form.all.employees.header}"></h1>
 <p><span th:text="#{chosen.date.is}"></span>:
     <b><span th:text="${recordsSet.getYear()}+'-'+${recordsSet.getDisplayMonthNo()}"></span></b>
