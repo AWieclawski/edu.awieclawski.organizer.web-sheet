@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Main Page</title>
+
+    <th:block th:include="fragments/head-inner-fragment :: generic-head"></th:block>
+
+    <script type="text/javascript" th:src="@{/js/functions.js}"></script>
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/user-upper-bar :: user-bar}"></div>
+
+<div class="container">
+
+    <div th:replace="~{fragments/welcome-header :: header}"></div>
+
+    <div class="mainframe">
+
+        <h2><a th:text="#{pick.date}" href="/pick-date"></a></h2>
+
+    </div>
+
+    <div th:replace="~{fragments/main-footer :: footer}"></div>
+
+</div>
+</body>
+</html>

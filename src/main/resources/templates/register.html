@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+<th:block th:include="fragments/head-public-fragment :: public-head"></th:block>
+
+<body>
+
+<div th:replace="fragments/nav-register-fragment :: public-nav-register"></div>
+
+<br/><br/><br/>
+<div class="container">
+    <div class="row col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Registration</h2>
+            </div>
+
+            <div th:if="${errorMessages?.size() > 0}" class="alert alert-danger">
+                <div th:each="errMsg : ${errorMessages}">
+                    <p th:text="${errMsg}"></p>
+                </div>
+            </div>
+
+            <div th:if="${param.success}">
+                <div class="alert alert-info">
+                    You have successfully registered our app!
+                </div>
+            </div>
+            <div class="card-body">
+                <form
+                        method="post"
+                        role="form"
+                        th:action="@{/register/save}"
+                        th:object="${userData}"
+                >
+                    <div class="form-group mb-3">
+                        <label for="firstName" class="form-label">Name<sup class="text-danger">*</sup></label>
+                        <input
+                                class="form-control"
+                                id="firstName"
+                                name="firstName"
+                                placeholder="Enter first name"
+                                th:field="*{userSecured.name}"
+                                type="text"
+                        />
+
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="surName" class="form-label">Surname<sup class="text-danger">*</sup></label>
+                        <input
+                                class="form-control"
+                                id="surName"
+                                name="surName"
+                                placeholder="Enter surname"
+                                th:field="*{userSecured.surName}"
+                                type="text"
+                        />
+
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="login" class="form-label">Login<sup class="text-danger">*</sup></label>
+                        <input
+                                class="form-control"
+                                id="login"
+                                name="login"
+                                placeholder="Enter login"
+                                th:field="*{credentialData.login}"
+                                type="text"
+                        />
+
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="email" class="form-label">Email<sup class="text-danger">*</sup></label>
+                        <input
+                                class="form-control"
+                                id="email"
+                                name="email"
+                                placeholder="Enter email address"
+                                th:field="*{credentialData.email}"
+                                type="email"
+                        />
+
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="password" class="form-label">Password<sup class="text-danger">*</sup></label>
+                        <input
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                placeholder="Enter password"
+                                th:field="*{credentialData.password}"
+                                type="password"
+                        />
+
+                    </div>
+
+                    <div class="form-group text-danger mb-3">
+                        <sup>*</sup> field required
+                    </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Register</button>
+                        <span>Already registered? <a th:href="@{/login}">Login here</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
