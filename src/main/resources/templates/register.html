@@ -14,13 +14,7 @@
     <div class="row col-md-8 offset-md-2">
         <div class="card">
             <div class="card-header">
-                <h2 class="text-center">Registration</h2>
-            </div>
-
-            <div th:if="${errorMessages?.size() > 0}" class="alert alert-danger">
-                <div th:each="errMsg : ${errorMessages}">
-                    <p th:text="${errMsg}"></p>
-                </div>
+                <h2 class="text-center" th:text="#{register.header}"></h2>
             </div>
 
             <div th:if="${param.success}">
@@ -28,6 +22,7 @@
                     You have successfully registered our app!
                 </div>
             </div>
+
             <div class="card-body">
                 <form
                         method="post"
@@ -36,82 +31,100 @@
                         th:object="${userData}"
                 >
                     <div class="form-group mb-3">
-                        <label for="firstName" class="form-label">Name<sup class="text-danger">*</sup></label>
-                        <input
-                                class="form-control"
-                                id="firstName"
-                                name="firstName"
-                                placeholder="Enter first name"
-                                th:field="*{userSecured.name}"
-                                type="text"
+                        <label for="name" class="form-label" th:text="#{user.name}"><sup class="text-danger">*</sup></label>
+                        <input th:classappend="${userData?.userSecured?.getFromErrorMap('name') != null ? 'alert-danger' : ''}"
+                               class="form-control"
+                               id="name"
+                               name="name"
+                               placeholder="Enter first name"
+                               th:field="*{userSecured.name}"
+                               type="text"
                         />
+                        <p th:if="*{userSecured?.getFromErrorMap('name')}"
+                           th:text="*{userSecured?.getFromErrorMap('name')}" class="text-danger"></p>
 
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="surName" class="form-label">Surname<sup class="text-danger">*</sup></label>
-                        <input
-                                class="form-control"
-                                id="surName"
-                                name="surName"
-                                placeholder="Enter surname"
-                                th:field="*{userSecured.surName}"
-                                type="text"
+                        <label for="surName" class="form-label" th:text="#{user.surname}"><sup class="text-danger">*</sup></label>
+                        <input th:classappend="${userData?.userSecured?.getFromErrorMap('surName') != null ? 'alert-danger' : ''}"
+                               class="form-control"
+                               id="surName"
+                               name="surName"
+                               placeholder="Enter surname"
+                               th:field="*{userSecured.surName}"
+                               type="text"
                         />
+                        <p th:if="*{userSecured?.getFromErrorMap('surName')}"
+                           th:text="*{userSecured?.getFromErrorMap('surName')}" class="text-danger"></p>
 
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="login" class="form-label">Login<sup class="text-danger">*</sup></label>
-                        <input
-                                class="form-control"
-                                id="login"
-                                name="login"
-                                placeholder="Enter login"
-                                th:field="*{credentialData.login}"
-                                type="text"
+                        <label for="login" class="form-label" th:text="#{user.login}"><sup class="text-danger">*</sup></label>
+                        <input th:classappend="${userData?.userSecured?.getFromErrorMap('login') != null ? 'alert-danger' : ''}"
+                               class="form-control"
+                               id="login"
+                               name="login"
+                               placeholder="Enter login"
+                               th:field="*{credentialData.login}"
+                               type="text"
                         />
-
+                        <p th:if="*{userSecured?.getFromErrorMap('login')}"
+                           th:text="*{userSecured?.getFromErrorMap('login')}" class="text-danger"></p>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="email" class="form-label">Email<sup class="text-danger">*</sup></label>
-                        <input
-                                class="form-control"
-                                id="email"
-                                name="email"
-                                placeholder="Enter email address"
-                                th:field="*{credentialData.email}"
-                                type="email"
+                        <label for="email" class="form-label" th:text="#{user.email}"><sup class="text-danger">*</sup></label>
+                        <input th:classappend="${userData?.userSecured?.getFromErrorMap('email') != null ? 'alert-danger' : ''}"
+                               class="form-control"
+                               id="email"
+                               name="email"
+                               placeholder="Enter email address"
+                               th:field="*{credentialData.email}"
+                               type="email"
                         />
-
+                        <p th:if="*{userSecured?.getFromErrorMap('email')}"
+                           th:text="*{userSecured?.getFromErrorMap('email')}" class="text-danger"></p>
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="password" class="form-label">Password<sup class="text-danger">*</sup></label>
-                        <input
-                                class="form-control"
-                                id="password"
-                                name="password"
-                                placeholder="Enter password"
-                                th:field="*{credentialData.password}"
-                                type="password"
+                        <label for="password" class="form-label" th:text="#{user.pass}"><sup class="text-danger">*</sup></label>
+                        <input th:classappend="${userData?.userSecured?.getFromErrorMap('password') != null ? 'alert-danger' : ''}"
+                               class="form-control"
+                               id="password"
+                               name="password"
+                               placeholder="Enter password"
+                               th:field="*{credentialData.password}"
+                               type="password"
                         />
-
+                        <p th:if="*{userSecured?.getFromErrorMap('password')}"
+                           th:text="*{userSecured?.getFromErrorMap('password')}" class="text-danger"></p>
                     </div>
 
                     <div class="form-group text-danger mb-3">
-                        <sup>*</sup> field required
+                        <sup>*</sup> <span th:text="#{form.field.req}"></span>
                     </div>
 
                     <div class="form-group">
-                        <button class="btn btn-primary" type="submit">Register</button>
-                        <span>Already registered? <a th:href="@{/login}">Login here</a></span>
+
+                        <div th:if="${errorMessages?.size() > 0}" class="d-sm-inline-block">
+                            <span class="text-danger" th:text="#{form.error}"></span><span>&emsp;</span>
+                        </div>
+
+                        <div class="d-sm-inline-block">
+                            <button class="btn btn-primary" type="submit"  th:text="#{user.register}"></button>
+                            <span th:text="#{is.user.reg}"></span> <a th:href="@{/login}" th:text="#{user.login.here}"></a>
+                        </div>
+
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<div th:replace="~{fragments/main-footer :: footer}"></div>
+
 </body>
 </html>

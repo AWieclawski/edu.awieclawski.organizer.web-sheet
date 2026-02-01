@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * <a href="https://www.baeldung.com/registration-with-spring-mvc-and-spring-security">
@@ -35,10 +37,13 @@ public class RegistrationController {
 
     // handler method to handle user registration form request
     @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
+    public String showRegistrationForm(Model model, HttpServletRequest httpServletRequest) {
+
         // create model object to store form data
         UserData userData = UserData.builder().build();
         model.addAttribute("userData", userData);
+        String link = String.valueOf(httpServletRequest.getRequestURL());
+        model.addAttribute("urLink", link);
         return "register";
     }
 
@@ -46,7 +51,11 @@ public class RegistrationController {
     // handler method to handle user registration form submit request
     @PostMapping("/register/save")
     public String registration(@ModelAttribute("userData") UserData userData,
+                               HttpServletRequest httpServletRequest,
                                Model model) {
+
+        String link = String.valueOf(httpServletRequest.getRequestURL());
+        model.addAttribute("urLink", link);
 
         userService.checkUserData(userData);
         userData.getCredentialData().setRole(Role.ROLE_USER);
@@ -65,7 +74,9 @@ public class RegistrationController {
 
     // handler method to handle login request
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model, HttpServletRequest httpServletRequest) {
+        String link = String.valueOf(httpServletRequest.getRequestURL());
+        model.addAttribute("urLink", link);
         return "login";
     }
 }

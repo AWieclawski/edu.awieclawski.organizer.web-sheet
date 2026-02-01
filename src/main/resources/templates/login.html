@@ -23,7 +23,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <h2 class="text-center">Login Form</h2>
+                    <h2 class="text-center" th:text="#{login.header}"></h2>
                 </div>
                 <div class="card-body">
                     <form
@@ -33,7 +33,7 @@
                             class="form-horizontal"
                     >
                         <div class="form-group mb-3">
-                            <label for="username" class="control-label"> Login</label>
+                            <label for="username" class="control-label" th:text="#{user.login}"></label>
                             <input
                                     type="text"
                                     id="username"
@@ -44,7 +44,7 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="password" class="control-label"> Password</label>
+                            <label for="password" class="control-label" th:text="#{user.pass}"></label>
                             <input
                                     type="password"
                                     id="password"
@@ -54,10 +54,9 @@
                             />
                         </div>
                         <div class="form-group mb-3">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <span> Not registered ?
-                                <a th:href="@{/register}">Register/Signup here</a>
-                            </span>
+                            <button type="submit" class="btn btn-primary" th:text="#{user.login.submit}"></button>
+                            <span th:text="#{not.user.reg}"></span>
+                                <a th:href="@{/register}" th:text="#{user.reg.here}"></a>
                         </div>
                     </form>
                 </div>
@@ -65,6 +64,9 @@
         </div>
     </div>
 </div>
+
+<div th:replace="~{fragments/main-footer :: footer}"></div>
+
 </body>
 </html>
 

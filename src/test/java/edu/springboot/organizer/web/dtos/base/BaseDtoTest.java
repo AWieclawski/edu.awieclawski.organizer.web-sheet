@@ -11,7 +11,7 @@ class BaseDtoTest {
         int iterate = 3;
         CredentialDto testObject = CredentialDto.builder().build();
         for (int i = 0; i < iterate; i++) {
-            testObject.addErrorMessage("Error");
+            testObject.addToErrorMap("key" + i, "error" + i);
         }
         Assertions.assertFalse(testObject.getErrorList().isEmpty());
         Assertions.assertEquals(iterate, testObject.getErrorList().size());

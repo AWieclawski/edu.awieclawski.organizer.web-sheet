@@ -43,7 +43,8 @@
     <tr>
         <th:block th:each="dateCellHr, dateCellHrStat : ${monthRecord?.dateCells}">
             <td th:if="${dateCellHrStat.index == 0}" class="leftDataInput"><span>
-                <input type="text" th:field="*{monthRecords[__${monthRecordStat.index}__].employee}"
+                <input th:classappend="${dateCellHr?.getFromErrorMap('employee') != null ? 'redAlert' : ''}"
+                        type="text" th:field="*{monthRecords[__${monthRecordStat.index}__].employee}"
                        placeholder="Enter employee name"/>
                             </span></td>
             <td th:if="${dateCellHrStat.index == 0}" class="leftLabel hrCell"><span th:text="#{hours.range}"></span>
@@ -52,7 +53,8 @@
                             <td colspan="1" class="hrCell hrBegin"
                                 th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
                                 th:title="'begin hour (' + ${dateCellHr?.date} + ')'">
-                                <input type="number" th:id="'dateCellHr_beginHour_'  + ${dateCellHr?.hashId}"
+                                <input th:classappend="${dateCellHr?.getFromErrorMap('beginHour') != null ? 'redAlert' : ''}"
+                                        type="number" th:id="'dateCellHr_beginHour_'  + ${dateCellHr?.hashId}"
                                        th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${dateCellHrStat.index}__].beginHour}"/>
                             </td>
                             <td colspan="1" class="hrPause"
@@ -60,7 +62,8 @@
                             <td colspan="1" class="hrCell hrEnd"
                                 th:classappend="${dateCellHr?.holiday ? 'holiday' : ''}"
                                 th:title="'end hour (' + ${dateCellHr?.date} + ')'">
-                                <input type="number" th:id="'dateCellHr_endHour_' + ${dateCellHr?.hashId}"
+                                <input th:classappend="${dateCellHr?.getFromErrorMap('endHour') != null ? 'redAlert' : ''}"
+                                        type="number" th:id="'dateCellHr_endHour_' + ${dateCellHr?.hashId}"
                                        th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${dateCellHrStat.index}__].endHour}"/>
                             </td>
                             </span>
@@ -78,7 +81,8 @@
                 th:with="dateCell=${monthRecord?.dateCells?.get(cellNo)}" class="hrsCellEdited"
                 th:title="'hours (' + ${dateCell?.date} +')'"
                 th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
-                <span th:text="${dateCell?.hours}"></span>
+                <span th:classappend="${dateCell?.getFromErrorMap('hours') != null ? 'redAlert' :''}"
+                        th:text="${dateCell?.hours}"></span>
             </td>
             <td th:if="${cellNo == dateMonthSize}" class="rightLabel"
                 th:classappend="${monthRecord?.calculateHours <= monthRecord?.standardHours ? ' hrsCell' : 'redAlert'}">
@@ -98,7 +102,8 @@
                 th:title="'overtime (' + ${dateCell?.date} + ')'"
                 th:classappend="${dateCell?.holiday ? 'holiday' : ''}">
                                 <span th:if="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">
-                                <input type="number" th:id="'dateCell_overtime_'  + ${dateCell?.hashId}"
+                                <input th:classappend="${dateCell?.getFromErrorMap('overtime') != null ? 'redAlert' : ''}"
+                                        type="number" th:id="'dateCell_overtime_'  + ${dateCell?.hashId}"
                                        th:field="*{monthRecords[__${monthRecordStat.index}__].dateCells[__${cellNo}__].overtime}"/>
                                 </span>
                 <span th:unless="${dateCell?.workType == T(edu.springboot.organizer.web.enums.WorkType).T}">n/a</span>

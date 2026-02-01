@@ -48,42 +48,44 @@ public class DateCellDto extends BaseDto {
     // validators
 
     private void validateHours() {
-        if (this.hours != null && this.hours < 0)
-            handleErrorMessage("Hours cannot be negative! [" + hours + "]");
-        else if (this.hours != null && this.hours > 24) {
-            handleErrorMessage("Hours cannot be greater than 24! [" + hours + "]");
-        } else if (this.beginHour != null && this.endHour != null && this.beginHour > this.endHour) {
-            handleErrorMessage("Begin Hour cannot be greater than End Hour! [" + this.beginHour + ">" + this.endHour + "]");
+        if (this.hours != null && this.hours < 0) {
+            addToErrorMap("hours", "Hours cannot be negative! [" + hours + "]");
+        } else if (this.hours != null && this.hours > 24) {
+            addToErrorMap("hours", "Hours cannot be greater than 24! [" + hours + "]");
         }
     }
 
     private void validateOvertime() {
-        if (this.overtime != null && this.overtime < 0)
-            handleErrorMessage("Overtime cannot be negative! [" + this.overtime + "]");
-        else if (this.overtime != null && this.overtime > 24) {
-            handleErrorMessage("Overtime cannot be greater than 24! [" + this.overtime + "]");
+        if (this.overtime != null && this.overtime < 0) {
+            addToErrorMap("overtime", "Overtime cannot be negative! [" + this.overtime + "]");
+        } else if (this.overtime != null && this.overtime > 24) {
+            addToErrorMap("overtime", "Overtime cannot be greater than 24! [" + this.overtime + "]");
         } else if (this.hours != null && this.overtime != null && (this.hours + this.overtime) > 24) {
-            handleErrorMessage("Overtime and hours sum cannot be greater than 24! [" + this.overtime + "+" + this.hours + "]");
+            addToErrorMap("overtime", "Overtime and hours sum cannot be greater than 24! [" + this.overtime + "+" + this.hours + "]");
         }
     }
 
     private void validateBeginHour() {
-        if (this.beginHour != null && this.beginHour < 0)
-            handleErrorMessage("BeginHour cannot be negative! [" + this.beginHour + "]");
-        else if (this.beginHour != null && this.beginHour > 24) {
-            handleErrorMessage("BeginHour cannot be greater than 24! [" + this.beginHour + "]");
+        if (this.beginHour != null && this.beginHour < 0) {
+            addToErrorMap("beginHour", "BeginHour cannot be negative! [" + this.beginHour + "]");
+        } else if (this.beginHour != null && this.beginHour > 24) {
+            addToErrorMap("beginHour", "BeginHour cannot be greater than 24! [" + this.beginHour + "]");
+        } else if (this.beginHour != null && this.endHour != null && this.beginHour > this.endHour) {
+            addToErrorMap("beginHour", "Begin Hour cannot be greater than End Hour! [" + this.beginHour + ">" + this.endHour + "]");
         } else if (this.beginHour != null && this.endHour == null) {
-            handleErrorMessage(" EndHour cannot be empty if BeginHour has positive value!");
+            addToErrorMap("beginHour", "EndHour cannot be empty if BeginHour has positive value!");
         }
     }
 
     private void validateEndHour() {
         if (this.endHour != null && this.endHour < 0) {
-            handleErrorMessage("EndHour cannot be negative! [" + this.endHour + "]");
+            addToErrorMap("endHour", "EndHour cannot be negative! [" + this.endHour + "]");
         } else if (this.endHour != null && this.endHour > 24) {
-            handleErrorMessage("EndHour cannot be greater than 24! [" + this.endHour + "]");
+            addToErrorMap("endHour", "EndHour cannot be greater than 24! [" + this.endHour + "]");
+        }else if (this.beginHour != null && this.endHour != null && this.beginHour > this.endHour) {
+            addToErrorMap("endHour", "End Hour cannot be smaller than Begin Hour! [" + this.beginHour + ">" + this.endHour + "]");
         } else if (this.endHour != null && this.beginHour == null) {
-            handleErrorMessage("BeginHour cannot be empty if EndHour has positive value!");
+            addToErrorMap("endHour", "BeginHour cannot be empty if EndHour has positive value!");
         }
     }
 

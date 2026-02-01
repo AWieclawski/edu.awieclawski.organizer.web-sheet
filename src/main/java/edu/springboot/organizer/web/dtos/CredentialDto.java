@@ -37,33 +37,32 @@ public class CredentialDto extends BaseDto {
     public void autoUpdate() {
     }
 
-    public void addErrorMessage(String message) {
-        handleErrorMessage(message);
-    }
-
     // validators
 
     private void validateLogin() {
-        if (this.login == null)
-            handleErrorMessage("Login cannot be empty!");
+        if (this.login == null) {
+            addToErrorMap("login", "Login cannot be empty!");
+        }
     }
 
     private void validatePassword() {
-        if (this.password == null)
-            handleErrorMessage("Password cannot be empty!");
+        if (this.password == null) {
+            addToErrorMap("password", "Password cannot be empty!");
+        }
     }
 
     private void validateRole() {
-        if (this.role == null)
-            handleErrorMessage("Role cannot be empty!");
+        if (this.role == null) {
+            addToErrorMap("role", "Role cannot be empty!");
+        }
     }
 
     private void validateEmail() {
         if (this.email == null || this.email.isEmpty()) {
-            handleErrorMessage("Email cannot be empty!");
+            addToErrorMap("email", "Email cannot be empty!");
         } else {
             if (!EMAIL_PATTERN.matcher(this.email).matches()) {
-                handleErrorMessage("Email not valid! [" + this.email + "]");
+                addToErrorMap("email", "Email not valid! [" + this.email + "]");
             }
         }
     }

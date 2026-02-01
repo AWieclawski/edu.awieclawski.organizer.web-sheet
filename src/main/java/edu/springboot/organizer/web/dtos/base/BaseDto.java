@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Setter
 @Getter
@@ -22,6 +24,7 @@ public abstract class BaseDto {
     protected String created;     // as ID
     protected Integer hashId;
     protected String errorMessage;
+    protected Map<String, String> errorMap = new HashMap<>();
 
     @Override
     public boolean equals(Object o) {
@@ -55,11 +58,32 @@ public abstract class BaseDto {
     public abstract void autoUpdate();
 
     public List<String> getErrorList() {
-        String nextStep = errorMessage != null ? errorMessage.replace(LIMITER, "#") : "";
-        return Arrays.asList(nextStep.split("#"));
+        return getErrorMap() != null ? new ArrayList<>(getErrorMap().values()) : new ArrayList<>();
+    }
+
+    public String getFromErrorMap(String key) {
+        if (key != null && getErrorMap() != null) {
+            return getErrorMap().get(key);
+        }
+        return null;
+    }
+
+    public void addToErrorMap(String key, String value) {
+        if (key != null && getErrorMap() != null) {
+            getErrorMap().put(key, value);
+            handleErrorMessage(value);
+        }
     }
 
     protected void handleErrorMessage(String message) {
         this.errorMessage = this.errorMessage == null ? message : this.errorMessage + LIMITER + message;
     }
+
+    public Map<String, String> getErrorMap() {
+        if (this.errorMap == null) {
+            this.errorMap = new HashMap<>();
+        }
+        return this.errorMap;
+    }
+
 }

@@ -20,7 +20,8 @@
             <td th:if="${cellNo == dateMonthSize}">
                 <a th:with="actionPath=${formRedirect} + '/' + ${editOne} + '/' + ${monthRecord?.created}"
                    th:href="@{/{targetPath} (targetPath=${actionPath})}">
-                    <button id="edtBtnID" onclick="disableButton(this)"
+                    <button th:id="'edtBtnID' + ${monthRecord?.created}"
+                            onclick="disableButton(this)"
                             type="button" class="edtBtn"
                             th:title="#{edit.employee.form.title}"
                             th:text="#{edit.employee.form}">
@@ -52,7 +53,8 @@
         <td>
             <a th:with="actionPath=${viewRedirect} + '/delete/' + ${monthRecord?.created}"
                th:href="@{/{targetPath} (targetPath=${actionPath})}">
-                <button id="delBtnID" onclick="disableButton(this)"
+                <button th:id="'delBtnID' + ${monthRecord?.created}"
+                        onclick="disableButton(this)"
                         type="button" class="delBtn"
                         th:title="#{delete.employee.form.title}"
                         th:text="#{delete.employee.form}">

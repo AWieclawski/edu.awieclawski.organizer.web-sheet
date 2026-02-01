@@ -52,10 +52,10 @@ public class UserSecuredService implements UserDetailsService {
     public void checkUserData(final UserData userData) {
         credentialService.findByLogin(userData.getCredentialData().getLogin()).ifPresent(
                 it -> userData.getCredentialData()
-                        .addErrorMessage("Login already taken: " + it.getLogin()));
+                        .addToErrorMap("login","Login already taken: " + it.getLogin()));
         credentialService.findByEmail(userData.getCredentialData().getEmail()).ifPresent(
                 it -> userData.getCredentialData()
-                        .addErrorMessage("Email already taken: " + it.getEmail()));
+                        .addToErrorMap("email", "Email already taken: " + it.getEmail()));
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)

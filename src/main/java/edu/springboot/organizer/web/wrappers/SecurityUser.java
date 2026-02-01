@@ -24,7 +24,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return appUser.getCredentialData().getPassword();
+        return appUser.getCredentialData() != null ? appUser.getCredentialData().getPassword() : null;
     }
 
     @Override

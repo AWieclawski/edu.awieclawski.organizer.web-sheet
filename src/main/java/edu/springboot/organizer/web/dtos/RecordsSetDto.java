@@ -58,7 +58,7 @@ public class RecordsSetDto extends BaseDto implements DateMonthHolder {
 
     private void validateMonth() {
         if (this.month != null && (this.month > 12 || this.month < 1)) {
-            handleErrorMessage((month + " <- Month value not valid!"));
+            addToErrorMap("month", "Month value [" + month + "] not valid!");
         }
     }
 }

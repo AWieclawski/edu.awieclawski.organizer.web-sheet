@@ -2,7 +2,7 @@
 
     <div class="userBar">
         <div sec:authorize="isAuthenticated()" class="rightHeader">
-            <p><span th:text="#{user.name} + ': '"></span><b><span sec:authentication="name"></span></b>
+            <p><span th:text="#{user.name.label} + ': '"></span><b><span sec:authentication="name"></span></b>
                 <a th:href="@{/logout}">
                     <button id="logOutButton" type="button" class="logOutBtn" th:text="#{user.logout}"></button>
                 </a>
