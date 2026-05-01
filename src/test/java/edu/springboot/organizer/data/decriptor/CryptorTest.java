@@ -13,21 +13,22 @@ class CryptorTest {
     void cratedDifferentNumbersFromGeneratedStringFromDates() {
         List<Integer> testIntList = new ArrayList<>();
         List<String> testStrList = new ArrayList<>();
-        for (int i = 0; i < 999; i++) {
+        for (int i = 0; i < 9999; i++) {
             String timeStampId = BaseDateUtils.getBaseTimestampId();
-            int hashId = assignHashId(testIntList, Cryptor.encryptWord(timeStampId), i);
-            Assertions.assertFalse(testStrList.contains(timeStampId), (String.format("%3d - found: %s", i, timeStampId)));
+            int hashId = assignHashId(testIntList, Cryptor.encryptWord(timeStampId), i, timeStampId);
+            Assertions.assertFalse(testStrList.contains(timeStampId), (String.format("%4d - found: %s", i, timeStampId)));
             testIntList.add(hashId);
             testStrList.add(timeStampId);
         }
     }
 
-    private int assignHashId(List<Integer> testIntList, int hashId, int i) {
+    private int assignHashId(List<Integer> testIntList, int hashId, int i, String timeStampId) {
         try {
             Assertions.assertFalse(testIntList.contains(hashId));
         } catch (Throwable th) {
-            System.out.println((i + " - found: " + hashId + " replaced by: " + ++hashId));
-            assignHashId(testIntList, hashId, i);
+            String counter = String.format("%3d", i);
+            System.out.println((counter + "[" + timeStampId + "] - found: " + hashId + " replaced by: " + ++hashId));
+            assignHashId(testIntList, hashId, i, timeStampId);
         }
         return hashId;
     }
