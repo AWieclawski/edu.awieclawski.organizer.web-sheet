@@ -18,7 +18,7 @@ class CryptorTest {
         for (int i = 0; i < 9999; i++) {
             String baseTimestampId = assignTimestampId(testHashIdList, testTimestampIdList, BaseDateUtils.getBaseTimestampId(), i);
             String counter = getConterAsString(i);
-            log.info("{} => assigned baseTimestampId: {}", counter, baseTimestampId);
+//            log.info("{} => assigned baseTimestampId: {}", counter, baseTimestampId);
         }
     }
 
