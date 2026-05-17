@@ -1,5 +1,12 @@
 A Spring Boot web application built on Docker for monthly work schedules using Thyme Leaf.
 
+The application uses neither Hibernate nor JPA, but only basic JDBC. All database operations utilize or extend the functionality of the JDBCTemplate.
+
+Entity identifiers are generated based on the timestamp and their uniqueness is verified programmatically.
+In the event of an identifier uniqueness conflict, the appropriate JAVA mechanism automatically changes the problematic identifier by a specified value.
+
+The simplest SQLite database is used to store data.
+
 The application allows users to register and then, after authentication, use the registered user's individual context.
 
 After authentication, users can select the month for which they would like to plan their work schedule in a spreadsheet-like format displayed in a web browser window.
