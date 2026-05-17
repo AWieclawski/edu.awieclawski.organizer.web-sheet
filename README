@@ -1,22 +1,14 @@
-# https://stackoverflow.com/questions/27767264/how-to-dockerize-a-maven-project-how-many-ways-to-accomplish-it/27768965#27768965
+A Spring Boot web application built on Docker for monthly work schedules using Thyme Leaf.
 
-# https://stackoverflow.com/questions/26050899/how-to-mount-host-volumes-into-docker-containers-in-dockerfile-during-build/52762779#52762779
+The application allows users to register and then, after authentication, use the registered user's individual context.
 
-# https://www.baeldung.com/thymeleaf-custom-html-attributes
+After authentication, users can select the month for which they would like to plan their work schedule in a spreadsheet-like format displayed in a web browser window.
 
-add datastore/appdata.db
+For each month, they can add additional employees and assign them daily work hours or various forms of absence, such as caregiving, vacation, etc.
 
-# endpoints
+Individual work schedules edited in the web browser window are saved and accessible only to the user who saved them.
 
- .../api/visitors/all
-
- .../api/visitors/between/2025-04-02/2025-04-04
-
- .../api/date-cells/date/2025-07-02
-
- .../api/month-records/all
-
-.../api/month-records/month/7/year/2025/user/userd01
+Ex. end-point
 
 .../form/date-picker/choose-date
 # ex. http://localhost:8080/form/date-picker/choose-date
